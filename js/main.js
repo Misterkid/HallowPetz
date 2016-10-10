@@ -3,7 +3,7 @@
  */
 class Main
 {
-    contructor()
+    constructor()
     {
         console.log("ToDo");
     }
