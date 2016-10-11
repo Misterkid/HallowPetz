@@ -36,11 +36,7 @@ class SceneRenderer
         this.renderer.setSize(window.innerWidth ,window.innerHeight);
         this.renderer.setClearColor(0x000000);
         document.body.appendChild(this.renderer.domElement);
-
         //Camera position
-        //this.camera.position.z = 20;
-        //this.camera.position.y = -40;
-       // this.camera.rotateX(qUtils.DegToRad(60));
     }
     Render(e)
     {
@@ -48,7 +44,6 @@ class SceneRenderer
 
         if(DeltaTime > (this.avgDelta * 2))
         {
-            //console.log("Lag");
             DeltaTime = 0;
         }
 

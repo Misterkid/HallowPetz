@@ -3,9 +3,9 @@
  */
 class PumpkinEgg extends Pet
 {
-    constructor(geometry,material)
+    constructor(map,width,height)
     {
-        super(geometry,material);
-        //Standard pet stuff here
+        super(map,width,height);
+        //Standard Egg stuff here
     }
 }

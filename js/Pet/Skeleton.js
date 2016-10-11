@@ -3,9 +3,9 @@
  */
 class Skeleton extends Pet
 {
-    constructor(geometry,material)
+    constructor(map,width,height)
     {
-        super(geometry,material);
+        super(map,width,height);
         //Standard skeleton stuff here
     }
 }

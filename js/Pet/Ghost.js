@@ -3,9 +3,9 @@
  */
 class Ghost extends Pet
 {
-    constructor(geometry,material)
+    constructor(map,width,height)
     {
-        super(geometry,material);
+        super(map,width,height);
         //Standard ghost stuff here
     }
 }

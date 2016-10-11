@@ -3,9 +3,9 @@
  */
 class Zombie extends Pet
 {
-    constructor(geometry,material)
+    constructor(map,width,height)
     {
-        super(geometry,material);
+        super(map,width,height);
         //Standard Zombie stuff here
     }
 }
