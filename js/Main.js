@@ -11,12 +11,19 @@ class Main
         this.loader = new THREE.TextureLoader();
         this.CreateLights();// You will see the light!
 
-        //Pet making test
-        var map =  this.loader.load("assets/textures/ghost_test.png");
-        this.ghost = new Ghost(map,1,2);
 
-        this.ghost.position.set(0,0,-5);
+
+        //Pet making test
+        var ghostname = qUtils.GetCookie("petname");
+        if(ghostname == "")
+            ghostname = "failed";
+
+        var map = this.loader.load("assets/textures/ghost_test.png");
+        this.ghost = new Ghost(map, 1, 2,ghostname);
+        this.ghost.position.set(0, 0, -5);
         this.sceneRenderer.AddObject(this.ghost);
+        console.log(this.ghost.name);
+        qUtils.SetCookie("petname",this.ghost.name);
         //End Test
 
         //Listen to events at the end of this constructor.
