@@ -20,7 +20,8 @@ class SceneRenderer
     CreateScene()
     {
         this.scene = new THREE.Scene();
-        var aspect = window.innerWidth / window.innerHeight;
+        //var aspect = window.innerWidth / window.innerHeight;
+        var aspect = 1280 / 720;
         this.camera = new THREE.PerspectiveCamera(75,aspect,0.1,1000);
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.antialias = true;

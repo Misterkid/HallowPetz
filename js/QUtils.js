@@ -39,14 +39,17 @@ class QUtils
             document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         }
     }
-    SetCookie(cookieName, cookieValue, exdays = 364)
+    SetCookie(cookieName, cookieValue, exdays = 31)
     {
         var d = new Date();
         d.setTime(d.getTime() + (exdays*24*60*60*1000));
         var expires = "expires="+d.toUTCString();
         document.cookie = cookieName + "=" + cookieValue + ";" + expires + ";path=/";
     }
-
+    DeleteCookie(name)
+    {
+        this.SetCookie(name,"",-1);
+    }
     WriteHTML(someText,element)
     {
         var createdElement = document.createElement(element);
