@@ -22,10 +22,12 @@ class Main
         document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
         //End Test
 
-
         //Listen to events at the end of this constructor.
         document.addEventListener("onrenderupdate",(e)=> {this.OnRenderUpdate(e);});
         document.addEventListener("oncollisionupdate",(e)=> {this.OnCollisionUpdate(e);});
+        document.addEventListener("onpumpkinhatch",(e)=> {this.OnPumpkinHatch(e);});
+        //Reset button
+        document.getElementsByClassName("test_reset")[0].onclick = (e) => {this.OnResetClick(e)};
         //Save before closing,refreshing etc...
         window.onbeforeunload = (e) => {this.OnBeforeUnload(e)};
         this.sceneRenderer.Render();//Start rendering
@@ -36,7 +38,7 @@ class Main
         //Pet.Update looks at camera, update it each frame.
         this.userPet.Update(this.sceneRenderer.camera);
         //Our test meter!
-        document.getElementsByClassName("test_stats")[0].innerText = "h: " + this.userPet.hunger + " e: " + this.userPet.energy + " j: " + this.userPet.joy;
+        document.getElementsByClassName("test_stats")[0].innerText = "Name:" + this.userPet.name +  " h: " + Math.floor(this.userPet.hunger) + " e: " + Math.floor(this.userPet.energy) + " j: " + Math.floor(this.userPet.joy);
 
         //Rotate around the pet
         if(keyboard.GetKey('a'))
@@ -87,6 +89,35 @@ class Main
         light.position.set( 0, 1, 1 );
         this.sceneRenderer.AddObject(light);
     }
+    OnResetClick(e)
+    {
+        this.ResetPet();
+    }
+
+    ResetPet()
+    {
+        //NewPet
+        var result = confirm("Do you really want to reset?");
+        if(result == true)
+        {
+            this.sceneRenderer.RemoveObject(this.userPet);
+            var map = this.loader.load("assets/textures/test.png");
+            this.userPet = new PumpkinEgg(map,1,2);
+            this.userPet.SavePet();
+
+            document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
+            this.sceneRenderer.AddObject(this.userPet);
+        }
+    }
+    OnPumpkinHatch(e)
+    {
+        var newPet = this.userPet.Hatch('1');
+        this.sceneRenderer.RemoveObject(this.userPet);
+        this.userPet = newPet;
+        this.userPet.SavePet();
+        this.sceneRenderer.AddObject(this.userPet);
+
+    }
     LoadPet()
     {
         var petId = qUtils.GetCookie("pet_id");
@@ -95,7 +126,6 @@ class Main
         {
             //NewPet
             this.userPet = new PumpkinEgg(map,1,2);
-            console.log("new pet");
         }
         else
         {
@@ -105,7 +135,7 @@ class Main
                     this.userPet = new PumpkinEgg(map,1,2);
                     break;
                 case '1':
-                    map = this.loader.load("assets/textures/ghost_test.png")
+                    map = this.loader.load("assets/textures/ghost_test.png");
                     this.userPet = new Ghost(map,1,2);
                     break;
                 case '2':

@@ -15,6 +15,11 @@
         {
             text-align: center;
         }
+        button
+        {
+            display: block;
+            margin: 0 auto;
+        }
         input
         {
             display: block;
@@ -25,8 +30,10 @@
 </head>
 <body>
     <input type="text" class ="pet_name" name="pet_name" value ="no_name">
-    <p>This game uses cookies to save your pet! Cookies get destroyed after 31 days. :(</p>
+    <p>This game uses cookies to save your pet! Cookies get destroyed after 31 days inactivity. :(</p>
     <p class = "test_stats">ToDo</p>
+    <button class="test_reset">Reset</button>
+
     <script src = "js/lib/three.min.js"></script>
     <script src = "js/Keyboard.js"></script>
     <script src = "js/QUtils.js"></script>

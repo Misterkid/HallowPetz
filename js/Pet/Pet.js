@@ -22,6 +22,7 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         this.energySteps = 0.7;
 
         var date = new Date();
+        this.creationDate = date.getTime();
         this.startTime = date.getTime();
     }
     Update(camera)
@@ -56,6 +57,7 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         qUtils.SetCookie("pet_energy",this.energy);
         var date = new Date();
         qUtils.SetCookie("pet_last_save",date.getTime());
+        qUtils.SetCookie("pet_creation_date",this.creationDate);
     }
     //Laad onze pet in die gesaved is!
     LoadPet()
@@ -69,5 +71,6 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         this.hunger = qUtils.GetCookie("pet_hunger") - (this.hungerSteps * diffrence);
         this.joy = qUtils.GetCookie("pet_joy")- (this.joySteps * diffrence);
         this.energy = qUtils.GetCookie("pet_energy")- (this.energySteps * diffrence);
+        this.creationDate = qUtils.GetCookie("pet_creation_date");
     }
 }
