@@ -26,6 +26,10 @@ class QUtils
         }
         return "";
     }
+    GetRandomBetweenInt(min, max)
+    {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
     DeleteAllCookies()
     {
         var cookie = document.cookie.split(';');

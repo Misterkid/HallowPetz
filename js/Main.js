@@ -111,7 +111,8 @@ class Main
     }
     OnPumpkinHatch(e)
     {
-        var newPet = this.userPet.Hatch('1');
+        var id = qUtils.GetRandomBetweenInt(1,3);
+        var newPet = this.userPet.Hatch(id.toString());
         this.sceneRenderer.RemoveObject(this.userPet);
         this.userPet = newPet;
         this.userPet.SavePet();
