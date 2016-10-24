@@ -47,7 +47,7 @@ class ThrowBall extends THREE.Mesh
         if(screenPos.x > 1080 - 2
             || screenPos.x < 0 + 2)
         {
-           // console.log(screenPos);
+            console.log(screenPos);
             this.velocity.x *= -1;
             this.position.set(this.position.x + this.velocity.x * DeltaTime,this.position.y + this.velocity.y * DeltaTime, this.position.z);
 
@@ -55,7 +55,7 @@ class ThrowBall extends THREE.Mesh
         if(screenPos.y < 0 + 2
             || screenPos.y > 720 - 2)
         {
-            //console.log(screenPos);
+            console.log(screenPos);
             this.velocity.y *= -1;
             this.position.set(this.position.x + this.velocity.x * DeltaTime,this.position.y + this.velocity.y * DeltaTime, this.position.z);
         }

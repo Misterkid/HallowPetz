@@ -21,12 +21,9 @@ class Main
         this.sceneRenderer.AddObject(this.userPet);
         document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
         //End Test
+        this.clickableObjects = new Array();
         //Mini Game
-        this.objects = new Array();
-        this.throwBall = new ThrowBall();
-        this.throwBall.position.set(0,0,0);
-        this.objects.push(this.throwBall);
-        this.sceneRenderer.AddObject(this.throwBall);
+        this.miniGame = new MiniGame();
         //End
         //Listen to events at the end of this constructor.
         document.addEventListener("onrenderupdate",(e)=> {this.OnRenderUpdate(e);});
@@ -56,15 +53,13 @@ class Main
         {
             this.sceneRenderer.RotateCameraAround(this.userPet,-1);
         }
-        this.throwBall.OnUpdate(e);
-        //  this.throwBall.rotation.set(this.sceneRenderer.camera.rotation);
+        this.miniGame.OnUpdate(e);
 
     }
     //On Every frame after RenderUpdate do COLLISION detection here.
     OnCollisionUpdate(e)
     {
-        mouse.OnMouseRayUpdate(this.objects,this.sceneRenderer.camera);
-        this.throwBall.OnCollisionUpdate(e,this.sceneRenderer.camera);
+        mouse.OnMouseRayUpdate(this.clickableObjects,this.sceneRenderer.camera);
     }
     OnBeforeUnload()
     {
@@ -106,12 +101,6 @@ class Main
     OnMouseObjectClick(e)
     {
         console.log(e.detail.object);
-        if(e.detail.object.uuid == this.throwBall.uuid)
-        {
-            var xRand = qUtils.GetRandomBetweenInt(-9,9);
-            var yRand = qUtils.GetRandomBetweenInt(-9,9);
-            this.throwBall.velocity = new THREE.Vector3(xRand,yRand,0);
-        }
     }
     ResetPet()
     {
