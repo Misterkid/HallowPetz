@@ -8,6 +8,7 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         var geometry = new THREE.PlaneGeometry(width,height);
         var material = new THREE.MeshLambertMaterial();
         material.map = map;//this.loader.load("assets/textures/ghost_test.png");
+        material.transparent = true;
         super(geometry,material);
         //Standard pet stuff here
         this.petId = -1;
