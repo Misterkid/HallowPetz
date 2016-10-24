@@ -4,9 +4,10 @@ class Mouse
     {
         this.position = new THREE.Vector2(0,0);
         this.caster = new THREE.Raycaster();
-        this.camera = camera;
+        //this.camera = camera;
         this.isDown = false;
         this.wentUp = false;
+        this.Init();
 
     }
     Init()
@@ -38,19 +39,15 @@ class Mouse
     OnMouseMove(e)
     {
         e.preventDefault();
-        this.position.x = (e.clientX / window.innerWidth) * 2 -1;
-        this.position.y = -(e.clientY / window.innerHeight) * 2 +1;
-
-
+        this.position.x = (e.clientX / 1280) * 2 -1;
+        this.position.y = -(e.clientY / 720) * 2 +1;
     }
     OnMouseUp(e)
     {
-        this.isDown = false;
         this.wentUp = true;
     }
     OnMouseDown(e)
     {
-        this.isDown = true;
         this.wentUp = false;
     }
     OnMouseRayUpdate(objects,camera)
@@ -60,7 +57,13 @@ class Mouse
         var collisions = this.caster.intersectObjects( objects );
         if(collisions[0] != null)
         {
-        
+            if(this.wentUp == true)
+            {
+                this.OnMouseObjectClick = new CustomEvent('onmouseobjectclick', { 'detail': collisions[0] });
+                document.dispatchEvent(this.OnMouseObjectClick);
+            }
         }
+        this.wentUp = false;
     }
 }
+let mouse = new Mouse();

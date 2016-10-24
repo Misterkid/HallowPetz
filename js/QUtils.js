@@ -2,7 +2,9 @@ class QUtils
 {
     constructor()
     {
-
+        //Temp
+        this.width = 1080;
+        this.height = 720;
     }
     DegToRad(deg)
     {

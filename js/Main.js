@@ -13,7 +13,7 @@ class Main
         this.CreateSkydome();
         this.CreateEnvirement();
         //Pet making test
-        console.log(  document.cookie);
+        console.log( document.cookie);
         this.userPet = null;//Need to load
         this.LoadPet();//Loaded
         this.userPet.SavePet();//saved
@@ -21,11 +21,18 @@ class Main
         this.sceneRenderer.AddObject(this.userPet);
         document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
         //End Test
-
+        //Mini Game
+        this.objects = new Array();
+        this.throwBall = new ThrowBall();
+        this.throwBall.position.set(0,0,0);
+        this.objects.push(this.throwBall);
+        this.sceneRenderer.AddObject(this.throwBall);
+        //End
         //Listen to events at the end of this constructor.
         document.addEventListener("onrenderupdate",(e)=> {this.OnRenderUpdate(e);});
         document.addEventListener("oncollisionupdate",(e)=> {this.OnCollisionUpdate(e);});
         document.addEventListener("onpumpkinhatch",(e)=> {this.OnPumpkinHatch(e);});
+        document.addEventListener("onmouseobjectclick",(e)=>{this.OnMouseObjectClick(e);});
         //Reset button
         document.getElementsByClassName("test_reset")[0].onclick = (e) => {this.OnResetClick(e)};
         //Save before closing,refreshing etc...
@@ -49,12 +56,15 @@ class Main
         {
             this.sceneRenderer.RotateCameraAround(this.userPet,-1);
         }
+        this.throwBall.OnUpdate(e);
+        //  this.throwBall.rotation.set(this.sceneRenderer.camera.rotation);
 
     }
     //On Every frame after RenderUpdate do COLLISION detection here.
     OnCollisionUpdate(e)
     {
-
+        mouse.OnMouseRayUpdate(this.objects,this.sceneRenderer.camera);
+        this.throwBall.OnCollisionUpdate(e,this.sceneRenderer.camera);
     }
     OnBeforeUnload()
     {
@@ -93,7 +103,16 @@ class Main
     {
         this.ResetPet();
     }
-
+    OnMouseObjectClick(e)
+    {
+        console.log(e.detail.object);
+        if(e.detail.object.uuid == this.throwBall.uuid)
+        {
+            var xRand = qUtils.GetRandomBetweenInt(-9,9);
+            var yRand = qUtils.GetRandomBetweenInt(-9,9);
+            this.throwBall.velocity = new THREE.Vector3(xRand,yRand,0);
+        }
+    }
     ResetPet()
     {
         //NewPet
