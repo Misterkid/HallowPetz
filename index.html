@@ -3,37 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>HallowPetz</title>
-    <style type="text/css">
-        canvas
-        {
-            width: 1280px!important;
-            height: 720px!important;
-            display: block;
-            margin: 0 auto;
-        }
-        p
-        {
-            text-align: center;
-        }
-        button
-        {
-            display: block;
-            margin: 0 auto;
-        }
-        input
-        {
-            display: block;
-            margin: 0 auto;
-        }
 
-    </style>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <input type="text" class ="pet_name" name="pet_name" value ="no_name">
-    <p>This game uses cookies to save your pet! Cookies get destroyed after 31 days inactivity. :(</p>
-    <p class = "test_stats">ToDo</p>
-    <button class="test_reset">Reset</button>
-
+    <div class = "hud">
+        <input type="text" class ="pet_name" name="pet_name" value ="no_name">
+        <p>This game uses cookies to save your pet! Cookies get destroyed after 31 days inactivity. :(</p>
+        <p class = "test_stats">ToDo</p>
+        <button class="test_reset">Reset</button>
+    </div>
     <script src = "js/lib/three.min.js"></script>
     <script src = "js/Keyboard.js"></script>
     <script src = "js/QUtils.js"></script>
@@ -46,5 +25,6 @@
 
     <script src = "js/SceneRenderer.js"></script>
     <script src = "js/Main.js"></script>
+
 </body>
 </html>

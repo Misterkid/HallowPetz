@@ -1,0 +1,33 @@
+canvas
+{
+    width: 1280px!important;
+    height: 720px!important;
+    margin: 0 auto;
+    z-index:1;
+    position: relative;
+}
+p
+{
+    text-align: center;
+    color:white;
+}
+button
+{
+    display: block;
+    margin: 0 auto;
+}
+input
+{
+    display: block;
+    margin: 0 auto;
+}
+
+.hud
+{
+    width: 1280px!important;
+    height: 720px!important;
+    margin: 0 auto;
+    position: absolute;
+    z-index: 3;
+
+}
