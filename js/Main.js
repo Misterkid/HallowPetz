@@ -207,7 +207,7 @@ class Main
     LoadPet()
     {
         var petId = qUtils.GetCookie("pet_id");
-        var map = this.loader.load("assets/textures/test.png");
+        var map = this.loader.load("assets/textures/pumpkin.png");
         if(petId == null || petId == -1 || petId == "")
         {
             //NewPet
