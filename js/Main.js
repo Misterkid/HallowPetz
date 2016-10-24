@@ -42,7 +42,10 @@ class Main
         //Pet.Update looks at camera, update it each frame.
         this.userPet.Update(this.sceneRenderer.camera);
         //Our test meter!
-        document.getElementsByClassName("test_stats")[0].innerText = "Name:" + this.userPet.name +  " h: " + Math.floor(this.userPet.hunger) + " e: " + Math.floor(this.userPet.energy) + " j: " + Math.floor(this.userPet.joy);
+        document.getElementsByClassName("test_stats")[0].innerText =
+            "Name: " + this.userPet.name ;
+
+        this.Createbarmeter();
 
         //Rotate around the pet
         if(keyboard.GetKey('a'))
@@ -102,6 +105,80 @@ class Main
     {
         console.log(e.detail.object);
     }
+    Createbarmeter()
+    {
+        // honger
+        if (Math.floor(this.userPet.hunger) > 95)
+        {document.getElementsByClassName("honger")[0].src = "assets/textures/100.png"}
+        if (Math.floor(this.userPet.hunger) > 85 && Math.floor(this.userPet.hunger) < 95)
+        {document.getElementsByClassName("honger")[0].src = "assets/textures/90.png"}
+        if (Math.floor(this.userPet.hunger) > 75 && Math.floor(this.userPet.hunger) < 85)
+        {document.getElementsByClassName("honger")[0].src = "assets/textures/80.png"}
+        if (Math.floor(this.userPet.hunger) > 65 && Math.floor(this.userPet.hunger) < 75)
+        {document.getElementsByClassName("honger")[0].src = "assets/textures/70.png"}
+        if (Math.floor(this.userPet.hunger) > 55 && Math.floor(this.userPet.hunger) < 65)
+        {document.getElementsByClassName("honger")[0].src = "assets/textures/60.png"}
+        if (Math.floor(this.userPet.hunger) > 45 && Math.floor(this.userPet.hunger) < 55)
+        {document.getElementsByClassName("honger")[0].src = "assets/textures/50.png"}
+        if (Math.floor(this.userPet.hunger) > 35 && Math.floor(this.userPet.hunger) < 45)
+        {document.getElementsByClassName("honger")[0].src = "assets/textures/40.png"}
+        if (Math.floor(this.userPet.hunger) > 25 && Math.floor(this.userPet.hunger) < 35)
+        {document.getElementsByClassName("honger")[0].src = "assets/textures/30.png"}
+        if (Math.floor(this.userPet.hunger) > 15 && Math.floor(this.userPet.hunger) < 25)
+        {document.getElementsByClassName("honger")[0].src = "assets/textures/20.png"}
+        if (Math.floor(this.userPet.hunger) > 5 && Math.floor(this.userPet.hunger) < 15)
+        {document.getElementsByClassName("honger")[0].src = "assets/textures/10.png"}
+        if (Math.floor(this.userPet.hunger) <5)
+        {document.getElementsByClassName("honger")[0].src = "assets/textures/0.png"}
+
+        //energie
+        if (Math.floor(this.userPet.energy) > 95)
+        {document.getElementsByClassName("energie")[0].src = "assets/textures/100.png"}
+        if (Math.floor(this.userPet.energy) > 85 && Math.floor(this.userPet.energy) < 95)
+        {document.getElementsByClassName("energie")[0].src = "assets/textures/90.png"}
+        if (Math.floor(this.userPet.energy) > 75 && Math.floor(this.userPet.energy) < 85)
+        {document.getElementsByClassName("energie")[0].src = "assets/textures/80.png"}
+        if (Math.floor(this.userPet.energy) > 65 && Math.floor(this.userPet.energy) < 75)
+        {document.getElementsByClassName("energie")[0].src = "assets/textures/70.png"}
+        if (Math.floor(this.userPet.energy) > 55 && Math.floor(this.userPet.energy) < 65)
+        {document.getElementsByClassName("energie")[0].src = "assets/textures/60.png"}
+        if (Math.floor(this.userPet.energy) > 45 && Math.floor(this.userPet.energy) < 55)
+        {document.getElementsByClassName("energie")[0].src = "assets/textures/50.png"}
+        if (Math.floor(this.userPet.energy) > 35 && Math.floor(this.userPet.energy) < 45)
+        {document.getElementsByClassName("energie")[0].src = "assets/textures/40.png"}
+        if (Math.floor(this.userPet.energy) > 25 && Math.floor(this.userPet.energy) < 35)
+        {document.getElementsByClassName("energie")[0].src = "assets/textures/30.png"}
+        if (Math.floor(this.userPet.energy) > 15 && Math.floor(this.userPet.energy) < 25)
+        {document.getElementsByClassName("energie")[0].src = "assets/textures/20.png"}
+        if (Math.floor(this.userPet.energy) > 5 && Math.floor(this.userPet.energy) < 15)
+        {document.getElementsByClassName("energie")[0].src = "assets/textures/10.png"}
+        if (Math.floor(this.userPet.energy) <5)
+        {document.getElementsByClassName("energie")[0].src = "assets/textures/0.png"}
+
+        // plezier
+        if (Math.floor(this.userPet.joy) > 95)
+        {document.getElementsByClassName("plezier")[0].src = "assets/textures/100.png"}
+        if (Math.floor(this.userPet.joy) > 85 && Math.floor(this.userPet.joy) < 95)
+        {document.getElementsByClassName("plezier")[0].src = "assets/textures/90.png"}
+        if (Math.floor(this.userPet.joy) > 75 && Math.floor(this.userPet.joy) < 85)
+        {document.getElementsByClassName("plezier")[0].src = "assets/textures/80.png"}
+        if (Math.floor(this.userPet.joy) > 65 && Math.floor(this.userPet.joy) < 75)
+        {document.getElementsByClassName("plezier")[0].src = "assets/textures/70.png"}
+        if (Math.floor(this.userPet.joy) > 55 && Math.floor(this.userPet.joy) < 65)
+        {document.getElementsByClassName("plezier")[0].src = "assets/textures/60.png"}
+        if (Math.floor(this.userPet.joy) > 45 && Math.floor(this.userPet.joy) < 55)
+        {document.getElementsByClassName("plezier")[0].src = "assets/textures/50.png"}
+        if (Math.floor(this.userPet.joy) > 35 && Math.floor(this.userPet.joy) < 45)
+        {document.getElementsByClassName("plezier")[0].src = "assets/textures/40.png"}
+        if (Math.floor(this.userPet.joy) > 25 && Math.floor(this.userPet.joy) < 35)
+        {document.getElementsByClassName("plezier")[0].src = "assets/textures/30.png"}
+        if (Math.floor(this.userPet.joy) > 15 && Math.floor(this.userPet.joy) < 25)
+        {document.getElementsByClassName("plezier")[0].src = "assets/textures/20.png"}
+        if (Math.floor(this.userPet.joy) > 5 && Math.floor(this.userPet.joy) < 15)
+        {document.getElementsByClassName("plezier")[0].src = "assets/textures/10.png"}
+        if (Math.floor(this.userPet.joy) <5)
+        {document.getElementsByClassName("plezier")[0].src = "assets/textures/0.png"}
+    }
     ResetPet()
     {
         //NewPet
@@ -109,7 +186,7 @@ class Main
         if(result == true)
         {
             this.sceneRenderer.RemoveObject(this.userPet);
-            var map = this.loader.load("assets/textures/test.png");
+            var map = this.loader.load("assets/textures/pumpkin.png");
             this.userPet = new PumpkinEgg(map,1,2);
             this.userPet.SavePet();
 
@@ -148,9 +225,11 @@ class Main
                     this.userPet = new Ghost(map,1,2);
                     break;
                 case '2':
+                    map = this.loader.load("assets/textures/zombie.png");
                     this.userPet = new Zombie(map,1,2);
                     break;
                 case '3':
+                    map = this.loader.load("assets/textures/skalet.png");
                     this.userPet = new Skeleton(map,1,2);
                     break;
                 default:
