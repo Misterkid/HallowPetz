@@ -101,7 +101,7 @@ class Main
         if(result == true)
         {
             this.sceneRenderer.RemoveObject(this.userPet);
-            var map = this.loader.load("assets/textures/test.png");
+            var map = this.loader.load("assets/textures/pumpkin.png");
             this.userPet = new PumpkinEgg(map,1,2);
             this.userPet.SavePet();
 
@@ -140,9 +140,11 @@ class Main
                     this.userPet = new Ghost(map,1,2);
                     break;
                 case '2':
+                    map = this.loader.load("assets/textures/zombie.png");
                     this.userPet = new Zombie(map,1,2);
                     break;
                 case '3':
+                    map = this.loader.load("assets/textures/skalet.png");
                     this.userPet = new Skeleton(map,1,2);
                     break;
                 default:

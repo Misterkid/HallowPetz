@@ -43,9 +43,11 @@ class PumpkinEgg extends Pet
                 newPet = new Ghost(map,1,2);
                 break;
             case '2':
+                map = this.loader.load("assets/textures/zombie.png");
                 newPet = new Zombie(map,1,2);
                 break;
             case '3':
+                map = this.loader.load("assets/textures/skalet.png");
                 newPet = new Skeleton(map,1,2);
                 break;
             default:
