@@ -6,6 +6,22 @@ canvas
     z-index:1;
     position: relative;
 }
+.honger
+{
+    width: 100px;
+    height: 30px;
+}
+.plezier
+{
+    width: 100px;
+    height: 30px;
+}
+.energie
+{
+    width: 100px;
+    height: 30px;
+}
+
 p
 {
     text-align: center;
