@@ -32,6 +32,7 @@ class Main
         document.addEventListener("onpumpkinhatch",(e)=> {this.OnPumpkinHatch(e);});
         document.addEventListener("onmouseobjectclick",(e)=>{this.OnMouseObjectClick(e);});
         document.addEventListener("onballmoving",(e)=>{this.OnBallMove(e);});
+        document.addEventListener("oncloudtimerend",(e)=>{this.OnCloudTimerEnd(e);});
         //Menu stuff
         document.getElementsByClassName("save_pet")[0].onclick = (e) => {this.OnSaveClick(e)};
         document.getElementsByClassName("test_reset")[0].onclick = (e) => {this.OnResetClick(e)};
@@ -274,6 +275,10 @@ class Main
         this.sceneRenderer.AddObject(this.userPet);
         this.clickableObjects.push(this.userPet);
 
+    }
+    OnCloudTimerEnd(e)
+    {
+        this.sceneRenderer.RemoveObject(e.detail);
     }
     LoadPet()
     {
