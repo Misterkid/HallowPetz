@@ -11,7 +11,7 @@ class ObjectLoader
 
         this.oLoader = new THREE.OBJLoader( this.manager );
     }
-
+    //Import Object
     ImportObject(objectPath, texturePath, pos, scale, rotate)
     {
         console.log(pos);
@@ -48,7 +48,7 @@ class ObjectLoader
         console.log(scale);
         console.log(pos);
         object.scale.set(scale.x,scale.y,scale.z);
-        
+
         object.position.set(pos.x, pos.y, pos.z);
         if(typeof rotate !== "undefined"){
             object.rotateX(rotate.x);
