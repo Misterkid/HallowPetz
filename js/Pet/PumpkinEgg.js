@@ -32,7 +32,7 @@ class PumpkinEgg extends Pet
     //Don't call it in here. We don't need a pet in a pet.
     Hatch(petId,map)
     {
-        var map = this.loader.load("assets/textures/test.png");
+        var map = this.loader.load("assets/textures/pumpkin.png");
         var newPet = new PumpkinEgg(map,1,2);
         switch(petId)
         {
@@ -43,9 +43,11 @@ class PumpkinEgg extends Pet
                 newPet = new Ghost(map,1,2);
                 break;
             case '2':
+                map = this.loader.load("assets/textures/zombie.png");
                 newPet = new Zombie(map,1,2);
                 break;
             case '3':
+                map = this.loader.load("assets/textures/skalet.png");
                 newPet = new Skeleton(map,1,2);
                 break;
             default:
