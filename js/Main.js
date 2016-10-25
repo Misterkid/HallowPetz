@@ -32,15 +32,12 @@ class Main
         document.addEventListener("onrenderupdate",(e)=> {this.OnRenderUpdate(e);});
         document.addEventListener("oncollisionupdate",(e)=> {this.OnCollisionUpdate(e);});
         document.addEventListener("onpumpkinhatch",(e)=> {this.OnPumpkinHatch(e);});
-<<<<<<< HEAD
         document.addEventListener("onobjectloaddone",(e)=> {this.OnObjectLoadDone(e);});
         //Reset button
-=======
         document.addEventListener("onmouseobjectclick",(e)=>{this.OnMouseObjectClick(e);});
         document.addEventListener("onballmoving",(e)=>{this.OnBallMove(e);});
         //Menu stuff
         document.getElementsByClassName("save_pet")[0].onclick = (e) => {this.OnSaveClick(e)};
->>>>>>> refs/remotes/origin/master
         document.getElementsByClassName("test_reset")[0].onclick = (e) => {this.OnResetClick(e)};
         document.getElementsByClassName("show_hide")[0].onclick = (e) => {this.OnShowMenuClick(e)};
         document.getElementsByClassName("ball_btn")[0].onclick = (e) => {this.OnBallBtnClick(e)};
@@ -106,6 +103,8 @@ class Main
         mesh.rotateX(qUtils.DegToRad(-90));
         mesh.position.set(0,-2,0);
         this.sceneRenderer.AddObject(mesh);
+
+
     }
 
     CreateSkydome()

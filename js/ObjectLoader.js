@@ -12,7 +12,7 @@ class ObjectLoader
         this.oLoader = new THREE.OBJLoader( this.manager );
     }
 
-    ImportObject(objectPath, texturePath, pos, scale)
+    ImportObject(objectPath, texturePath, pos, scale, rotate)
     {
         console.log(pos);
         var texture = new THREE.Texture();
@@ -28,13 +28,15 @@ class ObjectLoader
         console.log(texturePath);
 
 
-        this.oLoader.load(objectPath ,(object)=>{this.OnObjectLoad(object, texture, pos, scale);});
+        this.oLoader.load(objectPath ,(object)=>{this.OnObjectLoad(object, texture, pos, scale, rotate);});
 
         //console.log(object);
 
     }
 
-    OnObjectLoad(object, texture, pos, scale)
+
+
+    OnObjectLoad(object, texture, pos, scale, rotate)
     {
         object.traverse( function ( child ) {
 
@@ -46,8 +48,13 @@ class ObjectLoader
         console.log(scale);
         console.log(pos);
         object.scale.set(scale.x,scale.y,scale.z);
-        //object.position.set(pos);
+        
         object.position.set(pos.x, pos.y, pos.z);
+        if(typeof rotate !== "undefined"){
+            object.rotateX(rotate.x);
+            object.rotateY(rotate.y);
+            object.rotateZ(rotate.z);
+        }
         console.log(object);
         this.OnObjectLoadDone = new CustomEvent('onobjectloaddone', {'detail': object });
         document.dispatchEvent(this.OnObjectLoadDone);
