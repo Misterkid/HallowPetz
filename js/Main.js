@@ -22,6 +22,7 @@ class Main
         document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
         //End Test
         this.clickableObjects = new Array();
+        this.clickableObjects.push(this.userPet);
         //Mini Game
         this.miniGame = new MiniGame();
         //End
@@ -104,7 +105,12 @@ class Main
     }
     OnMouseObjectClick(e)
     {
-        console.log(e.detail.object);
+        //Userpet clicked
+        if(e.detail.object.uuid == this.userPet.uuid)
+        {
+            this.userPet.timesClicked ++;
+            console.log("clicked");
+        }
     }
     OnBallMove(e)
     {
@@ -192,12 +198,14 @@ class Main
         if(result == true)
         {
             this.sceneRenderer.RemoveObject(this.userPet);
+            this.clickableObjects.splice(this.userPet);
             var map = this.loader.load("assets/textures/pumpkin.png");
             this.userPet = new PumpkinEgg(map,1,2);
             this.userPet.SavePet();
 
             document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
             this.sceneRenderer.AddObject(this.userPet);
+            this.clickableObjects.push(this.userPet);
         }
     }
     OnPumpkinHatch(e)
@@ -205,9 +213,21 @@ class Main
         var id = qUtils.GetRandomBetweenInt(1,3);
         var newPet = this.userPet.Hatch(id.toString());
         this.sceneRenderer.RemoveObject(this.userPet);
+
+        this.clickableObjects.splice(this.userPet);
+        /*
+        for(var i = 0; i < this.clickableObjects.length; i++)
+        {
+            if(this.clickableObjects[i].uuid == this.userPet.uuid)
+            {
+                this.clickableObjects.splice(i);
+                console.log("ugh");
+            }
+        }*/
         this.userPet = newPet;
         this.userPet.SavePet();
         this.sceneRenderer.AddObject(this.userPet);
+        this.clickableObjects.push(this.userPet);
 
     }
     LoadPet()
