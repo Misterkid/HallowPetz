@@ -22,7 +22,7 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         this.energy = 100;
         this.energySteps = 0.7;
         this.timesClicked = 0;
-
+        this.position.set(0,-height,0);
         var date = new Date();
         this.creationDate = date.getTime();
         this.startTime = date.getTime();
@@ -44,6 +44,10 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         this.energy += add;
         if(this.energy > this.maxMeter)
             this.energy = this.maxMeter;
+    }
+    OnClick()
+    {
+        this.timesClicked ++;
     }
     Update(camera)
     {
