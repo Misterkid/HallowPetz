@@ -11,13 +11,39 @@ class PumpkinEgg extends Pet
         this.hatchTimeMinutes = 0.5;
         this.OnPumpkinHatch = new Event('onpumpkinhatch');
         this.loader = new THREE.TextureLoader();
+        this.isHatching = false;
+        this.clicksToHatch = 25;
+        this.scaling = 1;
+        this.scaleSteps = 0.05
         //
     }
     Update(camera)
     {
         super.Update(camera);
-        this.TimedHatching();
+        //this.TimedHatching();
+        this.ClickHatching();
     }
+    ClickHatching()
+    {
+        if(this.isHatching == false)
+        {
+            if(this.timesClicked == this.clicksToHatch)
+            {
+                document.dispatchEvent(this.OnPumpkinHatch);
+                this.isHatching = true;
+            }
+        }
+    }
+    OnClick()
+    {
+        super.OnClick();
+        this.scaling += this.scaleSteps;
+        var newY = (this.scaling - 1) + -1;
+        console.log(newY);
+        this.position.set(0,newY,0);
+        this.scale.set(this.scaling,this.scaling,1)
+    }
+
     TimedHatching()
     {
         var date = new Date();
@@ -53,6 +79,7 @@ class PumpkinEgg extends Pet
             default:
                 break;
         }
+        newPet.timesClicked = this.timesClicked;
         newPet.name = this.name;
         newPet.creationDate = this.creationDate;
         return newPet;

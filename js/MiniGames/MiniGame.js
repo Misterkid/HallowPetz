@@ -22,7 +22,21 @@ class MiniGame
         this.img.style.position = "absolute";
         this.img.style.zIndex = "10";
         this.img.onclick = ()=>{this.OnClick();}
+        this.isHidden = true;
+        this.img.style.visibility = "hidden";
 
+    }
+    Show()
+    {
+        this.isHidden = false;
+        this.img.style.visibility = "visible";
+    }
+    Hide()
+    {
+        this.isHidden = true;
+        this.img.style.visibility = "hidden";
+        this.velocity.set(0,0,0);
+        this.position = new THREE.Vector3((1280 - 30) * 0.5,(720 - 30) * 0.5,0);
     }
     OnClick()
     {
@@ -32,8 +46,11 @@ class MiniGame
     }
     OnUpdate(e)
     {
+        if(this.isHidden)
+            return;
+
         this.velocity.multiplyScalar(0.99);
-        if(this.velocity.length() < 2)
+        if(this.velocity.length() < 20)
         {
             this.velocity.set(0,0,0);//stop
         }
