@@ -30,6 +30,7 @@ class Main
         document.addEventListener("oncollisionupdate",(e)=> {this.OnCollisionUpdate(e);});
         document.addEventListener("onpumpkinhatch",(e)=> {this.OnPumpkinHatch(e);});
         document.addEventListener("onmouseobjectclick",(e)=>{this.OnMouseObjectClick(e);});
+        document.addEventListener("onballmoving",(e)=>{this.OnBallMove(e);});
         //Reset button
         document.getElementsByClassName("test_reset")[0].onclick = (e) => {this.OnResetClick(e)};
         //Save before closing,refreshing etc...
@@ -104,6 +105,11 @@ class Main
     OnMouseObjectClick(e)
     {
         console.log(e.detail.object);
+    }
+    OnBallMove(e)
+    {
+        //add 0.1 joy per second
+        this.userPet.AddToJoy(0.1 * DeltaTime);
     }
     Createbarmeter()
     {
