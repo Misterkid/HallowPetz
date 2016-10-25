@@ -14,7 +14,7 @@ class PumpkinEgg extends Pet
         this.isHatching = false;
         this.clicksToHatch = 25;
         this.scaling = 1;
-        this.scaleSteps = 0.05
+        this.scaleSteps = 0.05;
         this.height = height;
         //
     }
