@@ -59,22 +59,22 @@ class PumpkinEgg extends Pet
     Hatch(petId,map)
     {
         var map = this.loader.load("assets/textures/pumpkin.png");
-        var newPet = new PumpkinEgg(map,1,2);
+        var newPet = new PumpkinEgg(map,1,1);
         switch(petId)
         {
             case '0':
                 break;
             case '1':
                 map = this.loader.load("assets/textures/ghost_test.png");
-                newPet = new Ghost(map,1,2);
+                newPet = new Ghost(map,4,8);
                 break;
             case '2':
                 map = this.loader.load("assets/textures/zombie.png");
-                newPet = new Zombie(map,1,2);
+                newPet = new Zombie(map,4,8);
                 break;
             case '3':
                 map = this.loader.load("assets/textures/skalet.png");
-                newPet = new Skeleton(map,1,2);
+                newPet = new Skeleton(map,4,8);
                 break;
             default:
                 break;
