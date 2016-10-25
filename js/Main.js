@@ -5,6 +5,7 @@ class Main
 {
     constructor()
     {
+        this.objectL = new ObjectLoader();
         this.sceneRenderer = new SceneRenderer();
         this.sceneRenderer.CreateScene();
         //Texture loader, Keep using this.loader to avoid making more loaders!
@@ -19,6 +20,7 @@ class Main
         this.userPet.SavePet();//saved
         this.userPet.position.set(0,0,0);
         this.sceneRenderer.AddObject(this.userPet);
+        this.CeateTeaPot();
         document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
         //End Test
 
@@ -26,6 +28,7 @@ class Main
         document.addEventListener("onrenderupdate",(e)=> {this.OnRenderUpdate(e);});
         document.addEventListener("oncollisionupdate",(e)=> {this.OnCollisionUpdate(e);});
         document.addEventListener("onpumpkinhatch",(e)=> {this.OnPumpkinHatch(e);});
+        document.addEventListener("onobjectloaddone",(e)=> {this.OnObjectLoadDone(e);});
         //Reset button
         document.getElementsByClassName("test_reset")[0].onclick = (e) => {this.OnResetClick(e)};
         //Save before closing,refreshing etc...
@@ -33,6 +36,25 @@ class Main
         this.sceneRenderer.Render();//Start rendering
     }
     //On Every frame do actions here. This is the main loop.
+
+    //Testing adding OBJ 3d object.
+    CeateTeaPot() {
+        this.objectL = new ObjectLoader();
+        this.boomPos =  new THREE.Vector3(0,0,0);
+        this.boomScale = new THREE.Vector3(0.01,0.01,0.01);
+
+        console.log(this.boompos);
+        this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale);
+
+
+    }
+
+    OnObjectLoadDone(e)
+    {
+        this.sceneRenderer.AddObject(e.detail);
+
+    }
+
     OnRenderUpdate(e)
     {
         //Pet.Update looks at camera, update it each frame.
@@ -61,6 +83,7 @@ class Main
         this.userPet.name = document.getElementsByClassName("pet_name")[0].value;//SetName
         this.userPet.SavePet();
     }
+
     CreateEnvirement()
     {
         var geometry = new THREE.PlaneGeometry(100,100);
