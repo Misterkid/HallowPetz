@@ -12,6 +12,7 @@ class MiniGame
         createdElement.className = "miniball";
         this.speed = 100;
         this.img = document.body.appendChild(createdElement);
+        this.OnBallMoving = new Event('onballmoving');// on render update event
         this.position = new THREE.Vector3((1280 - 30) * 0.5,(720 - 30) * 0.5,0);
         this.speedVector = new THREE.Vector3();
         this.velocity = new THREE.Vector3(0,0,0);
@@ -21,6 +22,7 @@ class MiniGame
         this.img.style.position = "absolute";
         this.img.style.zIndex = "10";
         this.img.onclick = ()=>{this.OnClick();}
+
     }
     OnClick()
     {
@@ -34,6 +36,13 @@ class MiniGame
         if(this.velocity.length() < 2)
         {
             this.velocity.set(0,0,0);//stop
+        }
+        else
+        {
+            //In beweging
+            //Send event to main
+            document.dispatchEvent(this.OnBallMoving);
+
         }
         this.position.add(this.speedVector.copy(this.velocity).multiplyScalar(DeltaTime));
         this.img.style.left = this.position.x +"px";

@@ -26,6 +26,24 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         this.creationDate = date.getTime();
         this.startTime = date.getTime();
     }
+    AddToJoy(add)
+    {
+        this.joy += add;
+        if(this.joy > this.maxMeter)
+            this.joy = this.maxMeter;
+    }
+    AddToHunger(add)
+    {
+        this.hunger += add;
+        if(this.hunger > this.maxMeter)
+            this.hunger = this.maxMeter;
+    }
+    AddToEnergy(add)
+    {
+        this.energy += add;
+        if(this.energy > this.maxMeter)
+            this.energy = this.maxMeter;
+    }
     Update(camera)
     {
         this.lookAt(camera.position);
