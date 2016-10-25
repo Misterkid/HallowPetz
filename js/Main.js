@@ -27,6 +27,9 @@ class Main
         //Mini Game
         this.miniGame = new MiniGame();
         //End
+        //Explosion
+        this.cloudExplosion = new CloudExplosion(this.sceneRenderer);
+        //
         //Listen to events at the end of this constructor.
         document.addEventListener("onrenderupdate",(e)=> {this.OnRenderUpdate(e);});
         document.addEventListener("oncollisionupdate",(e)=> {this.OnCollisionUpdate(e);});
@@ -34,6 +37,7 @@ class Main
         document.addEventListener("onmouseobjectclick",(e)=>{this.OnMouseObjectClick(e);});
         document.addEventListener("onballmoving",(e)=>{this.OnBallMove(e);});
         document.addEventListener("onetentimerend",(e)=>{this.OnEtenTimer(e);});
+        document.addEventListener("oncloudtimerend",(e)=>{this.OnCloudTimerEnd(e);});
         //Menu stuff
         document.getElementsByClassName("save_pet")[0].onclick = (e) => {this.OnSaveClick(e)};
         document.getElementsByClassName("test_reset")[0].onclick = (e) => {this.OnResetClick(e)};
@@ -66,6 +70,7 @@ class Main
             this.sceneRenderer.RotateCameraAround(this.userPet,-1);
         }
         this.miniGame.OnUpdate(e);
+        this.cloudExplosion.OnUpdate(this.sceneRenderer.camera);
 
         for (var i=0; i<this.updateObjects.length; i++)
         {
@@ -287,6 +292,7 @@ class Main
     {
         var id = qUtils.GetRandomBetweenInt(1,3);
         var newPet = this.userPet.Hatch(id.toString());
+        this.cloudExplosion.CreateExplosion(25,newPet.position,2);
         this.sceneRenderer.RemoveObject(this.userPet);
 
         this.clickableObjects.splice(this.userPet);
@@ -294,7 +300,13 @@ class Main
         this.userPet.SavePet();
         this.sceneRenderer.AddObject(this.userPet);
         this.clickableObjects.push(this.userPet);
+        //var explosion = new CloudExplosion(25,this.userPet.position,2,this.sceneRenderer);
 
+    }
+    OnCloudTimerEnd(e)
+    {
+        this.cloudExplosion.clouds.splice(e.detail);
+        this.sceneRenderer.RemoveObject(e.detail);
     }
     LoadPet()
     {
