@@ -21,10 +21,33 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         this.joySteps = 0.3;
         this.energy = 100;
         this.energySteps = 0.7;
-
+        this.timesClicked = 0;
+        this.position.set(0,height/2,0);
         var date = new Date();
         this.creationDate = date.getTime();
         this.startTime = date.getTime();
+    }
+    AddToJoy(add)
+    {
+        this.joy += add;
+        if(this.joy > this.maxMeter)
+            this.joy = this.maxMeter;
+    }
+    AddToHunger(add)
+    {
+        this.hunger += add;
+        if(this.hunger > this.maxMeter)
+            this.hunger = this.maxMeter;
+    }
+    AddToEnergy(add)
+    {
+        this.energy += add;
+        if(this.energy > this.maxMeter)
+            this.energy = this.maxMeter;
+    }
+    OnClick()
+    {
+        this.timesClicked ++;
     }
     Update(camera)
     {
@@ -56,6 +79,7 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         qUtils.SetCookie("pet_hunger",this.hunger);
         qUtils.SetCookie("pet_joy",this.joy);
         qUtils.SetCookie("pet_energy",this.energy);
+        qUtils.SetCookie("pet_times_clicked",this.timesClicked );
         var date = new Date();
         qUtils.SetCookie("pet_last_save",date.getTime());
         qUtils.SetCookie("pet_creation_date",this.creationDate);
@@ -72,6 +96,8 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         this.hunger = qUtils.GetCookie("pet_hunger") - (this.hungerSteps * diffrence);
         this.joy = qUtils.GetCookie("pet_joy")- (this.joySteps * diffrence);
         this.energy = qUtils.GetCookie("pet_energy")- (this.energySteps * diffrence);
+
+        this.timesClicked = qUtils.GetCookie("pet_times_clicked" );
         this.creationDate = qUtils.GetCookie("pet_creation_date");
     }
 }

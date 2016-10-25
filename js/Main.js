@@ -14,23 +14,37 @@ class Main
         this.CreateSkydome();
         this.CreateEnvirement();
         //Pet making test
-        console.log(  document.cookie);
+        console.log( document.cookie);
         this.userPet = null;//Need to load
         this.LoadPet();//Loaded
         this.userPet.SavePet();//saved
-        this.userPet.position.set(0,0,0);
+        //this.userPet.position.set(0,-1,0);
         this.sceneRenderer.AddObject(this.userPet);
         this.CeateTeaPot();
         document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
         //End Test
-
+        this.clickableObjects = new Array();
+        this.clickableObjects.push(this.userPet);
+        //Mini Game
+        this.miniGame = new MiniGame();
+        //End
         //Listen to events at the end of this constructor.
         document.addEventListener("onrenderupdate",(e)=> {this.OnRenderUpdate(e);});
         document.addEventListener("oncollisionupdate",(e)=> {this.OnCollisionUpdate(e);});
         document.addEventListener("onpumpkinhatch",(e)=> {this.OnPumpkinHatch(e);});
+<<<<<<< HEAD
         document.addEventListener("onobjectloaddone",(e)=> {this.OnObjectLoadDone(e);});
         //Reset button
+=======
+        document.addEventListener("onmouseobjectclick",(e)=>{this.OnMouseObjectClick(e);});
+        document.addEventListener("onballmoving",(e)=>{this.OnBallMove(e);});
+        //Menu stuff
+        document.getElementsByClassName("save_pet")[0].onclick = (e) => {this.OnSaveClick(e)};
+>>>>>>> refs/remotes/origin/master
         document.getElementsByClassName("test_reset")[0].onclick = (e) => {this.OnResetClick(e)};
+        document.getElementsByClassName("show_hide")[0].onclick = (e) => {this.OnShowMenuClick(e)};
+        document.getElementsByClassName("ball_btn")[0].onclick = (e) => {this.OnBallBtnClick(e)};
+
         //Save before closing,refreshing etc...
         window.onbeforeunload = (e) => {this.OnBeforeUnload(e)};
         this.sceneRenderer.Render();//Start rendering
@@ -60,7 +74,10 @@ class Main
         //Pet.Update looks at camera, update it each frame.
         this.userPet.Update(this.sceneRenderer.camera);
         //Our test meter!
-        document.getElementsByClassName("test_stats")[0].innerText = "Name:" + this.userPet.name +  " h: " + Math.floor(this.userPet.hunger) + " e: " + Math.floor(this.userPet.energy) + " j: " + Math.floor(this.userPet.joy);
+        document.getElementsByClassName("test_stats")[0].innerText =
+            "Name: " + this.userPet.name ;
+
+        this.Createbarmeter();
 
         //Rotate around the pet
         if(keyboard.GetKey('a'))
@@ -71,17 +88,13 @@ class Main
         {
             this.sceneRenderer.RotateCameraAround(this.userPet,-1);
         }
+        this.miniGame.OnUpdate(e);
 
     }
     //On Every frame after RenderUpdate do COLLISION detection here.
     OnCollisionUpdate(e)
     {
-
-    }
-    OnBeforeUnload()
-    {
-        this.userPet.name = document.getElementsByClassName("pet_name")[0].value;//SetName
-        this.userPet.SavePet();
+        mouse.OnMouseRayUpdate(this.clickableObjects,this.sceneRenderer.camera);
     }
 
     CreateEnvirement()
@@ -112,11 +125,153 @@ class Main
         light.position.set( 0, 1, 1 );
         this.sceneRenderer.AddObject(light);
     }
+    OnShowMenuClick(e)
+    {
+        this.ShowHideMenu();
+    }
+    ShowHideMenu()
+    {
+        var menuItems = document.getElementsByClassName("menu_obj");
+        for(var i = 0; i < menuItems.length; i ++)
+        {
+            if( menuItems[i].style.visibility == "hidden")
+            {
+                menuItems[i].style.visibility = "visible";
+                this.miniGame.Hide();
+            }
+            else
+            {
+                menuItems[i].style.visibility = "hidden";
+            }
+        }
+    }
+    OnBallBtnClick(e)
+    {
+        if(this.miniGame.isHidden == false)
+        {
+            this.miniGame.Hide();
+        }
+        else
+        {
+            this.miniGame.Show();
+        }
+    }
     OnResetClick(e)
     {
+        this.ShowHideMenu();
         this.ResetPet();
     }
+    OnSaveClick(e)
+    {
+        this.ShowHideMenu();
+        this.SavePet();
+    }
+    OnBeforeUnload()
+    {
+        this.SavePet();
+    }
+    SavePet()
+    {
+        this.userPet.name = document.getElementsByClassName("pet_name")[0].value;//SetName
+        this.userPet.SavePet();
+    }
+    OnMouseObjectClick(e)
+    {
+        //Userpet clicked
+        if(e.detail.object.uuid == this.userPet.uuid)
+        {
+            this.userPet.OnClick();
+            console.log("clicked");
+        }
+    }
+    OnBallMove(e)
+    {
+        //add 0.1 joy per second
+        this.userPet.AddToJoy(0.5 * DeltaTime);
+    }
+    Createbarmeter()
+    {
+        // honger
+        if (Math.floor(this.userPet.hunger) < 101)
+        {
+            if (Math.floor(this.userPet.hunger) > 95)
+            {document.getElementsByClassName("honger")[0].src = "assets/textures/100.png"}
+            if (Math.floor(this.userPet.hunger) > 85 && Math.floor(this.userPet.hunger) < 95)
+            {document.getElementsByClassName("honger")[0].src = "assets/textures/90.png"}
+            if (Math.floor(this.userPet.hunger) > 75 && Math.floor(this.userPet.hunger) < 85)
+            {document.getElementsByClassName("honger")[0].src = "assets/textures/80.png"}
+            if (Math.floor(this.userPet.hunger) > 65 && Math.floor(this.userPet.hunger) < 75)
+            {document.getElementsByClassName("honger")[0].src = "assets/textures/70.png"}
+            if (Math.floor(this.userPet.hunger) > 55 && Math.floor(this.userPet.hunger) < 65)
+            {document.getElementsByClassName("honger")[0].src = "assets/textures/60.png"}
+            if (Math.floor(this.userPet.hunger) > 45 && Math.floor(this.userPet.hunger) < 55)
+            {document.getElementsByClassName("honger")[0].src = "assets/textures/50.png"}
+            if (Math.floor(this.userPet.hunger) > 35 && Math.floor(this.userPet.hunger) < 45)
+            {document.getElementsByClassName("honger")[0].src = "assets/textures/40.png"}
+            if (Math.floor(this.userPet.hunger) > 25 && Math.floor(this.userPet.hunger) < 35)
+            {document.getElementsByClassName("honger")[0].src = "assets/textures/30.png"}
+            if (Math.floor(this.userPet.hunger) > 15 && Math.floor(this.userPet.hunger) < 25)
+            {document.getElementsByClassName("honger")[0].src = "assets/textures/20.png"}
+            if (Math.floor(this.userPet.hunger) > 5 && Math.floor(this.userPet.hunger) < 15)
+            {document.getElementsByClassName("honger")[0].src = "assets/textures/10.png"}
+            if (Math.floor(this.userPet.hunger) <5)
+            {document.getElementsByClassName("honger")[0].src = "assets/textures/0.png"}
+        }
 
+        //energie
+        if (Math.floor(this.userPet.energy) < 101)
+        {
+            if (Math.floor(this.userPet.energy) > 95)
+            {document.getElementsByClassName("energie")[0].src = "assets/textures/100.png"}
+            if (Math.floor(this.userPet.energy) > 85 && Math.floor(this.userPet.energy) < 95)
+            {document.getElementsByClassName("energie")[0].src = "assets/textures/90.png"}
+            if (Math.floor(this.userPet.energy) > 75 && Math.floor(this.userPet.energy) < 85)
+            {document.getElementsByClassName("energie")[0].src = "assets/textures/80.png"}
+            if (Math.floor(this.userPet.energy) > 65 && Math.floor(this.userPet.energy) < 75)
+            {document.getElementsByClassName("energie")[0].src = "assets/textures/70.png"}
+            if (Math.floor(this.userPet.energy) > 55 && Math.floor(this.userPet.energy) < 65)
+            {document.getElementsByClassName("energie")[0].src = "assets/textures/60.png"}
+            if (Math.floor(this.userPet.energy) > 45 && Math.floor(this.userPet.energy) < 55)
+            {document.getElementsByClassName("energie")[0].src = "assets/textures/50.png"}
+            if (Math.floor(this.userPet.energy) > 35 && Math.floor(this.userPet.energy) < 45)
+            {document.getElementsByClassName("energie")[0].src = "assets/textures/40.png"}
+            if (Math.floor(this.userPet.energy) > 25 && Math.floor(this.userPet.energy) < 35)
+            {document.getElementsByClassName("energie")[0].src = "assets/textures/30.png"}
+            if (Math.floor(this.userPet.energy) > 15 && Math.floor(this.userPet.energy) < 25)
+            {document.getElementsByClassName("energie")[0].src = "assets/textures/20.png"}
+            if (Math.floor(this.userPet.energy) > 5 && Math.floor(this.userPet.energy) < 15)
+            {document.getElementsByClassName("energie")[0].src = "assets/textures/10.png"}
+            if (Math.floor(this.userPet.energy) <5)
+            {document.getElementsByClassName("energie")[0].src = "assets/textures/0.png"}
+        }
+
+        // plezier
+        if (Math.floor(this.userPet.joy) < 101)
+        {
+            if (Math.floor(this.userPet.joy) > 95)
+            {document.getElementsByClassName("plezier")[0].src = "assets/textures/100.png"}
+            if (Math.floor(this.userPet.joy) > 85 && Math.floor(this.userPet.joy) < 95)
+            {document.getElementsByClassName("plezier")[0].src = "assets/textures/90.png"}
+            if (Math.floor(this.userPet.joy) > 75 && Math.floor(this.userPet.joy) < 85)
+            {document.getElementsByClassName("plezier")[0].src = "assets/textures/80.png"}
+            if (Math.floor(this.userPet.joy) > 65 && Math.floor(this.userPet.joy) < 75)
+            {document.getElementsByClassName("plezier")[0].src = "assets/textures/70.png"}
+            if (Math.floor(this.userPet.joy) > 55 && Math.floor(this.userPet.joy) < 65)
+            {document.getElementsByClassName("plezier")[0].src = "assets/textures/60.png"}
+            if (Math.floor(this.userPet.joy) > 45 && Math.floor(this.userPet.joy) < 55)
+            {document.getElementsByClassName("plezier")[0].src = "assets/textures/50.png"}
+            if (Math.floor(this.userPet.joy) > 35 && Math.floor(this.userPet.joy) < 45)
+            {document.getElementsByClassName("plezier")[0].src = "assets/textures/40.png"}
+            if (Math.floor(this.userPet.joy) > 25 && Math.floor(this.userPet.joy) < 35)
+            {document.getElementsByClassName("plezier")[0].src = "assets/textures/30.png"}
+            if (Math.floor(this.userPet.joy) > 15 && Math.floor(this.userPet.joy) < 25)
+            {document.getElementsByClassName("plezier")[0].src = "assets/textures/20.png"}
+            if (Math.floor(this.userPet.joy) > 5 && Math.floor(this.userPet.joy) < 15)
+            {document.getElementsByClassName("plezier")[0].src = "assets/textures/10.png"}
+            if (Math.floor(this.userPet.joy) <5)
+            {document.getElementsByClassName("plezier")[0].src = "assets/textures/0.png"}
+        }
+    }
     ResetPet()
     {
         //NewPet
@@ -124,12 +279,14 @@ class Main
         if(result == true)
         {
             this.sceneRenderer.RemoveObject(this.userPet);
-            var map = this.loader.load("assets/textures/test.png");
+            this.clickableObjects.splice(this.userPet);
+            var map = this.loader.load("assets/textures/pumpkin.png");
             this.userPet = new PumpkinEgg(map,1,2);
             this.userPet.SavePet();
 
             document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
             this.sceneRenderer.AddObject(this.userPet);
+            this.clickableObjects.push(this.userPet);
         }
     }
     OnPumpkinHatch(e)
@@ -137,42 +294,47 @@ class Main
         var id = qUtils.GetRandomBetweenInt(1,3);
         var newPet = this.userPet.Hatch(id.toString());
         this.sceneRenderer.RemoveObject(this.userPet);
+
+        this.clickableObjects.splice(this.userPet);
         this.userPet = newPet;
         this.userPet.SavePet();
         this.sceneRenderer.AddObject(this.userPet);
+        this.clickableObjects.push(this.userPet);
 
     }
     LoadPet()
     {
         var petId = qUtils.GetCookie("pet_id");
-        var map = this.loader.load("assets/textures/test.png");
+        var map = this.loader.load("assets/textures/pumpkin.png");
         if(petId == null || petId == -1 || petId == "")
         {
             //NewPet
-            this.userPet = new PumpkinEgg(map,1,2);
+            this.userPet = new PumpkinEgg(map,1,1);
         }
         else
         {
             switch(petId)
             {
                 case '0':
-                    this.userPet = new PumpkinEgg(map,1,2);
+                    this.userPet = new PumpkinEgg(map,1,1);
                     break;
                 case '1':
                     map = this.loader.load("assets/textures/ghost_test.png");
-                    this.userPet = new Ghost(map,1,2);
+                    this.userPet = new Ghost(map,4,8);
                     break;
                 case '2':
-                    this.userPet = new Zombie(map,1,2);
+                    map = this.loader.load("assets/textures/zombie.png");
+                    this.userPet = new Zombie(map,4,8);
                     break;
                 case '3':
-                    this.userPet = new Skeleton(map,1,2);
+                    map = this.loader.load("assets/textures/skalet.png");
+                    this.userPet = new Skeleton(map,4,8);
                     break;
                 default:
                     //Someone cheating most likely xD
                     console.log("cheater");
                     qUtils.DeleteAllCookies();
-                    this.userPet = new PumpkinEgg(map,1,2);
+                    this.userPet = new PumpkinEgg(map,1,1);
                     return;
                     break;
             }

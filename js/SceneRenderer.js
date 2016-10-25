@@ -42,6 +42,8 @@ class SceneRenderer
         document.body.appendChild(this.renderer.domElement);
         //Camera position
         this.camera.position.set(0,2,10);
+        this.lookAtPosition = new THREE.Vector3(0,2,0);
+        this.camera.lookAt( this.lookAtPosition );
     }
     Render(e)
     {
@@ -68,7 +70,7 @@ class SceneRenderer
         this.camera.position.x = Math.sin(this.rotation)  * distance;
         this.camera.position.z = Math.cos(this.rotation)  * distance;
         //this.camera.position.y = this.camera.position.y;
-        this.camera.lookAt( target.position ); //Target
+        this.camera.lookAt( this.lookAtPosition ); //Target
     }
     //Disabled, well we need every bit of performance!
     CalcAvgDelta()
