@@ -26,6 +26,9 @@ class Main
         //Mini Game
         this.miniGame = new MiniGame();
         //End
+        //Explosion
+        this.cloudExplosion = new CloudExplosion(this.sceneRenderer);
+        //
         //Listen to events at the end of this constructor.
         document.addEventListener("onrenderupdate",(e)=> {this.OnRenderUpdate(e);});
         document.addEventListener("oncollisionupdate",(e)=> {this.OnCollisionUpdate(e);});
@@ -64,6 +67,7 @@ class Main
             this.sceneRenderer.RotateCameraAround(this.userPet,-1);
         }
         this.miniGame.OnUpdate(e);
+        this.cloudExplosion.OnUpdate(this.sceneRenderer.camera);
 
     }
     //On Every frame after RenderUpdate do COLLISION detection here.
@@ -267,6 +271,7 @@ class Main
     {
         var id = qUtils.GetRandomBetweenInt(1,3);
         var newPet = this.userPet.Hatch(id.toString());
+        this.cloudExplosion.CreateExplosion(25,newPet.position,2);
         this.sceneRenderer.RemoveObject(this.userPet);
 
         this.clickableObjects.splice(this.userPet);
@@ -274,10 +279,12 @@ class Main
         this.userPet.SavePet();
         this.sceneRenderer.AddObject(this.userPet);
         this.clickableObjects.push(this.userPet);
+        //var explosion = new CloudExplosion(25,this.userPet.position,2,this.sceneRenderer);
 
     }
     OnCloudTimerEnd(e)
     {
+        this.cloudExplosion.clouds.splice(e.detail);
         this.sceneRenderer.RemoveObject(e.detail);
     }
     LoadPet()

@@ -8,9 +8,24 @@ class Cloud extends THREE.Mesh
         var geometry = new THREE.PlaneGeometry(width,height);
         var material = new THREE.MeshLambertMaterial();
         material.map = map;
-        var randomTime = qUtils.GetRandomBetweenInt(1000,4000);
-        this.timer = setInterval((e)=>{this.OnTimerEnd(e);},randomTime);
+        material.depthWrite = false;
+        material.depthTest = false;
+        material.transparent = true;
         super(geometry,material);
+        this.renderOrder = 4;
+        var randomTime = qUtils.GetRandomBetweenInt(4000,4000);
+        this.timer = setInterval((e)=>{this.OnTimerEnd(e);},randomTime);
+
+        var randDirX =  qUtils.GetRandomBetweenInt(-10,10);
+        var randDirY = qUtils.GetRandomBetweenInt(-10,10);
+        this.dir = new THREE.Vector3(randDirX,randDirY,0);
+    }
+    OnUpdate(camera)
+    {
+        this.position.set(this.position.x + (this.dir.x * DeltaTime),this.position.y + (this.dir.y * DeltaTime),0);
+        this.lookAt(camera.position);
+        //this.position.translateX(this.dir.x * DeltaTime);
+        //this.position.translateX(this.dir.y * DeltaTime);
     }
     OnTimerEnd(e)
     {
