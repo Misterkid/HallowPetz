@@ -39,7 +39,7 @@ class PumpkinEgg extends Pet
     {
         super.OnClick();
         this.scaling += this.scaleSteps;
-        var newY = (this.scaling - 1) + (this.height/2);
+        var newY = (this.scaling - 1) + (this.height/2)-2;
         console.log(newY);
         this.position.set(0,newY,0);
         this.scale.set(this.scaling,this.scaling,1)
