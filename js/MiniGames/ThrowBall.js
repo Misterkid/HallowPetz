@@ -16,6 +16,7 @@ class ThrowBall extends THREE.Mesh
         this.velocity = new THREE.Vector3(0,0,0);
         //this.BallMesh = new THREE.Mesh(geomatry,material);
     }
+
     OnUpdate(e)
     {
         this.position.add(this.speedVector.copy(this.velocity).multiplyScalar(DeltaTime));
@@ -43,7 +44,6 @@ class ThrowBall extends THREE.Mesh
     OnCollisionUpdate(e,camera)
     {
         var screenPos = this.ToScreenPosition(camera);
-
         if(screenPos.x > 1080 - 2
             || screenPos.x < 0 + 2)
         {
@@ -59,6 +59,5 @@ class ThrowBall extends THREE.Mesh
             this.velocity.y *= -1;
             this.position.set(this.position.x + this.velocity.x * DeltaTime,this.position.y + this.velocity.y * DeltaTime, this.position.z);
         }
-
     }
 }

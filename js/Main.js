@@ -17,11 +17,12 @@ class Main
         this.userPet = null;//Need to load
         this.LoadPet();//Loaded
         this.userPet.SavePet();//saved
-        this.userPet.position.set(0,0,0);
+        //this.userPet.position.set(0,-1,0);
         this.sceneRenderer.AddObject(this.userPet);
         document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
         //End Test
         this.clickableObjects = new Array();
+        this.clickableObjects.push(this.userPet);
         //Mini Game
         this.miniGame = new MiniGame();
         //End
@@ -31,8 +32,12 @@ class Main
         document.addEventListener("onpumpkinhatch",(e)=> {this.OnPumpkinHatch(e);});
         document.addEventListener("onmouseobjectclick",(e)=>{this.OnMouseObjectClick(e);});
         document.addEventListener("onballmoving",(e)=>{this.OnBallMove(e);});
-        //Reset button
+        //Menu stuff
+        document.getElementsByClassName("save_pet")[0].onclick = (e) => {this.OnSaveClick(e)};
         document.getElementsByClassName("test_reset")[0].onclick = (e) => {this.OnResetClick(e)};
+        document.getElementsByClassName("show_hide")[0].onclick = (e) => {this.OnShowMenuClick(e)};
+        document.getElementsByClassName("ball_btn")[0].onclick = (e) => {this.OnBallBtnClick(e)};
+
         //Save before closing,refreshing etc...
         window.onbeforeunload = (e) => {this.OnBeforeUnload(e)};
         this.sceneRenderer.Render();//Start rendering
@@ -65,11 +70,6 @@ class Main
     {
         mouse.OnMouseRayUpdate(this.clickableObjects,this.sceneRenderer.camera);
     }
-    OnBeforeUnload()
-    {
-        this.userPet.name = document.getElementsByClassName("pet_name")[0].value;//SetName
-        this.userPet.SavePet();
-    }
     CreateEnvirement()
     {
         var geometry = new THREE.PlaneGeometry(100,100);
@@ -98,18 +98,69 @@ class Main
         light.position.set( 0, 1, 1 );
         this.sceneRenderer.AddObject(light);
     }
+    OnShowMenuClick(e)
+    {
+        this.ShowHideMenu();
+    }
+    ShowHideMenu()
+    {
+        var menuItems = document.getElementsByClassName("menu_obj");
+        for(var i = 0; i < menuItems.length; i ++)
+        {
+            if( menuItems[i].style.visibility == "hidden")
+            {
+                menuItems[i].style.visibility = "visible";
+                this.miniGame.Hide();
+            }
+            else
+            {
+                menuItems[i].style.visibility = "hidden";
+            }
+        }
+    }
+    OnBallBtnClick(e)
+    {
+        if(this.miniGame.isHidden == false)
+        {
+            this.miniGame.Hide();
+        }
+        else
+        {
+            this.miniGame.Show();
+        }
+    }
     OnResetClick(e)
     {
+        this.ShowHideMenu();
         this.ResetPet();
+    }
+    OnSaveClick(e)
+    {
+        this.ShowHideMenu();
+        this.SavePet();
+    }
+    OnBeforeUnload()
+    {
+        this.SavePet();
+    }
+    SavePet()
+    {
+        this.userPet.name = document.getElementsByClassName("pet_name")[0].value;//SetName
+        this.userPet.SavePet();
     }
     OnMouseObjectClick(e)
     {
-        console.log(e.detail.object);
+        //Userpet clicked
+        if(e.detail.object.uuid == this.userPet.uuid)
+        {
+            this.userPet.OnClick();
+            console.log("clicked");
+        }
     }
     OnBallMove(e)
     {
         //add 0.1 joy per second
-        this.userPet.AddToJoy(0.1 * DeltaTime);
+        this.userPet.AddToJoy(0.5 * DeltaTime);
     }
     Createbarmeter()
     {
@@ -201,12 +252,14 @@ class Main
         if(result == true)
         {
             this.sceneRenderer.RemoveObject(this.userPet);
+            this.clickableObjects.splice(this.userPet);
             var map = this.loader.load("assets/textures/pumpkin.png");
             this.userPet = new PumpkinEgg(map,1,2);
             this.userPet.SavePet();
 
             document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
             this.sceneRenderer.AddObject(this.userPet);
+            this.clickableObjects.push(this.userPet);
         }
     }
     OnPumpkinHatch(e)
@@ -214,9 +267,12 @@ class Main
         var id = qUtils.GetRandomBetweenInt(1,3);
         var newPet = this.userPet.Hatch(id.toString());
         this.sceneRenderer.RemoveObject(this.userPet);
+
+        this.clickableObjects.splice(this.userPet);
         this.userPet = newPet;
         this.userPet.SavePet();
         this.sceneRenderer.AddObject(this.userPet);
+        this.clickableObjects.push(this.userPet);
 
     }
     LoadPet()

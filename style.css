@@ -25,21 +25,37 @@ canvas
     width: 100px;
     height: 30px;
 }
-
+/*
+.menu_obj
+{
+    visibility: hidden;
+}
+*/
 p
 {
-    text-align: center;
+    /*text-align: center;*/
     color:white;
+}
+.menu
+{
+    width: 720px;
+    height: 500px;
+    background-color: rgba(100,100,100,0.9);
+    position: absolute;
 }
 button
 {
+    /*
     display: block;
     margin: 0 auto;
+    */
 }
 input
 {
+    /*
     display: block;
     margin: 0 auto;
+    */
 }
 
 .hud
@@ -49,5 +65,14 @@ input
     margin: 0 auto;
     position: absolute;
     z-index: 3;
+
+    /*disable select stuff */
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -khtml-user-select: none;    /* Konqueror */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
 
 }
