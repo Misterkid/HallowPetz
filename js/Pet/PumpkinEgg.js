@@ -15,6 +15,7 @@ class PumpkinEgg extends Pet
         this.clicksToHatch = 25;
         this.scaling = 1;
         this.scaleSteps = 0.05
+        this.height = height;
         //
     }
     Update(camera)
@@ -38,7 +39,7 @@ class PumpkinEgg extends Pet
     {
         super.OnClick();
         this.scaling += this.scaleSteps;
-        var newY = (this.scaling - 1) + -1;
+        var newY = (this.scaling - 1) + (this.height/2);
         console.log(newY);
         this.position.set(0,newY,0);
         this.scale.set(this.scaling,this.scaling,1)
