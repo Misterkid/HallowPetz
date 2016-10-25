@@ -226,32 +226,32 @@ class Main
         if(petId == null || petId == -1 || petId == "")
         {
             //NewPet
-            this.userPet = new PumpkinEgg(map,1,2);
+            this.userPet = new PumpkinEgg(map,1,1);
         }
         else
         {
             switch(petId)
             {
                 case '0':
-                    this.userPet = new PumpkinEgg(map,1,2);
+                    this.userPet = new PumpkinEgg(map,1,1);
                     break;
                 case '1':
                     map = this.loader.load("assets/textures/ghost_test.png");
-                    this.userPet = new Ghost(map,1,2);
+                    this.userPet = new Ghost(map,4,8);
                     break;
                 case '2':
                     map = this.loader.load("assets/textures/zombie.png");
-                    this.userPet = new Zombie(map,1,2);
+                    this.userPet = new Zombie(map,4,8);
                     break;
                 case '3':
                     map = this.loader.load("assets/textures/skalet.png");
-                    this.userPet = new Skeleton(map,1,2);
+                    this.userPet = new Skeleton(map,4,8);
                     break;
                 default:
                     //Someone cheating most likely xD
                     console.log("cheater");
                     qUtils.DeleteAllCookies();
-                    this.userPet = new PumpkinEgg(map,1,2);
+                    this.userPet = new PumpkinEgg(map,1,1);
                     return;
                     break;
             }
