@@ -13,7 +13,7 @@ class Main
         this.CreateSkydome();
         this.CreateEnvirement();
         //Pet making test
-        console.log(  document.cookie);
+        console.log( document.cookie);
         this.userPet = null;//Need to load
         this.LoadPet();//Loaded
         this.userPet.SavePet();//saved
@@ -21,11 +21,15 @@ class Main
         this.sceneRenderer.AddObject(this.userPet);
         document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
         //End Test
-
+        this.clickableObjects = new Array();
+        //Mini Game
+        this.miniGame = new MiniGame();
+        //End
         //Listen to events at the end of this constructor.
         document.addEventListener("onrenderupdate",(e)=> {this.OnRenderUpdate(e);});
         document.addEventListener("oncollisionupdate",(e)=> {this.OnCollisionUpdate(e);});
         document.addEventListener("onpumpkinhatch",(e)=> {this.OnPumpkinHatch(e);});
+        document.addEventListener("onmouseobjectclick",(e)=>{this.OnMouseObjectClick(e);});
         //Reset button
         document.getElementsByClassName("test_reset")[0].onclick = (e) => {this.OnResetClick(e)};
         //Save before closing,refreshing etc...
@@ -52,12 +56,13 @@ class Main
         {
             this.sceneRenderer.RotateCameraAround(this.userPet,-1);
         }
+        this.miniGame.OnUpdate(e);
 
     }
     //On Every frame after RenderUpdate do COLLISION detection here.
     OnCollisionUpdate(e)
     {
-
+        mouse.OnMouseRayUpdate(this.clickableObjects,this.sceneRenderer.camera);
     }
     OnBeforeUnload()
     {
@@ -95,6 +100,10 @@ class Main
     OnResetClick(e)
     {
         this.ResetPet();
+    }
+    OnMouseObjectClick(e)
+    {
+        console.log(e.detail.object);
     }
     Createbarmeter()
     {
@@ -170,7 +179,6 @@ class Main
         if (Math.floor(this.userPet.joy) <5)
         {document.getElementsByClassName("plezier")[0].src = "assets/textures/0.png"}
     }
-
     ResetPet()
     {
         //NewPet
@@ -199,7 +207,7 @@ class Main
     LoadPet()
     {
         var petId = qUtils.GetCookie("pet_id");
-        var map = this.loader.load("assets/textures/test.png");
+        var map = this.loader.load("assets/textures/pumpkin.png");
         if(petId == null || petId == -1 || petId == "")
         {
             //NewPet
