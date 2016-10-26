@@ -327,6 +327,12 @@ class Main
             this.userPet.AddToEnergy(-25 * DeltaTime);
             this.userPet.AddToHunger(-25 * DeltaTime);
         }
+        if(keyboard.GetKey('v'))
+        {
+            this.userPet.AddToJoy(25 * DeltaTime);
+            this.userPet.AddToEnergy(25 * DeltaTime);
+            this.userPet.AddToHunger(25 * DeltaTime);
+        }
     }
     OnPetDead(e)
     {
