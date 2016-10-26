@@ -292,7 +292,7 @@ class Main
     {
         var id = qUtils.GetRandomBetweenInt(1,3);
         var newPet = this.userPet.Hatch(id.toString());
-        this.cloudExplosion.CreateExplosion(25,newPet.position,2);
+        this.cloudExplosion.CreateExplosion(100,newPet.position,2);
         this.sceneRenderer.RemoveObject(this.userPet);
 
         this.clickableObjects.splice(this.userPet);
