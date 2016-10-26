@@ -30,6 +30,7 @@ class Main
         this.miniGame = new MiniGame();
         this.isDag = true;
         //End
+        this.effectsMuted = false;
         //Explosion
         this.cloudExplosion = new CloudExplosion(this.sceneRenderer);
         //
@@ -47,6 +48,9 @@ class Main
         //Menu stuff
         document.getElementsByClassName("save_pet")[0].onclick = (e) => {this.OnSaveClick(e)};
         document.getElementsByClassName("test_reset")[0].onclick = (e) => {this.OnResetClick(e)};
+        document.getElementsByClassName("effects_mute")[0].onclick = (e) => {this.OnEffectsMute(e)};
+        document.getElementsByClassName("bgm_mute")[0].onclick = (e) => {this.OnBGMMute(e)};
+
         document.getElementsByClassName("show_hide")[0].onclick = (e) => {this.OnShowMenuClick(e)};
         document.getElementsByClassName("ball_btn")[0].onclick = (e) => {this.OnBallBtnClick(e)};
         document.getElementsByClassName("eten1")[0].onclick = (e) => {this.OnEten1Click(e)};
@@ -55,9 +59,11 @@ class Main
         //Save before closing,refreshing etc...
         window.onbeforeunload = (e) => {this.OnBeforeUnload(e)};
         this.sceneRenderer.Render();//Start rendering
+
+        this.bgmMixer = new BGMMixer();
+        this.bgmMixer.Shuffle();//Start
     }
     //On Every frame do actions here. This is the main loop.
-
     //Testing adding OBJ 3d object.
     CeateTeaPot() {
         this.boomPos =  new THREE.Vector3(10,10,0);
@@ -103,6 +109,19 @@ class Main
         }
         this.Cheats();//Remove on release
 
+        if(keyboard.GetKey('t'))
+        {
+            this.bgmMixer.Stop();
+
+        }
+        if(keyboard.GetKey('s'))
+        {
+            this.bgmMixer.Shuffle();
+
+        }
+
+
+
     }
     //On Every frame after RenderUpdate do COLLISION detection here.
     OnCollisionUpdate(e)
@@ -122,7 +141,6 @@ class Main
 
 
     }
-
     CreateSkydome()
     {
         //SkyDome
@@ -334,6 +352,30 @@ class Main
             this.userPet.AddToHunger(25 * DeltaTime);
         }
     }
+    OnEffectsMute(e)
+    {
+        if(this.effectsMuted)
+        {
+            this.effectsMuted = false;
+        }
+        else
+        {
+            this.effectsMuted = true;
+        }
+    }
+    OnBGMMute(e)
+    {
+        if(this.bgmMixer.muted)
+        {
+            this.bgmMixer.Shuffle();
+            this.bgmMixer.muted = false;
+        }
+        else
+        {
+            this.bgmMixer.Stop();
+            this.bgmMixer.muted = true;
+        }
+    }
     OnPetDead(e)
     {
         var map = this.loader.load("assets/textures/grave.png");
@@ -383,6 +425,13 @@ class Main
             this.Alive();
         }
     }
+    PlaySound(audioSource)
+    {
+        if(this.effectsMuted == false)
+        {
+            new OneShotAudio(audioSource);
+        }
+    }
     OnPumpkinHatch(e)
     {
         var id = qUtils.GetRandomBetweenInt(1,3);
@@ -395,6 +444,7 @@ class Main
         this.userPet.SavePet();
         this.sceneRenderer.AddObject(this.userPet);
         this.clickableObjects.push(this.userPet);
+        this.PlaySound(audioSources.eggHatch);
         //var explosion = new CloudExplosion(25,this.userPet.position,2,this.sceneRenderer);
 
     }
