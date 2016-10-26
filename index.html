@@ -13,7 +13,11 @@
             <input type="text" class ="pet_name menu_obj" style = "visibility: hidden" name="pet_name" value ="no_name">
             <button class="save_pet menu_obj" style = "visibility: hidden">Save Pet</button>
             <button class="test_reset menu_obj" style = "visibility: hidden">Reset</button>
-            <P>lalalaal</P>
+            <P>
+                A & D to move the camera <br>
+                Feed your pet by clicking on the food <br>
+                Get a ball by clicking on the ball and play with your pet! <br>
+            </P>
             <p>This game uses cookies to save your pet! Cookies get destroyed after 31 days inactivity.</p>
         </div>
         <p class = "test_stats">ToDo</p>
@@ -23,9 +27,14 @@
         <img class = "ball_btn" src = "assets/textures/bal.png">
         <img class = "eten1" src = "assets/textures/eten1.png">
         <img class = "slapen" src = "assets/textures/bed.png">
+        <div class = "grave" style = "visibility: hidden">
+            <p>Rest in peperoni</p>
+        </div>
 
     </div>
     <script src = "js/lib/three.min.js"></script>
+    <script src = "js/lib/OBJLoader.js"></script>
+    <script src=  "js/ObjectLoader.js"></script>
     <script src = "js/Keyboard.js"></script>
     <script src = "js/Mouse.js"></script>
     <script src = "js/QUtils.js"></script>
@@ -36,6 +45,7 @@
     <script src = "js/Pet/Ghost.js"></script>
     <script src = "js/Pet/Skeleton.js"></script>
     <script src = "js/Pet/Zombie.js"></script>
+    <script src = "js/Pet/Death.js"></script>
     <!-- Mini Games -->
     <script src = "js/MiniGames/MiniGame.js"></script>
     <!-- Effects -->
