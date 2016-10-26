@@ -56,14 +56,13 @@ class Main
         this.sceneRenderer.Render();//Start rendering
     }
     //On Every frame do actions here. This is the main loop.
-    OnRenderUpdate(e) 
+
     //Testing adding OBJ 3d object.
     CeateTeaPot() {
-        this.objectL = new ObjectLoader();
-        this.boomPos =  new THREE.Vector3(0,0,0);
+        this.boomPos =  new THREE.Vector3(10,10,0);
         this.boomScale = new THREE.Vector3(0.01,0.01,0.01);
 
-        console.log(this.boompos);
+        console.log(this.boomPos);
         this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale);
 
 
