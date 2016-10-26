@@ -12,6 +12,7 @@ class BGMMixer
             this.AddToBgm("assets/sounds/bgm0" + (i + 1) + ".wav");
         }
         this.bgm = document.createElement('audio');
+        this.muted = false;
     }
     AddToBgm(path)
     {
