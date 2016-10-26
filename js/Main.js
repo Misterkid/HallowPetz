@@ -55,6 +55,9 @@ class Main
         //Save before closing,refreshing etc...
         window.onbeforeunload = (e) => {this.OnBeforeUnload(e)};
         this.sceneRenderer.Render();//Start rendering
+
+        this.bgmMixer = new BGMMixer();
+        this.bgmMixer.Shuffle();//Start
     }
     //On Every frame do actions here. This is the main loop.
 
@@ -103,6 +106,19 @@ class Main
         }
         this.Cheats();//Remove on release
 
+        if(keyboard.GetKey('t'))
+        {
+            this.bgmMixer.Stop();
+
+        }
+        if(keyboard.GetKey('s'))
+        {
+            this.bgmMixer.Shuffle();
+
+        }
+
+
+
     }
     //On Every frame after RenderUpdate do COLLISION detection here.
     OnCollisionUpdate(e)
@@ -122,7 +138,6 @@ class Main
 
 
     }
-
     CreateSkydome()
     {
         //SkyDome
@@ -389,6 +404,7 @@ class Main
         this.userPet.SavePet();
         this.sceneRenderer.AddObject(this.userPet);
         this.clickableObjects.push(this.userPet);
+        new OneShotAudio(audioSources.eggHatch);
         //var explosion = new CloudExplosion(25,this.userPet.position,2,this.sceneRenderer);
 
     }
