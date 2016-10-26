@@ -28,6 +28,7 @@ class Main
         this.updateObjects = new Array ();
         //Mini Game
         this.miniGame = new MiniGame();
+        this.isDag = true;
         //End
         //Explosion
         this.cloudExplosion = new CloudExplosion(this.sceneRenderer);
@@ -48,12 +49,16 @@ class Main
         document.getElementsByClassName("show_hide")[0].onclick = (e) => {this.OnShowMenuClick(e)};
         document.getElementsByClassName("ball_btn")[0].onclick = (e) => {this.OnBallBtnClick(e)};
         document.getElementsByClassName("eten1")[0].onclick = (e) => {this.OnEten1Click(e)};
+        document.getElementsByClassName("slapen")[0].onclick = (e) => {this.OnSlapenClick(e)};
 
         //Save before closing,refreshing etc...
         window.onbeforeunload = (e) => {this.OnBeforeUnload(e)};
         this.sceneRenderer.Render();//Start rendering
     }
     //On Every frame do actions here. This is the main loop.
+<<<<<<< HEAD
+    OnRenderUpdate(e) 
+=======
 
     //Testing adding OBJ 3d object.
     CeateTeaPot() {
@@ -74,6 +79,7 @@ class Main
     }
 
     OnRenderUpdate(e)
+>>>>>>> refs/remotes/origin/Michael
     {
         //Pet.Update looks at camera, update it each frame.
         this.userPet.Update(this.sceneRenderer.camera);
@@ -180,6 +186,21 @@ class Main
         this.updateObjects.slice(e.detail);
         this.sceneRenderer.RemoveObject(e.detail);
         this.userPet.AddToHunger(3);
+    }
+    OnSlapenClick(e)
+    {
+        if(this.isDag == true)
+        {
+            this.userPet.asleep = true;
+            this.isDag = false;
+            // moet nog iets toegevoegd worden zodat je kan zien dat hij slaapt
+        }
+        else
+        {
+            this.userPet.asleep = false;
+            this.isDag = true;
+        }
+        console.log(this.isDag);
     }
     OnResetClick(e)
     {
