@@ -25,9 +25,13 @@ class Main
         //End Test
         this.clickableObjects = new Array();
         this.clickableObjects.push(this.userPet);
+        this.updateObjects = new Array ();
         //Mini Game
         this.miniGame = new MiniGame();
         //End
+        //Explosion
+        this.cloudExplosion = new CloudExplosion(this.sceneRenderer);
+        //
         //Listen to events at the end of this constructor.
         document.addEventListener("onrenderupdate",(e)=> {this.OnRenderUpdate(e);});
         document.addEventListener("oncollisionupdate",(e)=> {this.OnCollisionUpdate(e);});
@@ -36,11 +40,14 @@ class Main
         //Reset button
         document.addEventListener("onmouseobjectclick",(e)=>{this.OnMouseObjectClick(e);});
         document.addEventListener("onballmoving",(e)=>{this.OnBallMove(e);});
+        document.addEventListener("onetentimerend",(e)=>{this.OnEtenTimer(e);});
+        document.addEventListener("oncloudtimerend",(e)=>{this.OnCloudTimerEnd(e);});
         //Menu stuff
         document.getElementsByClassName("save_pet")[0].onclick = (e) => {this.OnSaveClick(e)};
         document.getElementsByClassName("test_reset")[0].onclick = (e) => {this.OnResetClick(e)};
         document.getElementsByClassName("show_hide")[0].onclick = (e) => {this.OnShowMenuClick(e)};
         document.getElementsByClassName("ball_btn")[0].onclick = (e) => {this.OnBallBtnClick(e)};
+        document.getElementsByClassName("eten1")[0].onclick = (e) => {this.OnEten1Click(e)};
 
         //Save before closing,refreshing etc...
         window.onbeforeunload = (e) => {this.OnBeforeUnload(e)};
@@ -86,6 +93,12 @@ class Main
             this.sceneRenderer.RotateCameraAround(this.userPet,-1);
         }
         this.miniGame.OnUpdate(e);
+        this.cloudExplosion.OnUpdate(this.sceneRenderer.camera);
+
+        for (var i=0; i<this.updateObjects.length; i++)
+        {
+            this.updateObjects[i].OnUpdate(this.sceneRenderer.camera);
+        }
 
     }
     //On Every frame after RenderUpdate do COLLISION detection here.
@@ -154,6 +167,19 @@ class Main
         {
             this.miniGame.Show();
         }
+    }
+    OnEten1Click (e)
+    {
+        var map = this.loader.load("assets/textures/eten1.png");
+        var eten1 = new Eten (map,1.5,1);
+        this.sceneRenderer.AddObject(eten1);
+        this.updateObjects.push(eten1);
+    }
+    OnEtenTimer(e)
+    {
+        this.updateObjects.slice(e.detail);
+        this.sceneRenderer.RemoveObject(e.detail);
+        this.userPet.AddToHunger(3);
     }
     OnResetClick(e)
     {
@@ -292,6 +318,7 @@ class Main
     {
         var id = qUtils.GetRandomBetweenInt(1,3);
         var newPet = this.userPet.Hatch(id.toString());
+        this.cloudExplosion.CreateExplosion(100,newPet.position,2);
         this.sceneRenderer.RemoveObject(this.userPet);
 
         this.clickableObjects.splice(this.userPet);
@@ -299,7 +326,13 @@ class Main
         this.userPet.SavePet();
         this.sceneRenderer.AddObject(this.userPet);
         this.clickableObjects.push(this.userPet);
+        //var explosion = new CloudExplosion(25,this.userPet.position,2,this.sceneRenderer);
 
+    }
+    OnCloudTimerEnd(e)
+    {
+        this.cloudExplosion.clouds.splice(e.detail);
+        this.sceneRenderer.RemoveObject(e.detail);
     }
     LoadPet()
     {
