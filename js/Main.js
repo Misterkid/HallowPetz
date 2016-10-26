@@ -52,7 +52,7 @@ class Main
         this.sceneRenderer.Render();//Start rendering
     }
     //On Every frame do actions here. This is the main loop.
-    OnRenderUpdate(e)
+    OnRenderUpdate(e) 
     {
         //Pet.Update looks at camera, update it each frame.
         this.userPet.Update(this.sceneRenderer.camera);
