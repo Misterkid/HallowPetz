@@ -43,6 +43,7 @@ class Main
         document.addEventListener("onballmoving",(e)=>{this.OnBallMove(e);});
         document.addEventListener("onetentimerend",(e)=>{this.OnEtenTimer(e);});
         document.addEventListener("oncloudtimerend",(e)=>{this.OnCloudTimerEnd(e);});
+        document.addEventListener("onpetdead",(e)=>{this.OnPetDead(e);});
         //Menu stuff
         document.getElementsByClassName("save_pet")[0].onclick = (e) => {this.OnSaveClick(e)};
         document.getElementsByClassName("test_reset")[0].onclick = (e) => {this.OnResetClick(e)};
@@ -100,6 +101,7 @@ class Main
         {
             this.updateObjects[i].OnUpdate(this.sceneRenderer.camera);
         }
+        this.Cheats();//Remove on release
 
     }
     //On Every frame after RenderUpdate do COLLISION detection here.
@@ -156,6 +158,10 @@ class Main
             {
                 menuItems[i].style.visibility = "hidden";
             }
+        }
+        if(this.userPet.isDead)
+        {
+            document.getElementsByClassName("pet_name")[0].style.visibility ="hidden";
         }
     }
     OnBallBtnClick(e)
@@ -313,6 +319,46 @@ class Main
             {document.getElementsByClassName("plezier")[0].src = "assets/textures/0.png"}
         }
     }
+    Cheats()
+    {
+        if(keyboard.GetKey('c'))
+        {
+            this.userPet.AddToJoy(-25 * DeltaTime);
+            this.userPet.AddToEnergy(-25 * DeltaTime);
+            this.userPet.AddToHunger(-25 * DeltaTime);
+        }
+    }
+    OnPetDead(e)
+    {
+        var map = this.loader.load("assets/textures/grave.png");
+        this.sceneRenderer.RemoveObject(this.userPet);
+        this.clickableObjects.splice(this.userPet);
+        this.userPet = new Death(map,4,4,this.userPet.name);
+        this.userPet.hunger = 0;
+        this.userPet.joy = 100;
+        this.userPet.energy = 0;
+        this.userPet.SavePet();
+        document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
+        this.sceneRenderer.AddObject(this.userPet);
+        this.clickableObjects.push(this.userPet);
+        this.Dead();
+    }
+    Dead()
+    {
+        document.getElementsByClassName("ball_btn")[0].style.visibility = "hidden";
+        document.getElementsByClassName("eten1")[0].style.visibility = "hidden";
+        document.getElementsByClassName("grave")[0].style.visibility = "visible"
+        document.getElementsByClassName("grave")[0].innerHTML = "<p>" + this.userPet.name +  "</p>";
+        document.getElementsByClassName("slapen")[0].style.visibility = "hidden";
+    }
+    Alive()
+    {
+        document.getElementsByClassName("ball_btn")[0].style.visibility = "visible";
+        document.getElementsByClassName("eten1")[0].style.visibility = "visible";
+        document.getElementsByClassName("grave")[0].style.visibility = "hidden";
+        document.getElementsByClassName("slapen")[0].style.visibility = "visible";
+    }
+
     ResetPet()
     {
         //NewPet
@@ -328,6 +374,7 @@ class Main
             document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
             this.sceneRenderer.AddObject(this.userPet);
             this.clickableObjects.push(this.userPet);
+            this.Alive();
         }
     }
     OnPumpkinHatch(e)
@@ -354,7 +401,7 @@ class Main
     {
         var petId = qUtils.GetCookie("pet_id");
         var map = this.loader.load("assets/textures/pumpkin.png");
-        if(petId == null || petId == -1 || petId == "")
+        if(petId == null || petId == "")
         {
             //NewPet
             this.userPet = new PumpkinEgg(map,1,1);
@@ -363,6 +410,10 @@ class Main
         {
             switch(petId)
             {
+                case '-1':
+                    map = this.loader.load("assets/textures/grave.png");
+                    this.userPet = new Death(map,4,4);
+                    break;
                 case '0':
                     this.userPet = new PumpkinEgg(map,1,1);
                     break;
@@ -381,12 +432,16 @@ class Main
                 default:
                     //Someone cheating most likely xD
                     console.log("cheater");
-                    qUtils.DeleteAllCookies();
-                    this.userPet = new PumpkinEgg(map,1,1);
+                    //qUtils.DeleteAllCookies();
+                    map = this.loader.load("assets/textures/grave.png");
+                    this.userPet = new Death(map,4,4);
+                    this.Dead();
                     return;
                     break;
             }
             this.userPet.LoadPet();
+            if(this.userPet.isDead)
+                this.Dead();
         }
     }
 }

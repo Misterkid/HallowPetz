@@ -27,6 +27,8 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         this.creationDate = date.getTime();
         this.startTime = date.getTime();
         this.asleep = false;
+        this.isDead = false;
+        this.OnPetDead = new Event('onpetdead');
     }
     AddToJoy(add)
     {
@@ -79,8 +81,34 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
             this.energy -= (this.energySteps * diffrence);
 
         this.startTime = date.getTime();
+        this.DeathCheck();
     }
+    DeathCheck()
+    {
+        var count = 0;
+        if(this.hunger <= 0)
+        {
+            count++;
+            this.hunger = 0;
+        }
+        if(this.joy <= 0)
+        {
+            count++;
+            this.joy = 0;
+        }
+        if(this.energy <= 0)
+        {
+            count++;
+            this.energy = 0;
 
+        }
+        if(count >= 2 && this.isDead == false)
+        {
+            //Dead
+            this.isDead = true;
+            document.dispatchEvent(this.OnPetDead);
+        }
+    }
     SavePet()
     {
         qUtils.SetCookie("pet_id",this.petId);
@@ -105,7 +133,7 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         this.hunger = qUtils.GetCookie("pet_hunger") - (this.hungerSteps * diffrence);
         this.joy = qUtils.GetCookie("pet_joy")- (this.joySteps * diffrence);
         this.energy = qUtils.GetCookie("pet_energy")- (this.energySteps * diffrence);
-
+        this.DeathCheck();
         this.timesClicked = qUtils.GetCookie("pet_times_clicked" );
         this.creationDate = qUtils.GetCookie("pet_creation_date");
     }
