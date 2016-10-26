@@ -62,7 +62,15 @@ input
     margin: 0 auto;
     */
 }
-
+.grave
+{
+    position: absolute;
+    width: 120px;
+    height: 25px;
+    left: 592px;
+    bottom: 263px;
+    text-align: center;
+}
 .hud
 {
     width: 1280px!important;
