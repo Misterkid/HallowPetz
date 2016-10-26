@@ -18,11 +18,12 @@ class Cloud extends THREE.Mesh
 
         var randDirX =  qUtils.GetRandomBetweenInt(-10,10);
         var randDirY = qUtils.GetRandomBetweenInt(-10,10);
-        this.dir = new THREE.Vector3(randDirX,randDirY,0);
+        var randDirZ = qUtils.GetRandomBetweenInt(-10,10);
+        this.dir = new THREE.Vector3(randDirX,randDirY,randDirZ);
     }
     OnUpdate(camera)
     {
-        this.position.set(this.position.x + (this.dir.x * DeltaTime),this.position.y + (this.dir.y * DeltaTime),0);
+        this.position.set(this.position.x + (this.dir.x * DeltaTime),this.position.y + (this.dir.y * DeltaTime),this.position.z + (this.dir.z * DeltaTime));
         this.lookAt(camera.position);
         //this.position.translateX(this.dir.x * DeltaTime);
         //this.position.translateX(this.dir.y * DeltaTime);
