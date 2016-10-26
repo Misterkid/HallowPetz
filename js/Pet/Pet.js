@@ -26,6 +26,7 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         var date = new Date();
         this.creationDate = date.getTime();
         this.startTime = date.getTime();
+        this.asleep = false;
     }
     AddToJoy(add)
     {
@@ -53,6 +54,14 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
     {
         this.lookAt(camera.position);
         this.DoSteps();
+        this.sleepCheck();
+    }
+    sleepCheck()
+    {
+        if (this.asleep == true)
+        {
+            this.AddToEnergy(0.1 * DeltaTime);
+        }
     }
     //Gebruikt de tijd om de meters per frame te updaten.
     //De stappen zijn per minuut
