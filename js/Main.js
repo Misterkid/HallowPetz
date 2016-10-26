@@ -108,20 +108,6 @@ class Main
             this.updateObjects[i].OnUpdate(this.sceneRenderer.camera);
         }
         this.Cheats();//Remove on release
-
-        if(keyboard.GetKey('t'))
-        {
-            this.bgmMixer.Stop();
-
-        }
-        if(keyboard.GetKey('s'))
-        {
-            this.bgmMixer.Shuffle();
-
-        }
-
-
-
     }
     //On Every frame after RenderUpdate do COLLISION detection here.
     OnCollisionUpdate(e)
