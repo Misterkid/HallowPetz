@@ -56,10 +56,7 @@ class Main
         this.sceneRenderer.Render();//Start rendering
     }
     //On Every frame do actions here. This is the main loop.
-<<<<<<< HEAD
     OnRenderUpdate(e) 
-=======
-
     //Testing adding OBJ 3d object.
     CeateTeaPot() {
         this.objectL = new ObjectLoader();
@@ -79,7 +76,6 @@ class Main
     }
 
     OnRenderUpdate(e)
->>>>>>> refs/remotes/origin/Michael
     {
         //Pet.Update looks at camera, update it each frame.
         this.userPet.Update(this.sceneRenderer.camera);
