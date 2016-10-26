@@ -5,6 +5,7 @@ class Main
 {
     constructor()
     {
+        this.objectL = new ObjectLoader();
         this.sceneRenderer = new SceneRenderer();
         this.sceneRenderer.CreateScene();
         //Texture loader, Keep using this.loader to avoid making more loaders!
@@ -19,6 +20,7 @@ class Main
         this.userPet.SavePet();//saved
         //this.userPet.position.set(0,-1,0);
         this.sceneRenderer.AddObject(this.userPet);
+        this.CeateTeaPot();
         document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
         //End Test
         this.clickableObjects = new Array();
@@ -35,6 +37,8 @@ class Main
         document.addEventListener("onrenderupdate",(e)=> {this.OnRenderUpdate(e);});
         document.addEventListener("oncollisionupdate",(e)=> {this.OnCollisionUpdate(e);});
         document.addEventListener("onpumpkinhatch",(e)=> {this.OnPumpkinHatch(e);});
+        document.addEventListener("onobjectloaddone",(e)=> {this.OnObjectLoadDone(e);});
+        //Reset button
         document.addEventListener("onmouseobjectclick",(e)=>{this.OnMouseObjectClick(e);});
         document.addEventListener("onballmoving",(e)=>{this.OnBallMove(e);});
         document.addEventListener("onetentimerend",(e)=>{this.OnEtenTimer(e);});
@@ -52,7 +56,30 @@ class Main
         this.sceneRenderer.Render();//Start rendering
     }
     //On Every frame do actions here. This is the main loop.
+<<<<<<< HEAD
     OnRenderUpdate(e) 
+=======
+
+    //Testing adding OBJ 3d object.
+    CeateTeaPot() {
+        this.objectL = new ObjectLoader();
+        this.boomPos =  new THREE.Vector3(0,0,0);
+        this.boomScale = new THREE.Vector3(0.01,0.01,0.01);
+
+        console.log(this.boompos);
+        this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale);
+
+
+    }
+
+    OnObjectLoadDone(e)
+    {
+        this.sceneRenderer.AddObject(e.detail);
+
+    }
+
+    OnRenderUpdate(e)
+>>>>>>> refs/remotes/origin/Michael
     {
         //Pet.Update looks at camera, update it each frame.
         this.userPet.Update(this.sceneRenderer.camera);
@@ -85,6 +112,7 @@ class Main
     {
         mouse.OnMouseRayUpdate(this.clickableObjects,this.sceneRenderer.camera);
     }
+
     CreateEnvirement()
     {
         var geometry = new THREE.PlaneGeometry(100,100);
@@ -94,6 +122,8 @@ class Main
         mesh.rotateX(qUtils.DegToRad(-90));
         mesh.position.set(0,-2,0);
         this.sceneRenderer.AddObject(mesh);
+
+
     }
 
     CreateSkydome()
