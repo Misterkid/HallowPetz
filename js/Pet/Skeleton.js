@@ -3,14 +3,16 @@
  */
 class Skeleton extends Pet
 {
-    constructor(map,width,height,name)
+    constructor(name)
     {
-        super(map,width,height,name);
+        var loader = new THREE.TextureLoader();
+        var map = loader.load("assets/textures/skalet.png");
+        super(map,4,8,name);
         this.petId = 3;
         //Standard skeleton stuff here
     }
-    Update(camera)
+    OnUpdate(camera)
     {
-        super.Update(camera);
+        super.OnUpdate(camera);
     }
 }

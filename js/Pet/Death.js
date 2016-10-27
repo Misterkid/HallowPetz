@@ -3,13 +3,15 @@
  */
 class Death extends Pet
 {
-    constructor(map,width,height,name)
+    constructor(name)
     {
-        super(map,width,height,name);
+        var loader = new THREE.TextureLoader();
+        var map = loader.load("assets/textures/grave.png");
+        super(map,4,4,name);
         this.isDead = true;
         this.petId = -1;//dead
     }
-    Update(camera)
+    OnUpdate(camera)
     {
         this.lookAt(camera.position);
         //this.DoSteps();

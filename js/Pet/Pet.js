@@ -13,6 +13,8 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         //Standard pet stuff here
         this.petId = -1;
         this.name = name;
+        this.height = height;
+        this.width = width;
         this.maxMeter = 100;//Max for all.
         //meters
         this.hunger = 100;
@@ -52,7 +54,7 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
     {
         this.timesClicked ++;
     }
-    Update(camera)
+    OnUpdate(camera)
     {
         this.lookAt(camera.position);
         this.DoSteps();
@@ -133,7 +135,7 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         this.hunger = qUtils.GetCookie("pet_hunger") - (this.hungerSteps * diffrence);
         this.joy = qUtils.GetCookie("pet_joy")- (this.joySteps * diffrence);
         this.energy = qUtils.GetCookie("pet_energy")- (this.energySteps * diffrence);
-        this.DeathCheck();
+        //this.DeathCheck();
         this.timesClicked = qUtils.GetCookie("pet_times_clicked" );
         this.creationDate = qUtils.GetCookie("pet_creation_date");
     }
