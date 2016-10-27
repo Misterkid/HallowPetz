@@ -3,9 +3,11 @@
  */
 class PumpkinEgg extends Pet
 {
-    constructor(map,width,height)
+    constructor(name)
     {
-        super(map,width,height);
+        var loader = new THREE.TextureLoader();
+        var map = loader.load("assets/textures/pumpkin.png");
+        super(map,2,2,name);
         this.petId = 0;
         //Standard Egg stuff here
         this.hatchTimeMinutes = 0.5;
@@ -15,12 +17,11 @@ class PumpkinEgg extends Pet
         this.clicksToHatch = 25;
         this.scaling = 1;
         this.scaleSteps = 0.05;
-        this.height = height;
         //
     }
-    Update(camera)
+    OnUpdate(camera)
     {
-        super.Update(camera);
+        super.OnUpdate(camera);
         //this.TimedHatching();
         this.ClickHatching();
     }

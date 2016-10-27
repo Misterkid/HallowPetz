@@ -17,6 +17,8 @@ class SceneRenderer
         this.rotation = 0;
         this.deltaTimes = new Array();
 
+        this.isFullScreen = false;
+
     }
 
     //Creates scene with camera and renderer! full browser size
@@ -37,13 +39,34 @@ class SceneRenderer
         this.renderer.shadowMap.width = 1024;
         this.renderer.shadowMap.height = 1024;
         //end shadows
-        this.renderer.setSize(window.innerWidth ,window.innerHeight);
+        //this.renderer.setSize(window.innerWidth ,window.innerHeight);
+        this.renderer.setSize(1280,720);
         this.renderer.setClearColor(0x000000);
         document.body.appendChild(this.renderer.domElement);
         //Camera position
         this.camera.position.set(0,2,10);
         this.lookAtPosition = new THREE.Vector3(0,2,0);
         this.camera.lookAt( this.lookAtPosition );
+
+        //this.RequestFullScreen();
+    }
+    RequestFullScreen()
+    {
+        // Get the canvas element form the page
+        var el = document.documentElement;//document.getElementsByTagName('canvas')[0];
+        if(el.webkitRequestFullScreen)
+        {
+            el.webkitRequestFullScreen();
+        }
+        else
+        {
+            el.mozRequestFullScreen();
+        }
+        this.renderer.setSize(window.screen.width,window.screen.height);
+    }
+    BackToNormal()
+    {
+        this.renderer.setSize(1280,720);
     }
     Render(e)
     {

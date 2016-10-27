@@ -5,11 +5,13 @@
 body
 {
     margin:0;
+    overflow: hidden;
 }
 canvas
 {
+    /*
     width: 1280px!important;
-    height: 720px!important;
+    height: 720px!important; */
     margin: 0 auto;
     z-index:1;
     position: relative;
