@@ -60,16 +60,25 @@ canvas
 {
     width: 200px;
     height: 150px;
+    position: absolute;
+    left: 55%;
+    bottom: 70%;
 }
 .plezier1
 {
     width: 200px;
     height: 150px;
+    position: absolute;
+    left: 55%;
+    bottom: 70%;
 }
 .energie1
 {
     width: 200px;
     height: 150px;
+    position: absolute;
+    left: 55%;
+    bottom: 70%;
 }
 /*
 .menu_obj
