@@ -42,7 +42,9 @@ class SceneRenderer
         //this.renderer.setSize(window.innerWidth ,window.innerHeight);
         this.renderer.setSize(1280,720);
         this.renderer.setClearColor(0x000000);
-        document.body.appendChild(this.renderer.domElement);
+        this.gameContainer = document.getElementsByClassName("game_container")[0];
+        this.gameContainer.appendChild(this.renderer.domElement);
+        //document.body.appendChild(this.renderer.domElement);
         //Camera position
         this.camera.position.set(0,2,10);
         this.lookAtPosition = new THREE.Vector3(0,2,0);
@@ -53,7 +55,7 @@ class SceneRenderer
     RequestFullScreen()
     {
         // Get the canvas element form the page
-        var el = document.documentElement;//document.getElementsByTagName('canvas')[0];
+        var el = this.gameContainer;//document.documentElement;//document.getElementsByTagName('canvas')[0];
         if(el.webkitRequestFullScreen)
         {
             el.webkitRequestFullScreen();

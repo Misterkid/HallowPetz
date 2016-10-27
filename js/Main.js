@@ -27,7 +27,7 @@ class Main
         this.clickableObjects.push(this.userPet);
         this.updateObjects = new Array ();
         //Mini Game
-        this.throwBall = new ThrowBall();
+        this.throwBall = new ThrowBall(this.sceneRenderer.gameContainer);
         this.isDag = true;
         //End
         this.effectsMuted = false;
@@ -101,6 +101,7 @@ class Main
         {
             this.sceneRenderer.isFullScreen = true;
         }
+        this.throwBall.Hide();
     }
 
     OnFullScreenClick(e)

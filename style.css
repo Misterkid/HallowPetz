@@ -1,11 +1,21 @@
-@font-face {
+@font-face
+{
     font-family: "My Custom Font";
     src: url(lettertype.ttf) format("truetype");
 }
 body
 {
+    /*
     margin:0;
     overflow: hidden;
+    position: relative;
+    */
+}
+.game_container
+{
+    margin:0;
+    overflow: hidden;
+    position: relative;
 }
 canvas
 {

@@ -7,33 +7,34 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <div class = "hud">
-        <button class="show_hide">Pet Options</button>
-        <div class = "menu menu_obj" style = "visibility: hidden">
-            <input type="text" class ="pet_name menu_obj" style = "visibility: hidden" name="pet_name" value ="no_name">
-            <button class="save_pet menu_obj" style = "visibility: hidden">Save Pet</button>
-            <button class="test_reset menu_obj" style = "visibility: hidden">Reset</button>
-            <button class="bgm_mute menu_obj" style = "visibility: hidden">Toggle Music</button>
-            <button class="effects_mute menu_obj" style = "visibility: hidden">Toggle Sound</button>
-            <button class ="full_screen menu_obj" style = "visibility: hidden">Full Screen</button>
-            <P>
-                A & D to move the camera <br>
-                Feed your pet by clicking on the food <br>
-                Get a ball by clicking on the ball and play with your pet! <br>
-            </P>
-            <p>This game uses cookies to save your pet! Cookies get destroyed after 31 days inactivity.</p>
+    <div class = "game_container">
+        <div class = "hud">
+            <button class="show_hide">Pet Options</button>
+            <div class = "menu menu_obj" style = "visibility: hidden">
+                <input type="text" class ="pet_name menu_obj" style = "visibility: hidden" name="pet_name" value ="no_name">
+                <button class="save_pet menu_obj" style = "visibility: hidden">Save Pet</button>
+                <button class="test_reset menu_obj" style = "visibility: hidden">Reset</button>
+                <button class="bgm_mute menu_obj" style = "visibility: hidden">Toggle Music</button>
+                <button class="effects_mute menu_obj" style = "visibility: hidden">Toggle Sound</button>
+                <button class ="full_screen menu_obj" style = "visibility: hidden">Full Screen</button>
+                <P>
+                    A & D to move the camera <br>
+                    Feed your pet by clicking on the food <br>
+                    Get a ball by clicking on the ball and play with your pet! <br>
+                </P>
+                <p>This game uses cookies to save your pet! Cookies get destroyed after 31 days inactivity.</p>
+            </div>
+            <p class = "test_stats">ToDo</p>
+            <p>Hunger: <img class = "honger" src = "assets/textures/100.png">
+                Energy: <img class = "energie" src = "assets/textures/100.png">
+                Joy: <img class = "plezier" src = "assets/textures/100.png"></p>
+            <img class = "ball_btn" src = "assets/textures/bal.png">
+            <img class = "eten1" src = "assets/textures/eten1.png">
+            <img class = "slapen" src = "assets/textures/bed.png">
+            <div class = "grave" style = "visibility: hidden">
+                <p>Rest in peperoni</p>
+            </div>
         </div>
-        <p class = "test_stats">ToDo</p>
-        <p>Hunger: <img class = "honger" src = "assets/textures/100.png">
-            Energy: <img class = "energie" src = "assets/textures/100.png">
-            Joy: <img class = "plezier" src = "assets/textures/100.png"></p>
-        <img class = "ball_btn" src = "assets/textures/bal.png">
-        <img class = "eten1" src = "assets/textures/eten1.png">
-        <img class = "slapen" src = "assets/textures/bed.png">
-        <div class = "grave" style = "visibility: hidden">
-            <p>Rest in peperoni</p>
-        </div>
-
     </div>
     <script src = "js/lib/three.min.js"></script>
     <script src = "js/lib/OBJLoader.js"></script>
@@ -60,6 +61,5 @@
 
     <script src = "js/SceneRenderer.js"></script>
     <script src = "js/Main.js"></script>
-
 </body>
 </html>

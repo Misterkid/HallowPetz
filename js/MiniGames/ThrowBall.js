@@ -3,7 +3,7 @@
  */
 class ThrowBall
 {
-    constructor()
+    constructor(gameContainer)
     {
         //img.style.left = xPos + document.body.scrollLeft;
         //img.style.top = yPos + document.body.scrollTop;
@@ -11,7 +11,9 @@ class ThrowBall
         createdElement.src = 'assets/textures/ball.png';
         createdElement.className = "miniball";
         this.speed = 100;
-        this.img = document.body.appendChild(createdElement);
+       // this.gameContainer
+        this.img = gameContainer.appendChild(createdElement);//document.body.appendChild(createdElement);
+
         this.OnBallMoving = new Event('onballmoving');
         this.OnBallHitWall = new Event('onballhitwall');
 
@@ -20,6 +22,9 @@ class ThrowBall
         this.position = new THREE.Vector3((this.canvas.width - 30) * 0.5,(this.canvas.height - 30) * 0.5,0);
         this.speedVector = new THREE.Vector3();
         this.velocity = new THREE.Vector3(0,0,0);
+
+        this.size = 64;
+        this.img.style.width = this.size + "px";
 
         this.img.style.left = this.position.x;
         this.img.style.top = this.position.y;
@@ -41,7 +46,7 @@ class ThrowBall
         this.isHidden = true;
         this.img.style.visibility = "hidden";
         this.velocity.set(0,0,0);
-        this.position = new THREE.Vector3((this.canvas.width - 30) * 0.5,(this.canvas.height - 30) * 0.5,0);
+        this.position = new THREE.Vector3((this.canvas.width - this.size) * 0.5,(this.canvas.height - this.size) * 0.5,0);
     }
     OnClick()
     {
@@ -70,7 +75,7 @@ class ThrowBall
         this.img.style.left = this.position.x +"px";
         this.img.style.top = this.position.y + "px";
 
-        if(this.position.x > this.canvas.width - 30
+        if(this.position.x > this.canvas.width - this.size
             || this.position.x < 0)
         {
             this.velocity.x *= -1;
@@ -78,7 +83,7 @@ class ThrowBall
             document.dispatchEvent(this.OnBallHitWall);
         }
         if(this.position.y < 0
-            || this.position.y > this.canvas.height - 30)
+            || this.position.y > this.canvas.height - this.size)
         {
             this.velocity.y *= -1;
             this.position.set(this.position.x + this.velocity.x * DeltaTime,this.position.y + this.velocity.y * DeltaTime, this.position.z);
