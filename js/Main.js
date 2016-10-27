@@ -30,6 +30,18 @@ class Main
         //Mini Game
         this.throwBall = new ThrowBall(this.sceneRenderer.gameContainer);
         this.isDag = true;
+
+        //presents (food)
+        this.clickablePresent = new Array();
+        this.presentSpanPositions = new Array();
+        //this.etenObject.position.set(2,1,5);
+        //this.clickableObjects.push(this.etenObject);
+        //this.clickablePresent.push(this.etenObject);
+
+        this.SetPresentPosition();
+        this.SpawnPresent();
+
+
         //End
         this.effectsMuted = false;
         //Explosion
@@ -100,10 +112,25 @@ class Main
     {
         this.sceneRenderer.RequestFullScreen();
     }
+    SetPresentPosition()
+    {
+        this.AddPresentPosition(2, 1, 5);
+        this.AddPresentPosition(3, 1, 7);
+        this.AddPresentPosition(5, 1, 7);
+        this.AddPresentPosition(9, 1, 2);
+        this.AddPresentPosition(10,1,9);
+    }
+
+
+    AddPresentPosition(x,y,z)
+    {
+        var position = new THREE.Vector3(x,y,z);
+        this.presentSpanPositions.push(position);
+    }
+    
     OnObjectLoadDone(e)
     {
         this.sceneRenderer.AddObject(e.detail);
-
     }
 
     OnRenderUpdate(e)
@@ -253,14 +280,52 @@ class Main
         this.userPet.name = document.getElementsByClassName("pet_name")[0].value;//SetName
         this.userPet.SavePet();
     }
+
+    SpawnPresent()
+    {
+
+        for( var i = 0; i< this.presentSpanPositions.length; i++)
+        {
+            var gPresent = new THREE.BoxGeometry(1,1,1);
+            var mPresent = new THREE.MeshPhongMaterial();
+            var etenObject = new EtenVerzamelen(gPresent, mPresent);
+
+            //this.etenObject.position.set(2,0,5);
+            etenObject.position.set(this.presentSpanPositions[i].x,this.presentSpanPositions[i].y,this.presentSpanPositions[i].z);
+            this.clickableObjects.push(etenObject);
+            this.clickablePresent.push(etenObject);
+            this.sceneRenderer.AddObject(etenObject);
+        }
+
+    }
+
     OnMouseObjectClick(e)
     {
         //Userpet clicked
-        if(e.detail.object.uuid == this.userPet.uuid)
+        if (e.detail.object.uuid == this.userPet.uuid)
         {
             this.userPet.OnClick();
             console.log("clicked");
         }
+        for(var i = 0; i < this.clickablePresent.length; i++)
+        {
+
+            if(e.detail.object.uuid == this.clickablePresent[i].uuid)
+            {
+
+                this.clickablePresent[i].OnClick();
+                this.sceneRenderer.RemoveObject(this.clickablePresent[i]);
+
+                //this.clickableObjects.splice(this.clickablePresent[i]);
+                //this.clickablePresent.splice(this.clickablePresent[i]);
+
+                this.userPet.foodCount++;
+                console.log(this.userPet.foodCount);
+            }
+
+        }
+        console.log((e.detail.object.uuid));
+
     }
     OnBallMove(e)
     {
