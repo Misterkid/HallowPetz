@@ -490,6 +490,9 @@ class Main
         document.getElementsByClassName("grave")[0].style.visibility = "visible"
         document.getElementsByClassName("grave")[0].innerHTML = "<p>" + this.userPet.name +  "</p>";
         document.getElementsByClassName("slapen")[0].style.visibility = "hidden";
+        document.getElementsByClassName("honger1")[0].style.visibility = "hidden";
+        document.getElementsByClassName("plezier1")[0].style.visibility = "hidden";
+        document.getElementsByClassName("energie1")[0].style.visibility = "hidden";
     }
     Alive()
     {
