@@ -42,6 +42,7 @@ class Main
         //Reset button
         document.addEventListener("onmouseobjectclick",(e)=>{this.OnMouseObjectClick(e);});
         document.addEventListener("onballmoving",(e)=>{this.OnBallMove(e);});
+        document.addEventListener("onballhitwall",(e)=>{this.OnBallHitWall(e);});
         document.addEventListener("onetentimerend",(e)=>{this.OnEtenTimer(e);});
         document.addEventListener("oncloudtimerend",(e)=>{this.OnCloudTimerEnd(e);});
         document.addEventListener("onpetdead",(e)=>{this.OnPetDead(e);});
@@ -108,20 +109,6 @@ class Main
             this.updateObjects[i].OnUpdate(this.sceneRenderer.camera);
         }
         this.Cheats();//Remove on release
-
-        if(keyboard.GetKey('t'))
-        {
-            this.bgmMixer.Stop();
-
-        }
-        if(keyboard.GetKey('s'))
-        {
-            this.bgmMixer.Shuffle();
-
-        }
-
-
-
     }
     //On Every frame after RenderUpdate do COLLISION detection here.
     OnCollisionUpdate(e)
@@ -199,6 +186,7 @@ class Main
         var eten1 = new Eten (map,1.5,1);
         this.sceneRenderer.AddObject(eten1);
         this.updateObjects.push(eten1);
+        this.PlaySound(audioSources.eating);
     }
     OnEtenTimer(e)
     {
@@ -219,6 +207,7 @@ class Main
             this.userPet.asleep = false;
             this.isDag = true;
         }
+        this.PlaySound(audioSources.lightSwitch);
         console.log(this.isDag);
     }
     OnResetClick(e)
@@ -253,6 +242,10 @@ class Main
     {
         //add 0.1 joy per second
         this.userPet.AddToJoy(0.5 * DeltaTime);
+    }
+    OnBallHitWall(e)
+    {
+        this.PlaySound(audioSources.ballHit);
     }
     Createbarmeter()
     {

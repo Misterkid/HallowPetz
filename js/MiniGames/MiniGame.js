@@ -12,7 +12,8 @@ class MiniGame
         createdElement.className = "miniball";
         this.speed = 100;
         this.img = document.body.appendChild(createdElement);
-        this.OnBallMoving = new Event('onballmoving');// on render update event
+        this.OnBallMoving = new Event('onballmoving');
+        this.OnBallHitWall = new Event('onballhitwall');
         this.position = new THREE.Vector3((1280 - 30) * 0.5,(720 - 30) * 0.5,0);
         this.speedVector = new THREE.Vector3();
         this.velocity = new THREE.Vector3(0,0,0);
@@ -70,13 +71,14 @@ class MiniGame
         {
             this.velocity.x *= -1;
             this.position.set(this.position.x + this.velocity.x * DeltaTime,this.position.y + this.velocity.y * DeltaTime, this.position.z);
-
+            document.dispatchEvent(this.OnBallHitWall);
         }
         if(this.position.y < 0
             || this.position.y > 720 - 30)
         {
             this.velocity.y *= -1;
             this.position.set(this.position.x + this.velocity.x * DeltaTime,this.position.y + this.velocity.y * DeltaTime, this.position.z);
+            document.dispatchEvent(this.OnBallHitWall);
         }
     }
 }
