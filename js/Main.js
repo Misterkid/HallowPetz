@@ -249,6 +249,9 @@ class Main
     }
     Createbarmeter()
     {
+        document.getElementsByClassName("honger1")[0].style.visibility = "hidden";
+        document.getElementsByClassName("plezier1")[0].style.visibility = "hidden";
+        document.getElementsByClassName("energie1")[0].style.visibility = "hidden";
         // honger
         if (Math.floor(this.userPet.hunger) < 101)
         {
@@ -271,9 +274,11 @@ class Main
             if (Math.floor(this.userPet.hunger) >= 15 && Math.floor(this.userPet.hunger) < 25)
             {document.getElementsByClassName("honger")[0].src = "assets/textures/20.png"}
             if (Math.floor(this.userPet.hunger) >= 5 && Math.floor(this.userPet.hunger) < 15)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/10.png"}
+            {document.getElementsByClassName("honger")[0].src = "assets/textures/10.png"
+                document.getElementsByClassName("honger1")[0].style.visibility = "visible";}
             if (Math.floor(this.userPet.hunger) <5)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/0.png"}
+            {document.getElementsByClassName("honger")[0].src = "assets/textures/0.png"
+                document.getElementsByClassName("honger1")[0].style.visibility = "visible";}
         }
 
         //energie
@@ -298,9 +303,11 @@ class Main
             if (Math.floor(this.userPet.energy) >= 15 && Math.floor(this.userPet.energy) < 25)
             {document.getElementsByClassName("energie")[0].src = "assets/textures/20.png"}
             if (Math.floor(this.userPet.energy) >= 5 && Math.floor(this.userPet.energy) < 15)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/10.png"}
+            {document.getElementsByClassName("energie")[0].src = "assets/textures/10.png"
+                document.getElementsByClassName("energie1")[0].style.visibility = "visible";}
             if (Math.floor(this.userPet.energy) <5)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/0.png"}
+            {document.getElementsByClassName("energie")[0].src = "assets/textures/0.png"
+                document.getElementsByClassName("energie1")[0].style.visibility = "visible";}
         }
 
         // plezier
@@ -325,9 +332,11 @@ class Main
             if (Math.floor(this.userPet.joy) >= 15 && Math.floor(this.userPet.joy) < 25)
             {document.getElementsByClassName("plezier")[0].src = "assets/textures/20.png"}
             if (Math.floor(this.userPet.joy) >= 5 && Math.floor(this.userPet.joy) < 15)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/10.png"}
+            {document.getElementsByClassName("plezier")[0].src = "assets/textures/10.png"
+                document.getElementsByClassName("plezier1")[0].style.visibility = "visible";}
             if (Math.floor(this.userPet.joy) <5)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/0.png"}
+            {document.getElementsByClassName("plezier")[0].src = "assets/textures/0.png"
+                document.getElementsByClassName("plezier1")[0].style.visibility = "visible";}
         }
     }
     Cheats()
