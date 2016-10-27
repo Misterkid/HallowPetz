@@ -33,6 +33,14 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         this.isDead = false;
         this.OnPetDead = new Event('onpetdead');
     }
+    AddFood(add = 0)
+    {
+
+        this.foodCount =  this.foodCount + add;
+        if(this.foodCount < 0)
+            this.foodCount = 0;
+        document.getElementsByClassName("food_count")[0].innerText = this.foodCount;
+    }
     AddToJoy(add)
     {
         this.joy += add;
@@ -134,12 +142,15 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         diffrence = (diffrence/1000)/60;//minutes
         this.name = qUtils.GetCookie("pet_name");
         //Moeten natuurlijk ook de offline tijd berekenen.
-        this.hunger = qUtils.GetCookie("pet_hunger") - (this.hungerSteps * diffrence);
-        this.joy = qUtils.GetCookie("pet_joy")- (this.joySteps * diffrence);
-        this.energy = qUtils.GetCookie("pet_energy")- (this.energySteps * diffrence);
+
+        this.hunger =  parseFloat(qUtils.GetCookie("pet_hunger") - (this.hungerSteps * diffrence));
+        this.joy =  parseFloat(qUtils.GetCookie("pet_joy")- (this.joySteps * diffrence));
+        this.energy =  parseFloat(qUtils.GetCookie("pet_energy")- (this.energySteps * diffrence));
         //this.DeathCheck();
         this.timesClicked = qUtils.GetCookie("pet_times_clicked" );
         this.creationDate = qUtils.GetCookie("pet_creation_date");
-        this.foodCount = qUtils.GetCookie("pet_food_count");
+        this.foodCount = parseInt(qUtils.GetCookie("pet_food_count"));
+
+        document.getElementsByClassName("food_count")[0].innerText = this.foodCount;
     }
 }
