@@ -60,7 +60,7 @@ class Mouse
         {
             if(this.wentUp == true)
             {
-                this.OnMouseObjectClick = new CustomEvent('onmouseobjectclick', { 'detail': collisions[0] });
+                this.OnMouseObjectClick = new CustomEvent('onmouseobjectclick', { 'detail': collisions[0].object });
                 document.dispatchEvent(this.OnMouseObjectClick);
             }
         }

@@ -18,9 +18,8 @@ class CloudExplosion
         {
 
             var cloud = new Cloud(map,2,2);
-            var randx = qUtils.GetRandomBetweenInt(-diffrence * 1000 ,diffrence * 1000);
-            var randy = qUtils.GetRandomBetweenInt(-diffrence * 1000 ,diffrence * 1000);
-            console.log(randy);
+            //var randx = qUtils.GetRandomBetweenInt(-diffrence * 1000 ,diffrence * 1000);
+            //var randy = qUtils.GetRandomBetweenInt(-diffrence * 1000 ,diffrence * 1000);
            // cloud.position.set(position.x + (randx / 1000),position.y + (randy / 1000),0);
             cloud.position.set(position.x,position.y,0);
             this.clouds.push(cloud);

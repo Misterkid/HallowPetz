@@ -32,14 +32,14 @@ class Main
         this.isDag = true;
 
         //presents (food)
-        this.clickablePresent = new Array();
-        this.presentSpanPositions = new Array();
-        //this.etenObject.position.set(2,1,5);
-        //this.clickableObjects.push(this.etenObject);
-        //this.clickablePresent.push(this.etenObject);
-
+        //this.clickablePresent = new Array();
+        this.presentSpawnPositions = new Array();
         this.SetPresentPosition();
-        this.SpawnPresent();
+
+        var randomTime = qUtils.GetRandomBetweenInt(10000,100000);
+        this.PresentSpawnTimer = setInterval((e)=>{ this.SpawnPresent(e);},randomTime);
+
+        //this.SpawnPresent();
 
 
         //End
@@ -59,6 +59,7 @@ class Main
         document.addEventListener("onetentimerend",(e)=>{this.OnEtenTimer(e);});
         document.addEventListener("oncloudtimerend",(e)=>{this.OnCloudTimerEnd(e);});
         document.addEventListener("onpetdead",(e)=>{this.OnPetDead(e);});
+        document.addEventListener("onpresentclick",(e)=>{this.OnPresentClick(e);});
         //Menu stuff
         document.getElementsByClassName("save_pet")[0].onclick = (e) => {this.OnSaveClick(e)};
         document.getElementsByClassName("test_reset")[0].onclick = (e) => {this.OnResetClick(e)};
@@ -114,20 +115,45 @@ class Main
     }
     SetPresentPosition()
     {
-        this.AddPresentPosition(2, 1, 5);
-        this.AddPresentPosition(3, 1, 7);
-        this.AddPresentPosition(5, 1, 7);
-        this.AddPresentPosition(9, 1, 2);
-        this.AddPresentPosition(10,1,9);
+        this.AddPresentPosition(2, 0, 5);
+        this.AddPresentPosition(3, 0, 7);
+        this.AddPresentPosition(5, 0, 7);
+        this.AddPresentPosition(9, 0, 2);
+        this.AddPresentPosition(10,0,9);
     }
 
+    SpawnPresent()
+    {
+        var gPresent = new THREE.BoxGeometry(0.5,0.5,0.5);
+        var mPresent = new THREE.MeshPhongMaterial();
+        var etenObject = new EtenVerzamelen(gPresent, mPresent);
+        var i = qUtils.GetRandomBetweenInt(0,this.presentSpawnPositions.length -1);
+
+        clearInterval(this.PresentSpawnTimer);
+        var randomTime = qUtils.GetRandomBetweenInt(10000,100000);
+        this.PresentSpawnTimer = setInterval((e)=>{ this.SpawnPresent(e);},randomTime);
+
+        for(var j = 0; j < this.clickableObjects.length; j++ )
+        {
+                if(this.presentSpawnPositions[i].x == this.clickableObjects[j].position.x,
+                    this.presentSpawnPositions[i].y == this.clickableObjects[j].position.y,
+                    this.presentSpawnPositions[i].z == this.clickableObjects[j].position.z)
+                {
+                    return;
+                }
+        }
+        etenObject.position.set(this.presentSpawnPositions[i].x,this.presentSpawnPositions[i].y,this.presentSpawnPositions[i].z);
+        this.clickableObjects.push(etenObject);
+        this.sceneRenderer.AddObject(etenObject);
+
+    }
 
     AddPresentPosition(x,y,z)
     {
         var position = new THREE.Vector3(x,y,z);
-        this.presentSpanPositions.push(position);
+        this.presentSpawnPositions.push(position);
     }
-    
+
     OnObjectLoadDone(e)
     {
         this.sceneRenderer.AddObject(e.detail);
@@ -233,15 +259,19 @@ class Main
     }
     OnEten1Click (e)
     {
-        var map = this.loader.load("assets/textures/eten1.png");
-        var eten1 = new Eten (map,1.5,1);
-        this.sceneRenderer.AddObject(eten1);
-        this.updateObjects.push(eten1);
-        this.PlaySound(audioSources.eating);
+        if(this.userPet.foodCount > 0)
+        {
+            var map = this.loader.load("assets/textures/eten1.png");
+            var eten1 = new Eten(map, 1.5, 1);
+            this.sceneRenderer.AddObject(eten1);
+            this.updateObjects.push(eten1);
+            this.PlaySound(audioSources.eating);
+            this.userPet.AddFood(-1);
+        }
     }
     OnEtenTimer(e)
     {
-        this.updateObjects.slice(e.detail);
+        this.updateObjects.slice(e.detail);//Ohhh...
         this.sceneRenderer.RemoveObject(e.detail);
         this.userPet.AddToHunger(3);
     }
@@ -280,53 +310,30 @@ class Main
         this.userPet.name = document.getElementsByClassName("pet_name")[0].value;//SetName
         this.userPet.SavePet();
     }
-
-    SpawnPresent()
+    OnPresentClick(e)
     {
 
-        for( var i = 0; i< this.presentSpanPositions.length; i++)
-        {
-            var gPresent = new THREE.BoxGeometry(1,1,1);
-            var mPresent = new THREE.MeshPhongMaterial();
-            var etenObject = new EtenVerzamelen(gPresent, mPresent);
-
-            //this.etenObject.position.set(2,0,5);
-            etenObject.position.set(this.presentSpanPositions[i].x,this.presentSpanPositions[i].y,this.presentSpanPositions[i].z);
-            this.clickableObjects.push(etenObject);
-            this.clickablePresent.push(etenObject);
-            this.sceneRenderer.AddObject(etenObject);
-        }
-
+        this.RemoveClickAbleObject(e.detail);
+        this.sceneRenderer.RemoveObject(e.detail);
+        this.userPet.AddFood(1);
     }
-
     OnMouseObjectClick(e)
     {
         //Userpet clicked
-        if (e.detail.object.uuid == this.userPet.uuid)
-        {
-            this.userPet.OnClick();
-            console.log("clicked");
-        }
-        for(var i = 0; i < this.clickablePresent.length; i++)
-        {
-
-            if(e.detail.object.uuid == this.clickablePresent[i].uuid)
-            {
-
-                this.clickablePresent[i].OnClick();
-                this.sceneRenderer.RemoveObject(this.clickablePresent[i]);
-
-                //this.clickableObjects.splice(this.clickablePresent[i]);
-                //this.clickablePresent.splice(this.clickablePresent[i]);
-
-                this.userPet.foodCount++;
-                console.log(this.userPet.foodCount);
-            }
-
-        }
-        console.log((e.detail.object.uuid));
-
+        e.detail.OnClick(e.detail);
     }
+    RemoveClickAbleObject(object)
+    {
+        for(var i = 0; i < this.clickableObjects.length; i++)
+        {
+            if(object.uuid == this.clickableObjects[i].uuid)
+            {
+                this.clickableObjects.splice(i, 1);
+                return;
+            }
+        }
+    }
+
     OnBallMove(e)
     {
         //add 0.1 joy per second
@@ -470,7 +477,8 @@ class Main
     OnPetDead(e)
     {
         this.sceneRenderer.RemoveObject(this.userPet);
-        this.clickableObjects.splice(this.userPet);
+        //this.clickableObjects.splice(this.userPet);
+        this.RemoveClickAbleObject(this.userPet);
         this.userPet = new Death(this.userPet.name);
         this.userPet.hunger = 0;
         this.userPet.joy = 100;
@@ -509,7 +517,7 @@ class Main
         if(result == true)
         {
             this.sceneRenderer.RemoveObject(this.userPet);
-            this.clickableObjects.splice(this.userPet);
+            this.RemoveClickAbleObject(this.userPet);
             this.userPet = new PumpkinEgg();
             this.userPet.SavePet();
             document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
