@@ -58,16 +58,6 @@ class Main
         document.getElementsByClassName("ball_btn")[0].onclick = (e) => {this.OnBallBtnClick(e)};
         document.getElementsByClassName("eten1")[0].onclick = (e) => {this.OnEten1Click(e)};
         document.getElementsByClassName("slapen")[0].onclick = (e) => {this.OnSlapenClick(e)};
-
-        function check() {
-
-            if (!window.screenTop && !window.screenY) {
-                console.log('not fullscreen');
-            } else {
-                console.log('fullscreen');
-            }
-        }
-
         document.addEventListener('webkitfullscreenchange',(e)=> {this.FullScreenChange(e);}, false);
         document.addEventListener('mozfullscreenchange',(e)=> {this.FullScreenChange(e);}, false);
         document.addEventListener('fullscreenchange', (e)=> {this.FullScreenChange(e);}, false);
