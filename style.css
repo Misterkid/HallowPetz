@@ -95,9 +95,10 @@ input
     position: absolute;
     width: 120px;
     height: 25px;
-    left: 592px;
-    bottom: 263px;
+    left: 46%;
+    bottom: 41%;
     text-align: center;
+    color:white;
 }
 .hud
 {

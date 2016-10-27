@@ -8,6 +8,7 @@ class Main
         this.objectL = new ObjectLoader();
         this.sceneRenderer = new SceneRenderer();
         this.sceneRenderer.CreateScene();
+        this.mouse = new Mouse();
         //Texture loader, Keep using this.loader to avoid making more loaders!
         this.loader = new THREE.TextureLoader();
         this.CreateLights();// You will see the light!
@@ -102,6 +103,7 @@ class Main
             this.sceneRenderer.isFullScreen = true;
         }
         this.throwBall.Hide();
+        this.ShowHideMenu();
     }
 
     OnFullScreenClick(e)
@@ -145,7 +147,7 @@ class Main
     //On Every frame after RenderUpdate do COLLISION detection here.
     OnCollisionUpdate(e)
     {
-        mouse.OnMouseRayUpdate(this.clickableObjects,this.sceneRenderer.camera);
+        this.mouse.OnMouseRayUpdate(this.clickableObjects,this.sceneRenderer.camera);
     }
 
     CreateEnvirement()

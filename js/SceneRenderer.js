@@ -55,16 +55,22 @@ class SceneRenderer
     RequestFullScreen()
     {
         // Get the canvas element form the page
-        var el = this.gameContainer;//document.documentElement;//document.getElementsByTagName('canvas')[0];
-        if(el.webkitRequestFullScreen)
+        if(this.isFullScreen)
         {
-            el.webkitRequestFullScreen();
+            //this.BackToNormal();
         }
         else
         {
-            el.mozRequestFullScreen();
+            var el = this.gameContainer;//document.documentElement;//document.getElementsByTagName('canvas')[0];
+            if (el.webkitRequestFullScreen)
+            {
+                el.webkitRequestFullScreen();
+            }
+            else {
+                el.mozRequestFullScreen();
+            }
+            this.renderer.setSize(window.screen.width, window.screen.height);
         }
-        this.renderer.setSize(window.screen.width,window.screen.height);
     }
     BackToNormal()
     {
