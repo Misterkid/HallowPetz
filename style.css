@@ -1,15 +1,27 @@
-@font-face {
+@font-face
+{
     font-family: "My Custom Font";
     src: url(lettertype.ttf) format("truetype");
 }
 body
 {
+    /*
     margin:0;
+    overflow: hidden;
+    position: relative;
+    */
+}
+.game_container
+{
+    margin:0;
+    overflow: hidden;
+    position: relative;
 }
 canvas
 {
+    /*
     width: 1280px!important;
-    height: 720px!important;
+    height: 720px!important; */
     margin: 0 auto;
     z-index:1;
     position: relative;
@@ -48,16 +60,25 @@ canvas
 {
     width: 200px;
     height: 150px;
+    position: absolute;
+    left: 55%;
+    bottom: 70%;
 }
 .plezier1
 {
     width: 200px;
     height: 150px;
+    position: absolute;
+    left: 55%;
+    bottom: 70%;
 }
 .energie1
 {
     width: 200px;
     height: 150px;
+    position: absolute;
+    left: 55%;
+    bottom: 70%;
 }
 /*
 .menu_obj
@@ -98,9 +119,10 @@ input
     position: absolute;
     width: 120px;
     height: 25px;
-    left: 592px;
-    bottom: 263px;
+    left: 46%;
+    bottom: 41%;
     text-align: center;
+    color:white;
 }
 .hud
 {

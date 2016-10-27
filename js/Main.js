@@ -8,6 +8,7 @@ class Main
         this.objectL = new ObjectLoader();
         this.sceneRenderer = new SceneRenderer();
         this.sceneRenderer.CreateScene();
+        this.mouse = new Mouse();
         //Texture loader, Keep using this.loader to avoid making more loaders!
         this.loader = new THREE.TextureLoader();
         this.CreateLights();// You will see the light!
@@ -27,8 +28,20 @@ class Main
         this.clickableObjects.push(this.userPet);
         this.updateObjects = new Array ();
         //Mini Game
-        this.miniGame = new MiniGame();
+        this.throwBall = new ThrowBall(this.sceneRenderer.gameContainer);
         this.isDag = true;
+
+        //presents (food)
+        this.clickablePresent = new Array();
+        this.presentSpanPositions = new Array();
+        //this.etenObject.position.set(2,1,5);
+        //this.clickableObjects.push(this.etenObject);
+        //this.clickablePresent.push(this.etenObject);
+
+        this.SetPresentPosition();
+        this.SpawnPresent();
+
+
         //End
         this.effectsMuted = false;
         //Explosion
@@ -51,11 +64,16 @@ class Main
         document.getElementsByClassName("test_reset")[0].onclick = (e) => {this.OnResetClick(e)};
         document.getElementsByClassName("effects_mute")[0].onclick = (e) => {this.OnEffectsMute(e)};
         document.getElementsByClassName("bgm_mute")[0].onclick = (e) => {this.OnBGMMute(e)};
+        document.getElementsByClassName("full_screen")[0].onclick = (e) => {this.OnFullScreenClick(e)};
 
         document.getElementsByClassName("show_hide")[0].onclick = (e) => {this.OnShowMenuClick(e)};
         document.getElementsByClassName("ball_btn")[0].onclick = (e) => {this.OnBallBtnClick(e)};
         document.getElementsByClassName("eten1")[0].onclick = (e) => {this.OnEten1Click(e)};
         document.getElementsByClassName("slapen")[0].onclick = (e) => {this.OnSlapenClick(e)};
+        document.addEventListener('webkitfullscreenchange',(e)=> {this.FullScreenChange(e);}, false);
+        document.addEventListener('mozfullscreenchange',(e)=> {this.FullScreenChange(e);}, false);
+        document.addEventListener('fullscreenchange', (e)=> {this.FullScreenChange(e);}, false);
+
 
         //Save before closing,refreshing etc...
         window.onbeforeunload = (e) => {this.OnBeforeUnload(e)};
@@ -75,17 +93,50 @@ class Main
 
 
     }
+    FullScreenChange(e)
+    {
+        if(this.sceneRenderer.isFullScreen)
+        {
+            this.sceneRenderer.isFullScreen = false;
+            this.sceneRenderer.BackToNormal();
+        }
+        else
+        {
+            this.sceneRenderer.isFullScreen = true;
+        }
+        this.throwBall.Hide();
+        this.ShowHideMenu();
+    }
 
+    OnFullScreenClick(e)
+    {
+        this.sceneRenderer.RequestFullScreen();
+    }
+    SetPresentPosition()
+    {
+        this.AddPresentPosition(2, 1, 5);
+        this.AddPresentPosition(3, 1, 7);
+        this.AddPresentPosition(5, 1, 7);
+        this.AddPresentPosition(9, 1, 2);
+        this.AddPresentPosition(10,1,9);
+    }
+
+
+    AddPresentPosition(x,y,z)
+    {
+        var position = new THREE.Vector3(x,y,z);
+        this.presentSpanPositions.push(position);
+    }
+    
     OnObjectLoadDone(e)
     {
         this.sceneRenderer.AddObject(e.detail);
-
     }
 
     OnRenderUpdate(e)
     {
-        //Pet.Update looks at camera, update it each frame.
-        this.userPet.Update(this.sceneRenderer.camera);
+        //Pet.OnUpdate looks at camera, update it each frame.
+        this.userPet.OnUpdate(this.sceneRenderer.camera);
         //Our test meter!
         document.getElementsByClassName("test_stats")[0].innerText =
             "Name: " + this.userPet.name ;
@@ -101,7 +152,7 @@ class Main
         {
             this.sceneRenderer.RotateCameraAround(this.userPet,-1);
         }
-        this.miniGame.OnUpdate(e);
+        this.throwBall.OnUpdate(e);
         this.cloudExplosion.OnUpdate(this.sceneRenderer.camera);
 
         for (var i=0; i<this.updateObjects.length; i++)
@@ -113,7 +164,7 @@ class Main
     //On Every frame after RenderUpdate do COLLISION detection here.
     OnCollisionUpdate(e)
     {
-        mouse.OnMouseRayUpdate(this.clickableObjects,this.sceneRenderer.camera);
+        this.mouse.OnMouseRayUpdate(this.clickableObjects,this.sceneRenderer.camera);
     }
 
     CreateEnvirement()
@@ -157,7 +208,7 @@ class Main
             if( menuItems[i].style.visibility == "hidden")
             {
                 menuItems[i].style.visibility = "visible";
-                this.miniGame.Hide();
+                this.throwBall.Hide();
             }
             else
             {
@@ -171,13 +222,13 @@ class Main
     }
     OnBallBtnClick(e)
     {
-        if(this.miniGame.isHidden == false)
+        if(this.throwBall.isHidden == false)
         {
-            this.miniGame.Hide();
+            this.throwBall.Hide();
         }
         else
         {
-            this.miniGame.Show();
+            this.throwBall.Show();
         }
     }
     OnEten1Click (e)
@@ -229,14 +280,52 @@ class Main
         this.userPet.name = document.getElementsByClassName("pet_name")[0].value;//SetName
         this.userPet.SavePet();
     }
+
+    SpawnPresent()
+    {
+
+        for( var i = 0; i< this.presentSpanPositions.length; i++)
+        {
+            var gPresent = new THREE.BoxGeometry(1,1,1);
+            var mPresent = new THREE.MeshPhongMaterial();
+            var etenObject = new EtenVerzamelen(gPresent, mPresent);
+
+            //this.etenObject.position.set(2,0,5);
+            etenObject.position.set(this.presentSpanPositions[i].x,this.presentSpanPositions[i].y,this.presentSpanPositions[i].z);
+            this.clickableObjects.push(etenObject);
+            this.clickablePresent.push(etenObject);
+            this.sceneRenderer.AddObject(etenObject);
+        }
+
+    }
+
     OnMouseObjectClick(e)
     {
         //Userpet clicked
-        if(e.detail.object.uuid == this.userPet.uuid)
+        if (e.detail.object.uuid == this.userPet.uuid)
         {
             this.userPet.OnClick();
             console.log("clicked");
         }
+        for(var i = 0; i < this.clickablePresent.length; i++)
+        {
+
+            if(e.detail.object.uuid == this.clickablePresent[i].uuid)
+            {
+
+                this.clickablePresent[i].OnClick();
+                this.sceneRenderer.RemoveObject(this.clickablePresent[i]);
+
+                //this.clickableObjects.splice(this.clickablePresent[i]);
+                //this.clickablePresent.splice(this.clickablePresent[i]);
+
+                this.userPet.foodCount++;
+                console.log(this.userPet.foodCount);
+            }
+
+        }
+        console.log((e.detail.object.uuid));
+
     }
     OnBallMove(e)
     {
@@ -380,15 +469,16 @@ class Main
     }
     OnPetDead(e)
     {
-        var map = this.loader.load("assets/textures/grave.png");
         this.sceneRenderer.RemoveObject(this.userPet);
         this.clickableObjects.splice(this.userPet);
-        this.userPet = new Death(map,4,4,this.userPet.name);
+        this.userPet = new Death(this.userPet.name);
         this.userPet.hunger = 0;
         this.userPet.joy = 100;
         this.userPet.energy = 0;
         this.userPet.SavePet();
-        document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
+
+        //document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
+
         this.sceneRenderer.AddObject(this.userPet);
         this.clickableObjects.push(this.userPet);
         this.Dead();
@@ -417,10 +507,8 @@ class Main
         {
             this.sceneRenderer.RemoveObject(this.userPet);
             this.clickableObjects.splice(this.userPet);
-            var map = this.loader.load("assets/textures/pumpkin.png");
-            this.userPet = new PumpkinEgg(map,1,2);
+            this.userPet = new PumpkinEgg();
             this.userPet.SavePet();
-
             document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
             this.sceneRenderer.AddObject(this.userPet);
             this.clickableObjects.push(this.userPet);
@@ -437,16 +525,21 @@ class Main
     OnPumpkinHatch(e)
     {
         var id = qUtils.GetRandomBetweenInt(1,3);
-        var newPet = this.userPet.Hatch(id.toString());
-        this.cloudExplosion.CreateExplosion(100,newPet.position,2);
-        this.sceneRenderer.RemoveObject(this.userPet);
+        var newPet = this.PetSelect(id.toString());//this.userPet.Hatch(id.toString());
+        newPet.timesClicked = this.userPet.timesClicked;
+        newPet.name = this.userPet.name;
+        newPet.creationDate = this.userPet.creationDate;
 
+        this.cloudExplosion.CreateExplosion(25,newPet.position,2);
+        this.PlaySound(audioSources.eggHatch);
+
+        this.sceneRenderer.RemoveObject(this.userPet);
         this.clickableObjects.splice(this.userPet);
+
         this.userPet = newPet;
         this.userPet.SavePet();
         this.sceneRenderer.AddObject(this.userPet);
         this.clickableObjects.push(this.userPet);
-        this.PlaySound(audioSources.eggHatch);
         //var explosion = new CloudExplosion(25,this.userPet.position,2,this.sceneRenderer);
 
     }
@@ -455,51 +548,41 @@ class Main
         this.cloudExplosion.clouds.splice(e.detail);
         this.sceneRenderer.RemoveObject(e.detail);
     }
+    PetSelect(petId)
+    {
+        var  map = this.loader.load("assets/textures/grave.png");
+        switch(petId)
+        {
+            case '-1':
+                return new Death();
+                break;
+            //case '0': break; //default and 0 is the same...
+            case '1':
+                return new Ghost();
+                break;
+            case '2':
+                return new Zombie();
+                break;
+
+            case '3':
+                return new Skeleton();
+                break;
+
+            default:
+                return new PumpkinEgg();
+                break;
+        }
+        return null;
+    }
     LoadPet()
     {
         var petId = qUtils.GetCookie("pet_id");
-        var map = this.loader.load("assets/textures/pumpkin.png");
-        if(petId == null || petId == "")
+        var newPet = this.PetSelect(petId);
+        this.userPet = newPet;
+        this.userPet.LoadPet();
+        if(this.userPet.isDead == true)
         {
-            //NewPet
-            this.userPet = new PumpkinEgg(map,1,1);
-        }
-        else
-        {
-            switch(petId)
-            {
-                case '-1':
-                    map = this.loader.load("assets/textures/grave.png");
-                    this.userPet = new Death(map,4,4);
-                    break;
-                case '0':
-                    this.userPet = new PumpkinEgg(map,1,1);
-                    break;
-                case '1':
-                    map = this.loader.load("assets/textures/ghost_test.png");
-                    this.userPet = new Ghost(map,4,8);
-                    break;
-                case '2':
-                    map = this.loader.load("assets/textures/zombie.png");
-                    this.userPet = new Zombie(map,4,8);
-                    break;
-                case '3':
-                    map = this.loader.load("assets/textures/skalet.png");
-                    this.userPet = new Skeleton(map,4,8);
-                    break;
-                default:
-                    //Someone cheating most likely xD
-                    console.log("cheater");
-                    //qUtils.DeleteAllCookies();
-                    map = this.loader.load("assets/textures/grave.png");
-                    this.userPet = new Death(map,4,4);
-                    this.Dead();
-                    return;
-                    break;
-            }
-            this.userPet.LoadPet();
-            if(this.userPet.isDead)
-                this.Dead();
+            this.Dead();
         }
     }
 }

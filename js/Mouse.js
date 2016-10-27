@@ -1,12 +1,13 @@
 class Mouse
 {
-    constructor(camera)
+    constructor()
     {
         this.position = new THREE.Vector2(0,0);
         this.caster = new THREE.Raycaster();
         //this.camera = camera;
         this.isDown = false;
         this.wentUp = false;
+        this.canvas = document.getElementsByTagName('canvas')[0];
         this.Init();
 
     }
@@ -39,8 +40,8 @@ class Mouse
     OnMouseMove(e)
     {
         e.preventDefault();
-        this.position.x = (e.clientX / 1280) * 2 -1;
-        this.position.y = -(e.clientY / 720) * 2 +1;
+        this.position.x = (e.clientX / this.canvas.width) * 2 -1;
+        this.position.y = -(e.clientY / this.canvas.height) * 2 +1;
     }
     OnMouseUp(e)
     {
@@ -66,4 +67,4 @@ class Mouse
         this.wentUp = false;
     }
 }
-let mouse = new Mouse();
+//let mouse = new Mouse();
