@@ -23,9 +23,9 @@ class ObjectLoader
 
         } );
 
-        console.log(texture);
+       /* console.log(texture);
         console.log(objectPath);
-        console.log(texturePath);
+        console.log(texturePath);*/
 
 
         this.oLoader.load(objectPath ,(object)=>{this.OnObjectLoad(object, texture, pos, scale, rotate);});
@@ -43,18 +43,21 @@ class ObjectLoader
             if ( child instanceof THREE.Mesh ) {
 
                child.material.map = texture;
+               child.castShadow = true;
+
             }
         } );
-        console.log(scale);
-        console.log(pos);
+        /*console.log(scale);
+        console.log(pos);*/
         object.scale.set(scale.x,scale.y,scale.z);
-
+        object.castShadow = true;
         object.position.set(pos.x, pos.y, pos.z);
         if(typeof rotate !== "undefined"){
             object.rotateX(rotate.x);
             object.rotateY(rotate.y);
             object.rotateZ(rotate.z);
         }
+
         console.log(object);
         this.OnObjectLoadDone = new CustomEvent('onobjectloaddone', {'detail': object });
         document.dispatchEvent(this.OnObjectLoadDone);

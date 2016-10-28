@@ -19,8 +19,8 @@ class Main
         this.LoadPet();//Loaded
         this.userPet.SavePet();//saved
         //this.userPet.position.set(0,-1,0);
+        //this.userPet.castShadow = true;
         this.sceneRenderer.AddObject(this.userPet);
-        this.CeateTeaPot();
         document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
         //End Test
         this.clickableObjects = new Array();
@@ -58,16 +58,6 @@ class Main
     }
     //On Every frame do actions here. This is the main loop.
 
-    //Testing adding OBJ 3d object.
-    CeateTeaPot() {
-        this.boomPos =  new THREE.Vector3(10,10,0);
-        this.boomScale = new THREE.Vector3(0.01,0.01,0.01);
-
-        console.log(this.boomPos);
-        this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale);
-
-
-    }
 
     OnObjectLoadDone(e)
     {
@@ -84,6 +74,7 @@ class Main
             "Name: " + this.userPet.name ;
 
         this.Createbarmeter();
+        this.AnimateSpotLight();
 
         //Rotate around the pet
         if(keyboard.GetKey('a'))
@@ -112,34 +103,144 @@ class Main
 
     CreateEnvirement()
     {
-        var geometry = new THREE.PlaneGeometry(100,100);
-        var material = new THREE.MeshLambertMaterial();
+        var geometry = new THREE.PlaneGeometry(500,500);
+        var material = new THREE.MeshPhongMaterial();
         material.color.setHex("0x77FF00");
         var mesh = new THREE.Mesh(geometry,material);
         mesh.rotateX(qUtils.DegToRad(-90));
         mesh.position.set(0,-2,0);
+        mesh.receiveShadow = true;
         this.sceneRenderer.AddObject(mesh);
+
+/*        var geometry = new THREE.BoxGeometry(1,1,1);
+        var material = new THREE.MeshPhongMaterial( { color: 0x0000FF } );
+
+        var box = new THREE.Mesh(geometry,material);
+        box.position.set(5,-2,5);
+        box.receiveShadow = true;
+        box.castShadow = true;
+        this.sceneRenderer.AddObject(box);*/
+        // Fence Placement
+
+        //this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale);
+
+        /*for(var i = 0; i < 50; i++) {
+            var k = qUtils.GetRandomBetweenInt(1, 2)/100;
+            var x = qUtils.GetRandomBetweenInt(5, 60);
+            var y = -2;
+            var z = qUtils.GetRandomBetweenInt(5, 60);
+            this.boomPos = new THREE.Vector3(x, y, z);
+            this.boomScale = new THREE.Vector3(k, k, k);
+            this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale);
+
+        }*/
+
+        this.aantalhekjes = 15;
+        for(var i = 0; i < this.aantalhekjes; i++) {
+            var k = 0.01;
+            var x = -20;
+            var y = -2;
+            var z = -20;
+            this.boomPos = new THREE.Vector3(x+(i*2.5), y, z);
+            this.boomScale = new THREE.Vector3(k, k, k);
+            this.boomRotate = new THREE.Vector3(0, qUtils.DegToRad(180), 0);
+            this.objectL.ImportObject('assets/models/fench.obj', 'assets/textures/ColorsheetFenceBrown.png', this.boomPos, this.boomScale, this.boomRotate);
+            var x = -22.5;
+            this.boomPos = new THREE.Vector3(x, y, (z+(i*2.5)));
+            this.boomRotate = new THREE.Vector3(0, qUtils.DegToRad(-90), 0);
+            this.objectL.ImportObject('assets/models/fench.obj', 'assets/textures/ColorsheetFenceBrown.png', this.boomPos, this.boomScale, this.boomRotate);
+            var x = -20;
+            this.boomPos = new THREE.Vector3(x+(i*2.5), y, z+(this.aantalhekjes*2.5));
+            this.boomScale = new THREE.Vector3(k, k, k);
+            this.boomRotate = new THREE.Vector3(0, qUtils.DegToRad(180), 0);
+            this.objectL.ImportObject('assets/models/fench.obj', 'assets/textures/ColorsheetFenceBrown.png', this.boomPos, this.boomScale, this.boomRotate);
+            var x = -22.5;
+            this.boomPos = new THREE.Vector3(x+(this.aantalhekjes*2.5), y, (z+(i*2.5)));
+            this.boomRotate = new THREE.Vector3(0, qUtils.DegToRad(-90), 0);
+            this.objectL.ImportObject('assets/models/fench.obj', 'assets/textures/ColorsheetFenceBrown.png', this.boomPos, this.boomScale, this.boomRotate);
+        }
+
+        for(var i = 0; i < 20; i++) {
+            var k = qUtils.GetRandomBetweenInt(10, 15)/1000;
+            var x = qUtils.GetRandomBetweenInt(5, 35)+10;
+            var y = -2;
+            var z = qUtils.GetRandomBetweenInt(5, 35)-18;
+            this.boomPos = new THREE.Vector3(-x, y, -z);
+            this.boomScale = new THREE.Vector3(k, k, k);
+            this.boomRotate = new THREE.Vector3(0,qUtils.GetRandomBetweenInt(0,360), 0);
+            this.objectL.ImportObject('assets/models/boom1.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale, this.boomRotate );
+        }
+        /*for(var i = 1; i < 4; i++) {
+            var k = (1*i) / 150;
+            var x = 25+(i*4);
+            var y = -2;
+            var z = -10+(i*i);
+            this.boomPos = new THREE.Vector3(-x, y, -z);
+            this.boomScale = new THREE.Vector3(k, k, k);
+            this.boomRotate = new THREE.Vector3(0, qUtils.GetRandomBetweenInt(0, 360), 0);
+            this.objectL.ImportObject('assets/models/boom1.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale, this.boomRotate);
+        }*/
 
 
     }
 
     CreateSkydome()
     {
-        //SkyDome
-        var skyGeo = new THREE.SphereGeometry(1000, 25, 25);
-        var material = new THREE.MeshBasicMaterial();
-        material.map = this.loader.load("assets/textures/skydome02.jpg");
-        var sky = new THREE.Mesh(skyGeo, material);
-        sky.position.set(0,0,0);
+
+
+        var skyGeo = new THREE.SphereGeometry(4000, 25, 25);
+
+
+        //var skytexture = THREE.ImageUtils.loadTexture( "assets/textures/milky.jpg" );
+
+
+        var skymaterial = new THREE.MeshBasicMaterial( { color: 0x003366 } );
+
+
+        var sky = new THREE.Mesh(skyGeo, skymaterial);
         sky.material.side = THREE.BackSide;
         this.sceneRenderer.AddObject(sky);
     }
     CreateLights()
     {
-        var light = new THREE.AmbientLight( 0xffffff,0.5);
-        light.position.set( 0, 1, 1 );
+        var light = new THREE.AmbientLight( 0x003366,0.2);
+        light.position.set( 0, 10, 1 );
         this.sceneRenderer.AddObject(light);
+
+        this.spotLight = new THREE.SpotLight( 0x003366,1 );
+        this.spotLight.position.set( 15, 10, 15 );
+        this.spotLight.castShadow = true;
+        this.spotLight.shadowDarkness =  1;
+        this.spotLight.angle = 240;
+
+
+        this.sceneRenderer.AddObject( this.spotLight );
+
+        var spotLightHelper = new THREE.SpotLightHelper( this.spotLight );
+        this.sceneRenderer.AddObject(spotLightHelper );
+
+        this.spotLight2 = new THREE.SpotLight( 0xFFFFFF,1 );
+        this.spotLight2.position.set( 20, 5, 20 );
+        this.spotLight2.castShadow = true;
+        this.spotLight2.shadowDarkness =  1;
+        this.spotLight2.angle = 240;
+
+
+        this.sceneRenderer.AddObject( this.spotLight2 );
+
+        var spotLightHelper2 = new THREE.SpotLightHelper( this.spotLight2 );
+        this.sceneRenderer.AddObject(spotLightHelper2 );
     }
+
+    AnimateSpotLight(){
+        var angle	= Date.now()/1000 * Math.PI;
+// angle	= Math.PI*2
+        this.spotLight.position.x	= Math.cos(angle*-0.1)*20;
+        //this.spotLight.position.y	= 10 + Math.sin(angle*0.5)*6;
+        this.spotLight.position.z	= Math.sin(angle*-0.1)*20;
+        //this.spotLight.target(this.userPet);
+    }
+
     OnShowMenuClick(e)
     {
         this.ShowHideMenu();

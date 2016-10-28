@@ -25,17 +25,19 @@ class SceneRenderer
         this.scene = new THREE.Scene();
         //var aspect = window.innerWidth / window.innerHeight;
         var aspect = 1280 / 720;
-        this.camera = new THREE.PerspectiveCamera(75,aspect,0.1,10000);
+        this.camera = new THREE.PerspectiveCamera(90,aspect,0.1,5000);
         this.renderer = new THREE.WebGLRenderer({"antialias":true});
         //this.renderer.antialias = true;
         //Shadows
-        this.renderer.shadowMap.enabled = true;
+        this.renderer.shadowMapEnabled	= true;
+        this.renderer.shadowMapType = THREE.PCFSoftShadowMap;
+        /*this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.soft = true;
         this.renderer.shadowMap.CullFrontFaces = false;
         this.renderer.shadowMap.bias = 0.0039;
         this.renderer.shadowMap.darkness = 0.5;
         this.renderer.shadowMap.width = 1024;
-        this.renderer.shadowMap.height = 1024;
+        this.renderer.shadowMap.height = 1024;*/
         //end shadows
         this.renderer.setSize(window.innerWidth ,window.innerHeight);
         this.renderer.setClearColor(0x000000);
