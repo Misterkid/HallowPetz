@@ -25,6 +25,15 @@ class PumpkinEgg extends Pet
         //this.TimedHatching();
         this.ClickHatching();
     }
+    Transfer(currentPet)
+    {
+        this.energy = currentPet.energy;
+        this.hunger = currentPet.hunger;
+        this.joy = currentPet.joy;
+        this.timesClicked = currentPet.timesClicked;
+        this.name = currentPet.name;
+        this.creationDate = currentPet.creationDate;
+    }
     ClickHatching()
     {
         if(this.isHatching == false)

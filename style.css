@@ -59,10 +59,9 @@ canvas
 .food_count
 {
     position: absolute;
-    left: 37%;
-    bottom: -26%;
+    left: 15%;
+    bottom: 50%;
 }
-
 /*
 .honger1
 {
@@ -128,8 +127,8 @@ input
     position: absolute;
     width: 120px;
     height: 25px;
-    left: 118%;
-    bottom: -55%;
+    left: 46%;
+    bottom: 40%;
     text-align: center;
     color:white;
 }
@@ -138,15 +137,15 @@ input
     width: 200px;
     height: 150px;
     position: absolute;
-    left: 150%;
-    bottom: 0%;
+    left: 60%;
+    bottom: 65%;;
 }
 .hud
 {
-    /*
-    width: 1280px!important;
-    height: 720px!important;
-    */
+
+    width: 1280px;
+    height: 720px;
+
     margin: 0 auto;
     position: absolute;
     z-index: 3;
@@ -157,7 +156,6 @@ input
     -khtml-user-select: none;    /* Konqueror */
     -moz-user-select: none;      /* Firefox */
     -ms-user-select: none;       /* Internet Explorer/Edge */
-    user-select: none;           /* Non-prefixed version, currently
-                                  not supported by any browser */
-
+    /* user-select: none;            Non-prefixed version, currently
+                                   not supported by any browser */
 }
