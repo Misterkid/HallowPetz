@@ -6,6 +6,7 @@ class HeadsUpDisplay
     //All the html hud stuff here!
     constructor()
     {
+        this.hudDiv =  document.getElementsByClassName("hud")[0];
         this.funButton = document.getElementsByClassName("ball_btn")[0];
         this.sleepButton = document.getElementsByClassName("slapen")[0];
         this.eatButton = document.getElementsByClassName("eten1")[0];
@@ -83,6 +84,8 @@ class HeadsUpDisplay
             return;
 
         this.emotionCloud.style.visibility = "hidden";
+        this.emotionCloud.style.top = userPet.headPoint2d.y - this.emotionCloud.height + 'px';
+        this.emotionCloud.style.left = userPet.headPoint2d.x + (this.emotionCloud.width /2) + 'px';
         // honger
         if (Math.floor(userPet.hunger) < 101)
         {

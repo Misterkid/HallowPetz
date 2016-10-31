@@ -10,6 +10,8 @@ class Death extends Pet
         super(map,4,4,name);
         this.isDead = true;
         this.petId = -1;//dead
+        this.headPoint = new THREE.Vector3(this.position.x,1,0);
+        this.headPoint2d = new THREE.Vector3(1280 * 0.5,720 * 0.5,0);
     }
     OnUpdate(camera)
     {

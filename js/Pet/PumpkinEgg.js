@@ -17,6 +17,8 @@ class PumpkinEgg extends Pet
         this.clicksToHatch = 25;
         this.scaling = 1;
         this.scaleSteps = 0.05;
+        this.headPoint = new THREE.Vector3(this.position.x,0,0);
+        this.headPoint2d = new THREE.Vector3(1280 * 0.5,720 * 0.5,0);
         //
     }
     OnUpdate(camera)
@@ -42,6 +44,8 @@ class PumpkinEgg extends Pet
         this.scaling += this.scaleSteps;
         var newY = (this.scaling - 1) + (this.height/2)-2;
         this.position.set(0,newY,0);
-        this.scale.set(this.scaling,this.scaling,1)
+        this.scale.set(this.scaling,this.scaling,1);
+
+        this.headPoint.set(0,this.headPoint.y + this.scaleSteps,0);
     }
 }
