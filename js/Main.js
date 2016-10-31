@@ -17,6 +17,7 @@ class Main
         //Pet making test
         console.log( document.cookie);
         this.userPet = null;//Need to load
+        this.hud = new HeadsUpDisplay();
         this.LoadPet();//Loaded
         this.userPet.SavePet();//saved
         //this.userPet.position.set(0,-1,0);
@@ -60,20 +61,20 @@ class Main
         document.addEventListener("oncloudtimerend",(e)=>{this.OnCloudTimerEnd(e);});
         document.addEventListener("onpetdead",(e)=>{this.OnPetDead(e);});
         document.addEventListener("onpresentclick",(e)=>{this.OnPresentClick(e);});
-        //Menu stuff
-        document.getElementsByClassName("save_pet")[0].onclick = (e) => {this.OnSaveClick(e)};
-        document.getElementsByClassName("test_reset")[0].onclick = (e) => {this.OnResetClick(e)};
-        document.getElementsByClassName("effects_mute")[0].onclick = (e) => {this.OnEffectsMute(e)};
-        document.getElementsByClassName("bgm_mute")[0].onclick = (e) => {this.OnBGMMute(e)};
-        document.getElementsByClassName("full_screen")[0].onclick = (e) => {this.OnFullScreenClick(e)};
-
-        document.getElementsByClassName("show_hide")[0].onclick = (e) => {this.OnShowMenuClick(e)};
-        document.getElementsByClassName("ball_btn")[0].onclick = (e) => {this.OnBallBtnClick(e)};
-        document.getElementsByClassName("eten1")[0].onclick = (e) => {this.OnEten1Click(e)};
-        document.getElementsByClassName("slapen")[0].onclick = (e) => {this.OnSlapenClick(e)};
         document.addEventListener('webkitfullscreenchange',(e)=> {this.FullScreenChange(e);}, false);
         document.addEventListener('mozfullscreenchange',(e)=> {this.FullScreenChange(e);}, false);
         document.addEventListener('fullscreenchange', (e)=> {this.FullScreenChange(e);}, false);
+
+        //Hud
+        this.hud.savePetButton.onclick = (e) => {this.OnSaveClick(e)};
+        this.hud.resetPetButton.onclick = (e) => {this.OnResetClick(e)};
+        this.hud.muteSFXButton.onclick = (e) => {this.OnEffectsMute(e)};
+        this.hud.muteBGMButton.onclick = (e) => {this.OnBGMMute(e)};
+        this.hud.fullScreenButton.onclick = (e) => {this.OnFullScreenClick(e)};
+        this.hud.menuButton.onclick = (e) => {this.OnShowMenuClick(e)};
+        this.hud.funButton.onclick = (e) => {this.OnBallBtnClick(e)};
+        this.hud.sleepButton.onclick = (e) => {this.OnSlapenClick(e)};
+        this.hud.eatButton.onclick = (e) => {this.OnEten1Click(e)};
 
 
         //Save before closing,refreshing etc...
@@ -106,7 +107,7 @@ class Main
             this.sceneRenderer.isFullScreen = true;
         }
         this.throwBall.Hide();
-        this.ShowHideMenu();
+        this.hud.ShowHideMenu(this.throwBall,this.userPet);
     }
 
     OnFullScreenClick(e)
@@ -161,14 +162,10 @@ class Main
 
     OnRenderUpdate(e)
     {
+        //updates heads up display
+        this.hud.OnUpdate(this.userPet);
         //Pet.OnUpdate looks at camera, update it each frame.
         this.userPet.OnUpdate(this.sceneRenderer.camera);
-        //Our test meter!
-        document.getElementsByClassName("test_stats")[0].innerText =
-            "Name: " + this.userPet.name ;
-
-        this.Createbarmeter();
-
         //Rotate around the pet
         if(keyboard.GetKey('a'))
         {
@@ -224,27 +221,7 @@ class Main
     }
     OnShowMenuClick(e)
     {
-        this.ShowHideMenu();
-    }
-    ShowHideMenu()
-    {
-        var menuItems = document.getElementsByClassName("menu_obj");
-        for(var i = 0; i < menuItems.length; i ++)
-        {
-            if( menuItems[i].style.visibility == "hidden")
-            {
-                menuItems[i].style.visibility = "visible";
-                this.throwBall.Hide();
-            }
-            else
-            {
-                menuItems[i].style.visibility = "hidden";
-            }
-        }
-        if(this.userPet.isDead)
-        {
-            document.getElementsByClassName("pet_name")[0].style.visibility ="hidden";
-        }
+        this.hud.ShowHideMenu(this.throwBall,this.userPet);
     }
     OnBallBtnClick(e)
     {
@@ -293,12 +270,12 @@ class Main
     }
     OnResetClick(e)
     {
-        this.ShowHideMenu();
+        this.hud.ShowHideMenu(this.throwBall,this.userPet);
         this.ResetPet();
     }
     OnSaveClick(e)
     {
-        this.ShowHideMenu();
+        this.hud.ShowHideMenu(this.throwBall,this.userPet);
         this.SavePet();
     }
     OnBeforeUnload()
@@ -307,7 +284,7 @@ class Main
     }
     SavePet()
     {
-        this.userPet.name = document.getElementsByClassName("pet_name")[0].value;//SetName
+        this.userPet.name = this.hud.petRenameField.value;
         this.userPet.SavePet();
     }
     OnPresentClick(e)
@@ -341,120 +318,6 @@ class Main
     OnBallHitWall(e)
     {
         this.PlaySound(audioSources.ballHit);
-    }
-    Createbarmeter()
-    {
-        /*
-         <img class = "honger1 emotion_cloud" src = "assets/textures/honger.png">
-         <img class = "energie1 emotion_cloud" src = "assets/textures/slapen.png">
-         <img class = "plezier1 emotion_cloud" src = "assets/textures/plezier.png">
-        document.getElementsByClassName("honger1")[0].style.visibility = "hidden";
-        document.getElementsByClassName("plezier1")[0].style.visibility = "hidden";
-        document.getElementsByClassName("energie1")[0].style.visibility = "hidden";
-        */
-        //Saves a ton of performance when character is dead
-        if(this.userPet.isDead)
-            return;
-
-        document.getElementsByClassName("emotion_cloud")[0].style.visibility = "hidden";
-        // honger
-        if (Math.floor(this.userPet.hunger) < 101)
-        {
-            if (Math.floor(this.userPet.hunger) >= 95)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/100.png"}
-            else if (Math.floor(this.userPet.hunger) >= 85 && Math.floor(this.userPet.hunger) < 95)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/90.png"}
-            else if (Math.floor(this.userPet.hunger) >= 75 && Math.floor(this.userPet.hunger) < 85)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/80.png"}
-            else if (Math.floor(this.userPet.hunger) >= 65 && Math.floor(this.userPet.hunger) < 75)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/70.png"}
-            else if (Math.floor(this.userPet.hunger) >= 55 && Math.floor(this.userPet.hunger) < 65)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/60.png"}
-            else if (Math.floor(this.userPet.hunger) >= 45 && Math.floor(this.userPet.hunger) < 55)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/50.png"}
-            else  if (Math.floor(this.userPet.hunger) >= 35 && Math.floor(this.userPet.hunger) < 45)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/40.png"}
-            else if (Math.floor(this.userPet.hunger) >= 25 && Math.floor(this.userPet.hunger) < 35)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/30.png"}
-            else if (Math.floor(this.userPet.hunger) >= 15 && Math.floor(this.userPet.hunger) < 25)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/20.png"}
-            else if (Math.floor(this.userPet.hunger) >= 5 && Math.floor(this.userPet.hunger) < 15)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/10.png"
-               // document.getElementsByClassName("honger1")[0].style.visibility = "visible";}
-                ,document.getElementsByClassName("emotion_cloud")[0].src = "assets/textures/honger.png"
-                ,document.getElementsByClassName("emotion_cloud")[0].style.visibility = "visible";}
-            else if (Math.floor(this.userPet.hunger) <5)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/0.png"
-                //document.getElementsByClassName("honger1")[0].style.visibility = "visible";}
-                ,document.getElementsByClassName("emotion_cloud")[0].src = "assets/textures/honger.png"
-                ,document.getElementsByClassName("emotion_cloud")[0].style.visibility = "visible";}
-        }
-
-        //energie
-        if (Math.floor(this.userPet.energy) < 101)
-        {
-            if (Math.floor(this.userPet.energy) >= 95)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/100.png"}
-            else if (Math.floor(this.userPet.energy) >= 85 && Math.floor(this.userPet.energy) < 95)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/90.png"}
-            else if (Math.floor(this.userPet.energy) >= 75 && Math.floor(this.userPet.energy) < 85)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/80.png"}
-            else if (Math.floor(this.userPet.energy) >= 65 && Math.floor(this.userPet.energy) < 75)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/70.png"}
-            else if (Math.floor(this.userPet.energy) >= 55 && Math.floor(this.userPet.energy) < 65)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/60.png"}
-            else if (Math.floor(this.userPet.energy) >= 45 && Math.floor(this.userPet.energy) < 55)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/50.png"}
-            else if (Math.floor(this.userPet.energy) >= 35 && Math.floor(this.userPet.energy) < 45)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/40.png"}
-            else if (Math.floor(this.userPet.energy) >= 25 && Math.floor(this.userPet.energy) < 35)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/30.png"}
-            else if (Math.floor(this.userPet.energy) >= 15 && Math.floor(this.userPet.energy) < 25)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/20.png"}
-            else if (Math.floor(this.userPet.energy) >= 5 && Math.floor(this.userPet.energy) < 15)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/10.png"
-                //document.getElementsByClassName("energie1")[0].style.visibility = "visible";}
-                ,document.getElementsByClassName("emotion_cloud")[0].src = "assets/textures/slapen.png"
-                ,document.getElementsByClassName("emotion_cloud")[0].style.visibility = "visible";}
-            else if (Math.floor(this.userPet.energy) <5)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/0.png"
-                //document.getElementsByClassName("energie1")[0].style.visibility = "visible";}
-                ,document.getElementsByClassName("emotion_cloud")[0].src = "assets/textures/slapen.png"
-                ,document.getElementsByClassName("emotion_cloud")[0].style.visibility = "visible";}
-        }
-
-        // plezier
-        if (Math.floor(this.userPet.joy) < 101)
-        {
-            if (Math.floor(this.userPet.joy) > 95)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/100.png"}
-            else if (Math.floor(this.userPet.joy) >= 85 && Math.floor(this.userPet.joy) < 95)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/90.png"}
-            else if (Math.floor(this.userPet.joy) >= 75 && Math.floor(this.userPet.joy) < 85)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/80.png"}
-            else if (Math.floor(this.userPet.joy) >= 65 && Math.floor(this.userPet.joy) < 75)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/70.png"}
-            else if (Math.floor(this.userPet.joy) >= 55 && Math.floor(this.userPet.joy) < 65)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/60.png"}
-            else if (Math.floor(this.userPet.joy) >= 45 && Math.floor(this.userPet.joy) < 55)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/50.png"}
-            else if (Math.floor(this.userPet.joy) >= 35 && Math.floor(this.userPet.joy) < 45)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/40.png"}
-            else if (Math.floor(this.userPet.joy) >= 25 && Math.floor(this.userPet.joy) < 35)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/30.png"}
-            else if (Math.floor(this.userPet.joy) >= 15 && Math.floor(this.userPet.joy) < 25)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/20.png"}
-            else if (Math.floor(this.userPet.joy) >= 5 && Math.floor(this.userPet.joy) < 15)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/10.png"
-                //document.getElementsByClassName("plezier1")[0].style.visibility = "visible";}
-                ,document.getElementsByClassName("emotion_cloud")[0].src = "assets/textures/plezier.png"
-                ,document.getElementsByClassName("emotion_cloud")[0].style.visibility = "visible";}
-            else if (Math.floor(this.userPet.joy) <5)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/0.png"
-                //document.getElementsByClassName("plezier1")[0].style.visibility = "visible";}
-                ,document.getElementsByClassName("emotion_cloud")[0].src = "assets/textures/plezier.png"
-                ,document.getElementsByClassName("emotion_cloud")[0].style.visibility = "visible";}
-        }
     }
     Cheats()
     {
@@ -498,7 +361,7 @@ class Main
     OnPetDead(e)
     {
         this.sceneRenderer.RemoveObject(this.userPet);
-        //this.clickableObjects.splice(this.userPet);
+        //this.clickableObjects.slice(this.userPet);
         this.RemoveClickAbleObject(this.userPet);
         this.userPet = new Death(this.userPet.name);
         this.userPet.hunger = 0;
@@ -506,35 +369,10 @@ class Main
         this.userPet.energy = 0;
         this.userPet.SavePet();
 
-        //document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
-
         this.sceneRenderer.AddObject(this.userPet);
         this.clickableObjects.push(this.userPet);
-        this.Dead();
+        this.hud.Dead(this.userPet);
     }
-    Dead()
-    {
-        document.getElementsByClassName("ball_btn")[0].style.visibility = "hidden";
-        document.getElementsByClassName("eten1")[0].style.visibility = "hidden";
-        document.getElementsByClassName("grave")[0].style.visibility = "visible"
-        document.getElementsByClassName("grave")[0].innerHTML = "<p>" + this.userPet.name +  "</p>";
-        document.getElementsByClassName("slapen")[0].style.visibility = "hidden";
-        document.getElementsByClassName("emotion_cloud")[0].style.visibility = "hidden";
-        /*
-        document.getElementsByClassName("honger1")[0].style.visibility = "hidden";
-        document.getElementsByClassName("plezier1")[0].style.visibility = "hidden";
-        document.getElementsByClassName("energie1")[0].style.visibility = "hidden";
-        */
-    }
-    Alive()
-    {
-
-        document.getElementsByClassName("ball_btn")[0].style.visibility = "visible";
-        document.getElementsByClassName("eten1")[0].style.visibility = "visible";
-        document.getElementsByClassName("grave")[0].style.visibility = "hidden";
-        document.getElementsByClassName("slapen")[0].style.visibility = "visible";
-    }
-
     ResetPet()
     {
         //NewPet
@@ -548,7 +386,7 @@ class Main
             document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
             this.sceneRenderer.AddObject(this.userPet);
             this.clickableObjects.push(this.userPet);
-            this.Alive();
+            this.hud.Alive();
         }
     }
     PlaySound(audioSource)
@@ -616,7 +454,7 @@ class Main
         this.userPet.LoadPet();
         if(this.userPet.isDead == true)
         {
-            this.Dead();
+            this.hud.Dead(this.userPet);
         }
     }
 }

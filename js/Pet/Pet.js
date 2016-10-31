@@ -39,7 +39,6 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         this.foodCount =  this.foodCount + add;
         if(this.foodCount < 0)
             this.foodCount = 0;
-        document.getElementsByClassName("food_count")[0].innerText = this.foodCount;
     }
     AddToJoy(add)
     {
@@ -150,7 +149,5 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         this.timesClicked = qUtils.GetCookie("pet_times_clicked" );
         this.creationDate = qUtils.GetCookie("pet_creation_date");
         this.foodCount = parseInt(qUtils.GetCookie("pet_food_count"));
-
-        document.getElementsByClassName("food_count")[0].innerText = this.foodCount;
     }
 }
