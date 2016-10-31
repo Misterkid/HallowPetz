@@ -76,6 +76,8 @@ class Main
 
         this.bgmMixer = new BGMMixer();
         this.bgmMixer.Shuffle();//Start
+
+        this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
     }
 
     //On Every frame do actions here. This is the main loop.
@@ -101,6 +103,7 @@ class Main
         }
         this.throwBall.Hide();
         this.hud.ShowHideMenu(this.throwBall,this.userPet);
+        this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
     }
 
     OnFullScreenClick(e)
@@ -232,6 +235,15 @@ class Main
         {
             var map = this.loader.load("assets/textures/eten1.png");
             var eten1 = new Eten(map, 1.5, 1);
+            if(this.userPet.petId == '2')
+            {
+                eten1.position.set(this.userPet.headPoint.x,this.userPet.headPoint.y - 2.5,0);
+                console.log("?");
+            }
+            else
+            {
+                eten1.position.set(this.userPet.headPoint.x,this.userPet.headPoint.y,0);
+            }
             this.sceneRenderer.AddObject(eten1);
             this.updateObjects.push(eten1);
             this.PlaySound(audioSources.eating);
@@ -242,7 +254,7 @@ class Main
     {
         this.updateObjects.slice(e.detail);//Ohhh...
         this.sceneRenderer.RemoveObject(e.detail);
-        this.userPet.AddToHunger(3);
+        this.userPet.AddToHunger(10);
     }
     OnSlapenClick(e)
     {
@@ -288,6 +300,7 @@ class Main
     OnMouseObjectClick(e)
     {
         //CLICK
+        this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
         e.detail.OnClick(e.detail);
     }
     RemoveClickAbleObject(object)
@@ -324,6 +337,11 @@ class Main
             this.userPet.AddToEnergy(25 * DeltaTime);
             this.userPet.AddToHunger(25 * DeltaTime);
         }
+        if(keyboard.GetKey('b'))
+        {
+            this.userPet.foodCount ++;
+        }
+
     }
     OnEffectsMute(e)
     {
@@ -363,6 +381,8 @@ class Main
         this.sceneRenderer.AddObject(this.userPet);
         this.clickableObjects.push(this.userPet);
         this.hud.Dead(this.userPet);
+
+        this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
     }
     ResetPet()
     {
@@ -374,10 +394,11 @@ class Main
             this.RemoveClickAbleObject(this.userPet);
             this.userPet = new PumpkinEgg();
             this.userPet.SavePet();
-            document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
+            this.hud.petRenameField.value = this.userPet.name;
             this.sceneRenderer.AddObject(this.userPet);
             this.clickableObjects.push(this.userPet);
             this.hud.Alive();
+            this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
         }
     }
     PlaySound(audioSource)
@@ -403,6 +424,7 @@ class Main
         this.userPet.SavePet();
         this.sceneRenderer.AddObject(this.userPet);
         this.clickableObjects.push(this.userPet);
+        this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
         //var explosion = new CloudExplosion(25,this.userPet.position,2,this.sceneRenderer);
     }
     OnCloudTimerEnd(e)
@@ -446,6 +468,19 @@ class Main
         {
             this.hud.Dead(this.userPet);
         }
+
+    }
+    WorldToScreen( position )
+    {
+        var width = this.hud.hudDiv.offsetWidth, height = this.hud.hudDiv.offsetHeight;
+        var widthHalf = width / 2;
+        var heightHalf = height / 2;
+
+        var pos = position.clone();
+        pos.project(this.sceneRenderer.camera);
+        pos.x = Math.round( (   pos.x + 1 ) * widthHalf );
+        pos.y = Math.round( ( - pos.y + 1 ) * heightHalf );
+        return new THREE.Vector3(pos.x,pos.y,0);
     }
 }
 new Main();
