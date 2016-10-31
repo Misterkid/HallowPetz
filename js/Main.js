@@ -392,6 +392,7 @@ class Main
             this.clickableObjects.push(this.userPet);
             this.hud.Alive();
             this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
+            this.userPet.asleep = !this.isDag;
         }
     }
     PlaySound(audioSource)

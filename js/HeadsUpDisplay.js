@@ -20,6 +20,9 @@ class HeadsUpDisplay
         this.grave = document.getElementsByClassName("grave")[0];
         //Count
         this.foodCount = document.getElementsByClassName("food_count")[0];
+
+        this.sleepEmoticon = document.getElementsByClassName("sleep_emoticon")[0];
+        this.sleepEmoticon.style.visibility = "hidden";
         //menu
         this.menuItems = document.getElementsByClassName("menu_obj");
         this.petRenameField = document.getElementsByClassName("pet_rename")[0];
@@ -35,6 +38,23 @@ class HeadsUpDisplay
         this.petNameLabel.innerText = userPet.name;
         this.foodCount.innerText = userPet.foodCount;
         this.Createbarmeter(userPet);
+        this.Sleep(userPet);
+
+    }
+    Sleep(userPet)
+    {
+
+        this.sleepEmoticon.style.top = userPet.headPoint2d.y - this.sleepEmoticon.height + 'px';
+        this.sleepEmoticon.style.left = userPet.headPoint2d.x + (this.sleepEmoticon.width /2) + 'px';
+        if(userPet.asleep)
+        {
+            this.sleepEmoticon.style.visibility = "visible";
+        }
+        else
+        {
+            this.sleepEmoticon.style.visibility = "hidden";
+        }
+
     }
     Dead(userPet)
     {
