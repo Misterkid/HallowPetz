@@ -1,7 +1,3 @@
-/**
- * Created by Moi on 10/26/2016.
- */
-
 class EtenVerzamelen extends THREE.Mesh
 {
 

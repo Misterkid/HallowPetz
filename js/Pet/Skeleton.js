@@ -1,6 +1,3 @@
-/**
- * Created by quget on 11-10-16.
- */
 class Skeleton extends Pet
 {
     constructor(name)
