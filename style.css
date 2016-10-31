@@ -61,6 +61,7 @@ canvas
     position: absolute;
     left: 15%;
     bottom: 50%;
+    z-index:-1;
 }
 /*
 .honger1
