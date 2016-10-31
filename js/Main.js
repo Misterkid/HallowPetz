@@ -394,7 +394,7 @@ class Main
             this.RemoveClickAbleObject(this.userPet);
             this.userPet = new PumpkinEgg();
             this.userPet.SavePet();
-            document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
+            this.hud.petRenameField.value = this.userPet.name;
             this.sceneRenderer.AddObject(this.userPet);
             this.clickableObjects.push(this.userPet);
             this.hud.Alive();
