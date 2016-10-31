@@ -61,42 +61,10 @@ canvas
     position: absolute;
     left: 15%;
     bottom: 50%;
+    z-index:-1;
 }
-/*
-.honger1
-{
-    width: 200px;
-    height: 150px;
-    position: absolute;
-    left: 55%;
-    bottom: 70%;
-}
-.plezier1
-{
-    width: 200px;
-    height: 150px;
-    position: absolute;
-    left: 55%;
-    bottom: 70%;
-}
-.energie1
-{
-    width: 200px;
-    height: 150px;
-    position: absolute;
-    left: 55%;
-    bottom: 70%;
-}
-*/
-/*
-.menu_obj
-{
-    visibility: hidden;
-}
-*/
 p
 {
-    /*text-align: center;*/
     font-family: "My Custom Font", Verdana, Tahoma;
     font-size: 40px;
     color:white;
@@ -107,20 +75,6 @@ p
     height: 500px;
     background-color: rgba(100,100,100,0.9);
     position: absolute;
-}
-button
-{
-    /*
-    display: block;
-    margin: 0 auto;
-    */
-}
-input
-{
-    /*
-    display: block;
-    margin: 0 auto;
-    */
 }
 .grave
 {
@@ -142,7 +96,6 @@ input
 }
 .hud
 {
-
     width: 1280px;
     height: 720px;
 
@@ -156,6 +109,5 @@ input
     -khtml-user-select: none;    /* Konqueror */
     -moz-user-select: none;      /* Firefox */
     -ms-user-select: none;       /* Internet Explorer/Edge */
-    /* user-select: none;            Non-prefixed version, currently
-                                   not supported by any browser */
+    /* user-select: none;            Non-prefixed version, currently not supported by any browser */
 }

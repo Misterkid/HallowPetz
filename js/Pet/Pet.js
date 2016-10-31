@@ -1,6 +1,3 @@
-/**
- * Created by quget on 11-10-16.
- */
 class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
 {
     constructor(map,width,height,name = "no_name")

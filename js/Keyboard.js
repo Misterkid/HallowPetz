@@ -1,6 +1,3 @@
-/**
- * Created by quget on 13-9-16.
- */
 class Keyboard
 {
     constructor()
@@ -27,4 +24,4 @@ class Keyboard
         return this.keyList[key];
     }
 }
-let keyboard = new Keyboard();//Uhm... ok
+let keyboard = new Keyboard();

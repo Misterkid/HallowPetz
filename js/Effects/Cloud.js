@@ -1,6 +1,3 @@
-/**
- * Created by quget on 25-10-16.
- */
 class Cloud extends THREE.Mesh
 {
     constructor(map,width,height)
