@@ -1,11 +1,7 @@
-/**
- * Created by Compaq on 10/25/2016.
- */
 class ObjectLoader
 {
     constructor()
     {
-
         this.manager = new THREE.LoadingManager();
         this.tLoader = new THREE.ImageLoader( this.manager );
 
@@ -27,14 +23,8 @@ class ObjectLoader
         console.log(objectPath);
         console.log(texturePath);
 
-
         this.oLoader.load(objectPath ,(object)=>{this.OnObjectLoad(object, texture, pos, scale, rotate);});
-
-        //console.log(object);
-
     }
-
-
 
     OnObjectLoad(object, texture, pos, scale, rotate)
     {
@@ -58,15 +48,5 @@ class ObjectLoader
         console.log(object);
         this.OnObjectLoadDone = new CustomEvent('onobjectloaddone', {'detail': object });
         document.dispatchEvent(this.OnObjectLoadDone);
-
-
     }
-
-    /*LoadObject()
-    {
-        console.log(this.objectR);
-        return this.objectR;
-    }*/
-
-
 }

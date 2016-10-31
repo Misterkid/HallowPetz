@@ -1,6 +1,3 @@
-/**
- * Created by quget on 10-10-16.
- */
 class Main
 {
     constructor()
@@ -40,9 +37,6 @@ class Main
         var randomTime = qUtils.GetRandomBetweenInt(10000,100000);
         this.PresentSpawnTimer = setInterval((e)=>{ this.SpawnPresent(e);},randomTime);
 
-        //this.SpawnPresent();
-
-
         //End
         this.effectsMuted = false;
         //Explosion
@@ -76,7 +70,6 @@ class Main
         this.hud.sleepButton.onclick = (e) => {this.OnSlapenClick(e)};
         this.hud.eatButton.onclick = (e) => {this.OnEten1Click(e)};
 
-
         //Save before closing,refreshing etc...
         window.onbeforeunload = (e) => {this.OnBeforeUnload(e)};
         this.sceneRenderer.Render();//Start rendering
@@ -84,16 +77,16 @@ class Main
         this.bgmMixer = new BGMMixer();
         this.bgmMixer.Shuffle();//Start
     }
+
     //On Every frame do actions here. This is the main loop.
     //Testing adding OBJ 3d object.
-    CeateTeaPot() {
+    CeateTeaPot()
+    {
         this.boomPos =  new THREE.Vector3(10,10,0);
         this.boomScale = new THREE.Vector3(0.01,0.01,0.01);
 
         console.log(this.boomPos);
         this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale);
-
-
     }
     FullScreenChange(e)
     {
@@ -136,12 +129,12 @@ class Main
 
         for(var j = 0; j < this.clickableObjects.length; j++ )
         {
-                if(this.presentSpawnPositions[i].x == this.clickableObjects[j].position.x,
-                    this.presentSpawnPositions[i].y == this.clickableObjects[j].position.y,
-                    this.presentSpawnPositions[i].z == this.clickableObjects[j].position.z)
-                {
-                    return;
-                }
+            if(this.presentSpawnPositions[i].x == this.clickableObjects[j].position.x,
+                this.presentSpawnPositions[i].y == this.clickableObjects[j].position.y,
+                this.presentSpawnPositions[i].z == this.clickableObjects[j].position.z)
+            {
+                return;
+            }
         }
         etenObject.position.set(this.presentSpawnPositions[i].x,this.presentSpawnPositions[i].y,this.presentSpawnPositions[i].z);
         this.clickableObjects.push(etenObject);
@@ -184,6 +177,7 @@ class Main
         }
         this.Cheats();//Remove on release
     }
+
     //On Every frame after RenderUpdate do COLLISION detection here.
     OnCollisionUpdate(e)
     {
@@ -199,8 +193,6 @@ class Main
         mesh.rotateX(qUtils.DegToRad(-90));
         mesh.position.set(0,-2,0);
         this.sceneRenderer.AddObject(mesh);
-
-
     }
     CreateSkydome()
     {
@@ -289,7 +281,6 @@ class Main
     }
     OnPresentClick(e)
     {
-
         this.RemoveClickAbleObject(e.detail);
         this.sceneRenderer.RemoveObject(e.detail);
         this.userPet.AddFood(1);
@@ -413,7 +404,6 @@ class Main
         this.sceneRenderer.AddObject(this.userPet);
         this.clickableObjects.push(this.userPet);
         //var explosion = new CloudExplosion(25,this.userPet.position,2,this.sceneRenderer);
-
     }
     OnCloudTimerEnd(e)
     {

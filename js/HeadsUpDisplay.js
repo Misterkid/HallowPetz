@@ -1,6 +1,3 @@
-/**
- * Created by quget on 28-10-16.
- */
 class HeadsUpDisplay
 {
     //All the html hud stuff here!

@@ -1,6 +1,3 @@
-/**
- * Created by quget on 13-9-16.
- */
 let DeltaTime = 0;
 class SceneRenderer
 {
@@ -49,8 +46,6 @@ class SceneRenderer
         this.camera.position.set(0,2,10);
         this.lookAtPosition = new THREE.Vector3(0,2,0);
         this.camera.lookAt( this.lookAtPosition );
-
-        //this.RequestFullScreen();
     }
     RequestFullScreen()
     {
@@ -89,7 +84,7 @@ class SceneRenderer
             DeltaTime = 0;
         }
 
-       // this.CalcAvgDelta();
+        //this.CalcAvgDelta();
         //ToDo find a better way?  well it works like events :P
         //Dispatch events to our listener(Most likely Main)
         document.dispatchEvent(this.OnRenderEvent);//Send update event to main class.

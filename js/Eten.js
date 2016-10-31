@@ -1,6 +1,3 @@
-/**
- * Created by Kelly's on 25-10-2016.
- */
 class Eten extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
 {
     constructor (map,width,height)

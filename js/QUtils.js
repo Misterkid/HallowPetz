@@ -37,7 +37,6 @@ class QUtils
         var cookie = document.cookie.split(';');
         for (var i = 0; i < cookie.length; i++)
         {
-
             var chip = cookie[i],
                 entry = chip.split("="),
                 name = entry[0];

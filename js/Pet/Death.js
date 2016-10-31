@@ -1,6 +1,3 @@
-/**
- * Created by quget on 26-10-16.
- */
 class Death extends Pet
 {
     constructor(name)
