@@ -100,6 +100,7 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         this.joy = currentPet.joy;
         this.timesClicked = currentPet.timesClicked;
         this.name = currentPet.name;
+        this.asleep = currentPet.asleep;
         this.creationDate = currentPet.creationDate;
     }
     DeathCheck()

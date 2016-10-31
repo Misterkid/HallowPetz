@@ -9,7 +9,7 @@ class CloudExplosion
     }
     CreateExplosion(cloudCount,position,diffrence)
     {
-        this.clouds = new Array();
+        //this.clouds = new Array();
         var map = this.loader.load("assets/textures/skull.png");
         for(var i = 0; i < cloudCount; i++)
         {
