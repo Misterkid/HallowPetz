@@ -58,6 +58,7 @@ class SceneRenderer
         if(this.isFullScreen)
         {
             //this.BackToNormal();
+
         }
         else
         {
@@ -70,11 +71,15 @@ class SceneRenderer
                 el.mozRequestFullScreen();
             }
             this.renderer.setSize(window.screen.width, window.screen.height);
+            document.getElementsByClassName("hud")[0].style.width = window.screen.width +'px';
+            document.getElementsByClassName("hud")[0].style.height = window.screen.height +'px';
         }
     }
     BackToNormal()
     {
         this.renderer.setSize(1280,720);
+        document.getElementsByClassName("hud")[0].style.width = '1280px';
+        document.getElementsByClassName("hud")[0].style.height = '720px';
     }
     Render(e)
     {
