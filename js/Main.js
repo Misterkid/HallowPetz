@@ -20,7 +20,6 @@ class Main
         //this.userPet.position.set(0,-1,0);
         this.sceneRenderer.AddObject(this.userPet);
         this.CeateTeaPot();
-        document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
         //End Test
         this.clickableObjects = new Array();
         this.clickableObjects.push(this.userPet);
@@ -235,14 +234,19 @@ class Main
         {
             var map = this.loader.load("assets/textures/eten1.png");
             var eten1 = new Eten(map, 1.5, 1);
-            if(this.userPet.petId == '2')
+
+            switch(this.userPet.petId)
             {
-                eten1.position.set(this.userPet.headPoint.x,this.userPet.headPoint.y - 2.5,0);
-                console.log("?");
-            }
-            else
-            {
-                eten1.position.set(this.userPet.headPoint.x,this.userPet.headPoint.y,0);
+                case 1:
+                    eten1.position.set(this.userPet.headPoint.x,this.userPet.headPoint.y - 2,0);
+                    break;
+                case 2:
+                    eten1.position.set(this.userPet.headPoint.x,this.userPet.headPoint.y - 2.5,0);
+                    break;
+
+                default:
+                    eten1.position.set(this.userPet.headPoint.x,this.userPet.headPoint.y,0);
+                    break;
             }
             this.sceneRenderer.AddObject(eten1);
             this.updateObjects.push(eten1);
@@ -293,8 +297,9 @@ class Main
     }
     OnPresentClick(e)
     {
-        this.RemoveClickAbleObject(e.detail);
         this.sceneRenderer.RemoveObject(e.detail);
+        qUtils.RemoveObjectFromArray(this.clickableObjects,e.detail);
+        this.cloudExplosion.CreateExplosion(10,e.detail.position,0);
         this.userPet.AddFood(1);
     }
     OnMouseObjectClick(e)
@@ -302,17 +307,6 @@ class Main
         //CLICK
         this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
         e.detail.OnClick(e.detail);
-    }
-    RemoveClickAbleObject(object)
-    {
-        for(var i = 0; i < this.clickableObjects.length; i++)
-        {
-            if(object.uuid == this.clickableObjects[i].uuid)
-            {
-                this.clickableObjects.splice(i, 1);
-                return;
-            }
-        }
     }
     OnBallMove(e)
     {
@@ -370,8 +364,7 @@ class Main
     OnPetDead(e)
     {
         this.sceneRenderer.RemoveObject(this.userPet);
-        //this.clickableObjects.slice(this.userPet);
-        this.RemoveClickAbleObject(this.userPet);
+        qUtils.RemoveObjectFromArray(this.clickableObjects,this.userPet);
         this.userPet = new Death(this.userPet.name);
         this.userPet.hunger = 0;
         this.userPet.joy = 100;
@@ -391,7 +384,7 @@ class Main
         if(result == true)
         {
             this.sceneRenderer.RemoveObject(this.userPet);
-            this.RemoveClickAbleObject(this.userPet);
+            qUtils.RemoveObjectFromArray(this.clickableObjects,this.userPet);
             this.userPet = new PumpkinEgg();
             this.userPet.SavePet();
             this.hud.petRenameField.value = this.userPet.name;
@@ -429,8 +422,8 @@ class Main
     }
     OnCloudTimerEnd(e)
     {
-        this.cloudExplosion.clouds.splice(e.detail);
         this.sceneRenderer.RemoveObject(e.detail);
+        qUtils.RemoveObjectFromArray(this.cloudExplosion.clouds,e.detail);
     }
     PetSelect(petId)
     {

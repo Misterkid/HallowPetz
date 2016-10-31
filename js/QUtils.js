@@ -44,6 +44,17 @@ class QUtils
             document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         }
     }
+    RemoveObjectFromArray(array,object)
+    {
+        for(var i = 0; i < array.length; i++)
+        {
+            if(object.uuid == array[i].uuid)
+            {
+                array.splice(i, 1);
+                return;
+            }
+        }
+    }
     SetCookie(cookieName, cookieValue, exdays = 31)
     {
         var d = new Date();
