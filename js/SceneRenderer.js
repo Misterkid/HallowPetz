@@ -126,6 +126,10 @@ class SceneRenderer
     }
     RemoveObject(object)
     {
+
         this.scene.remove(object);
+        object.material.dispose();
+        object.geometry.dispose();
+        object = null;
     }
 }
