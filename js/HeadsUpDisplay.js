@@ -49,10 +49,14 @@ class HeadsUpDisplay
         if(userPet.asleep)
         {
             this.sleepEmoticon.style.visibility = "visible";
+            this.eatButton.disabled = true;
+            this.funButton.disabled = true;
         }
         else
         {
             this.sleepEmoticon.style.visibility = "hidden";
+            this.eatButton.disabled = false;
+            this.funButton.disabled = false;
         }
 
     }
