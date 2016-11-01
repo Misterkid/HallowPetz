@@ -18,8 +18,9 @@ class Main
         this.LoadPet();//Loaded
         this.userPet.SavePet();//saved
         //this.userPet.position.set(0,-1,0);
+        //this.userPet.castShadow = true;
         this.sceneRenderer.AddObject(this.userPet);
-        this.CeateTeaPot();
+
         //End Test
         this.clickableObjects = new Array();
         this.clickableObjects.push(this.userPet);
@@ -79,16 +80,9 @@ class Main
         this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
     }
 
-    //On Every frame do actions here. This is the main loop.
-    //Testing adding OBJ 3d object.
-    CeateTeaPot()
-    {
-        this.boomPos =  new THREE.Vector3(10,10,0);
-        this.boomScale = new THREE.Vector3(0.01,0.01,0.01);
 
-        console.log(this.boomPos);
-        this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale);
-    }
+    //On Every frame do actions here. This is the main loop.
+
     FullScreenChange(e)
     {
         if(this.sceneRenderer.isFullScreen)
@@ -157,10 +151,15 @@ class Main
 
     OnRenderUpdate(e)
     {
+
+        this.AnimateSpotLight();
+
+
         //updates heads up display
         this.hud.OnUpdate(this.userPet);
         //Pet.OnUpdate looks at camera, update it each frame.
         this.userPet.OnUpdate(this.sceneRenderer.camera);
+
         //Rotate around the pet
         if(keyboard.GetKey('a'))
         {
@@ -188,31 +187,240 @@ class Main
 
     CreateEnvirement()
     {
-        var geometry = new THREE.PlaneGeometry(100,100);
-        var material = new THREE.MeshLambertMaterial();
+        var geometry = new THREE.PlaneGeometry(500,500);
+        var material = new THREE.MeshPhongMaterial();
         material.color.setHex("0x77FF00");
         var mesh = new THREE.Mesh(geometry,material);
         mesh.rotateX(qUtils.DegToRad(-90));
         mesh.position.set(0,-2,0);
+        mesh.receiveShadow = true;
         this.sceneRenderer.AddObject(mesh);
+
+
+
+        this.aantalhekjes = 15;
+        for(var i = 0; i < this.aantalhekjes; i++) {
+            var k = 0.01;
+            var x = -20;
+            var y = -2;
+            var z = -20;
+            this.boomPos = new THREE.Vector3(x+(i*2.5), y, z);
+            this.boomScale = new THREE.Vector3(k, k, k);
+            this.boomRotate = new THREE.Vector3(0, qUtils.DegToRad(180), 0);
+            this.objectL.ImportObject('assets/models/fench.obj', 'assets/textures/ColorsheetFenceBrown.png', this.boomPos, this.boomScale, this.boomRotate);
+            var x = -22.5;
+            this.boomPos = new THREE.Vector3(x, y, (z+(i*2.5)));
+            this.boomRotate = new THREE.Vector3(0, qUtils.DegToRad(-90), 0);
+            this.objectL.ImportObject('assets/models/fench.obj', 'assets/textures/ColorsheetFenceBrown.png', this.boomPos, this.boomScale, this.boomRotate);
+            var x = -20;
+            this.boomPos = new THREE.Vector3(x+(i*2.5), y, z+(this.aantalhekjes*2.5));
+            this.boomScale = new THREE.Vector3(k, k, k);
+            this.boomRotate = new THREE.Vector3(0, qUtils.DegToRad(180), 0);
+            this.objectL.ImportObject('assets/models/fench.obj', 'assets/textures/ColorsheetFenceBrown.png', this.boomPos, this.boomScale, this.boomRotate);
+            var x = -22.5;
+            this.boomPos = new THREE.Vector3(x+(this.aantalhekjes*2.5), y, (z+(i*2.5)));
+            this.boomRotate = new THREE.Vector3(0, qUtils.DegToRad(-90), 0);
+            this.objectL.ImportObject('assets/models/fench.obj', 'assets/textures/ColorsheetFenceBrown.png', this.boomPos, this.boomScale, this.boomRotate);
+        }
+
+        for(var i = 0; i < 75; i++) {
+            var k = qUtils.GetRandomBetweenInt(15, 25)/1000;
+            var x = qUtils.GetRandomBetweenInt(-50, 50);
+            var y = -2;
+            var z = qUtils.GetRandomBetweenInt(30, 40);
+            this.boomPos = new THREE.Vector3(x, y, z);
+            this.boomScale = new THREE.Vector3(k, k, k);
+            this.boomRotate = new THREE.Vector3(0,qUtils.DegToRad(qUtils.GetRandomBetweenInt(0,360)), 0);
+            this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale, this.boomRotate );
+        }
+
+        for(var i = 0; i < 75; i++) {
+            var k = qUtils.GetRandomBetweenInt(10, 25)/1000;
+            var x = qUtils.GetRandomBetweenInt(-50, 50);
+            var y = -2;
+            var z = qUtils.GetRandomBetweenInt(-32, -22);
+            this.boomPos = new THREE.Vector3(x, y, z);
+            this.boomScale = new THREE.Vector3(k, k, k);
+            this.boomRotate = new THREE.Vector3(0,qUtils.DegToRad(qUtils.GetRandomBetweenInt(0,360)), 0);
+            this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale, this.boomRotate );
+        }
+
+        for(var i = 0; i < 50; i++) {
+            var k = qUtils.GetRandomBetweenInt(10, 25)/1000;
+            var x = qUtils.GetRandomBetweenInt(-22, -40);
+            var y = -2;
+            var z = qUtils.GetRandomBetweenInt(-20, 20);
+            this.boomPos = new THREE.Vector3(x, y, z);
+            this.boomScale = new THREE.Vector3(k, k, k);
+            this.boomRotate = new THREE.Vector3(0,qUtils.DegToRad(qUtils.GetRandomBetweenInt(0,360)), 0);
+            this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale, this.boomRotate );
+        }
+
+        for(var i = 0; i < 50; i++) {
+            var k = qUtils.GetRandomBetweenInt(10, 25)/1000;
+            var x = qUtils.GetRandomBetweenInt(50, 60);
+            var y = -2;
+            var z = qUtils.GetRandomBetweenInt(-20, 20);
+            this.boomPos = new THREE.Vector3(x, y, z);
+            this.boomScale = new THREE.Vector3(k, k, k);
+            this.boomRotate = new THREE.Vector3(0,qUtils.DegToRad(qUtils.GetRandomBetweenInt(0,360)), 0);
+            this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale, this.boomRotate );
+        }
+
+
+        this.moonPos = new THREE.Vector3(220, 500,-1000);
+        this.moonScale = new THREE.Vector3(100,100,100);
+        this.objectL.ImportObject('assets/models/Moon.obj', 'assets/textures/colorsheettreenormal.png', this.moonPos, this.moonScale);
+
+        var cScale = 0.3;
+        this.churchPos = new THREE.Vector3(35,-3.2,20);
+        this.churchScale = new THREE.Vector3(cScale,cScale,cScale);
+        this.churchRotate = new THREE.Vector3(0,qUtils.DegToRad(-90), 0);
+        this.objectL.ImportObject('assets/models/Church.obj', 'assets/textures/concretetext.png', this.churchPos, this.churchScale, this.churchRotate);
+
+        var pScale = 0.05;
+        this.pumpkinPos = new THREE.Vector3(30,-2.5,15);
+        this.pumpkinScale = new THREE.Vector3(pScale,pScale,pScale);
+        this.pumpkinRotate = new THREE.Vector3(0,qUtils.DegToRad(0), 0);
+        this.objectL.ImportObject('assets/models/pumpkin.obj', 'assets/textures/orange.png', this.pumpkinPos, this.pumpkinScale, this.pumpkinRotate);
+        this.pumpkinPos = new THREE.Vector3(30,-2.5,25);
+        this.objectL.ImportObject('assets/models/pumpkin.obj', 'assets/textures/orange.png', this.pumpkinPos, this.pumpkinScale, this.pumpkinRotate);
+
+
+        //Clouds
+        for(var i = 0; i < 75; i++) {
+            var k = qUtils.GetRandomBetweenInt(10, 20)/10;
+            var x = qUtils.GetRandomBetweenInt(-100, 100);
+            var y = qUtils.GetRandomBetweenInt(12, 18);
+            var z = qUtils.GetRandomBetweenInt(-100, 100);
+            this.cloudPos = new THREE.Vector3(-x, y, -z);
+            this.cloudScale = new THREE.Vector3(k, k, k);
+            this.cloudRotate = new THREE.Vector3(0,qUtils.DegToRad(qUtils.GetRandomBetweenInt(0,360)), 0);
+            this.objectL.ImportObject('assets/models/cloud.obj', 'assets/textures/colorsheettreenormal.png', this.cloudPos, this.cloudScale, this.cloudRotate );
+        }
+
+        for(var i = 0; i < 75; i++) {
+            var k = qUtils.GetRandomBetweenInt(10, 20)/10;
+            var x = qUtils.GetRandomBetweenInt(-100, 100);
+            var y = qUtils.GetRandomBetweenInt(12, 18);
+            var z = qUtils.GetRandomBetweenInt(-100, 100);
+            this.cloudPos = new THREE.Vector3(-x, y, -z);
+            this.cloudScale = new THREE.Vector3(k, k, k);
+            this.cloudRotate = new THREE.Vector3(0,qUtils.GetRandomBetweenInt(0,360), 0);
+            this.objectL.ImportObject('assets/models/cloud2.obj', 'assets/textures/colorsheettreenormal.png', this.cloudPos, this.cloudScale, this.cloudRotate );
+        }
+
+
+        //Graves
+        for(var i = 0; i < 3; i++) {
+            var gScale = 0.05;
+            var x = -18;
+            var y = -2.5;
+            var z = -18;
+            this.gravePos = new THREE.Vector3(x+(6*i), y, z);
+            this.graveScale = new THREE.Vector3(gScale, gScale, gScale);
+            this.graveRotate = new THREE.Vector3(0,qUtils.DegToRad(qUtils.GetRandomBetweenInt(0,360)), 0);
+            this.objectL.ImportObject('assets/models/pumpkin.obj', 'assets/textures/orange.png', this.gravePos, this.graveScale, this.graveRotate );
+            for(var k = 0; k < 6; k++){
+                this.gravePos = new THREE.Vector3(x+(6*i),y, z+(6*k));
+                this.graveRotate = new THREE.Vector3(0,qUtils.DegToRad(qUtils.GetRandomBetweenInt(0,360)), 0);
+                this.objectL.ImportObject('assets/models/pumpkin.obj', 'assets/textures/orange.png', this.gravePos, this.graveScale, this.graveRotate );
+            }
+        }
+
+        for(var i = 0; i < 8; i++) {
+            var gScale = 0.05;
+            var x = 22;
+            var y = -2.5;
+            var z = -15;
+            this.gravePos = new THREE.Vector3(x+(6*i), y, z);
+            this.graveScale = new THREE.Vector3(gScale, gScale, gScale);
+            this.graveRotate = new THREE.Vector3(0,qUtils.DegToRad(qUtils.GetRandomBetweenInt(0,360)), 0);
+            this.objectL.ImportObject('assets/models/pumpkin.obj', 'assets/textures/orange.png', this.gravePos, this.graveScale, this.graveRotate );
+            for(var k = 0; k < 6; k++){
+                this.gravePos = new THREE.Vector3(x+(6*i),y, z+(6*k));
+                this.graveRotate = new THREE.Vector3(0,qUtils.DegToRad(qUtils.GetRandomBetweenInt(0,360)), 0);
+                this.objectL.ImportObject('assets/models/pumpkin.obj', 'assets/textures/orange.png', this.gravePos, this.graveScale, this.graveRotate );
+            }
+        }
+
     }
     CreateSkydome()
     {
-        //SkyDome
-        var skyGeo = new THREE.SphereGeometry(1000, 25, 25);
-        var material = new THREE.MeshBasicMaterial();
-        material.map = this.loader.load("assets/textures/skydome02.jpg");
-        var sky = new THREE.Mesh(skyGeo, material);
-        sky.position.set(0,0,0);
+
+
+        var skyGeo = new THREE.SphereGeometry(4000, 25, 25);
+
+
+        //var skytexture = THREE.ImageUtils.loadTexture( "assets/textures/milky.jpg" );
+
+
+        var skymaterial = new THREE.MeshBasicMaterial( { color: 0x003366 } );
+
+
+        var sky = new THREE.Mesh(skyGeo, skymaterial);
         sky.material.side = THREE.BackSide;
         this.sceneRenderer.AddObject(sky);
     }
     CreateLights()
     {
-        var light = new THREE.AmbientLight( 0xffffff,0.5);
-        light.position.set( 0, 1, 1 );
+        //var light = new THREE.AmbientLight( 0x003366,0.5);
+        var light = new THREE.AmbientLight( 0xFFFFFF,0.5);
+        light.position.set( 0, 10, 1 );
         this.sceneRenderer.AddObject(light);
+
+        //this.spotLight = new THREE.SpotLight( 0x003366,1 );
+        this.spotLight = new THREE.SpotLight( 0xFFFFFF,1 );
+
+        this.spotLight.position.set( 150, 10, 150 ); //y = 50
+        this.spotLight.castShadow = true;
+        this.spotLight.shadowDarkness =  1;
+        this.spotLight.angle = 240;
+
+
+        this.sceneRenderer.AddObject( this.spotLight );
+
+        var spotLightHelper = new THREE.SpotLightHelper( this.spotLight );
+        this.sceneRenderer.AddObject(spotLightHelper );
+
+/*        this.spotLight2 = new THREE.SpotLight( 0x003366,1 );
+        //this.spotLight2 = new THREE.SpotLight( 0xFFFFFF,0 );
+        this.spotLight2.position.set( 20, 5, -40 );
+        this.spotLight2.castShadow = true;
+        this.spotLight2.shadowDarkness =  1;
+        this.spotLight2.angle = 240;
+
+
+        this.sceneRenderer.AddObject( this.spotLight2 );
+
+        var spotLightHelper2 = new THREE.SpotLightHelper( this.spotLight2 );
+        this.sceneRenderer.AddObject(spotLightHelper2 );*/
+
+        /*this.moonLight = new THREE.SpotLight( 0xFFFFFF,0.5 );
+        this.moonLight.position.set( 100, 450,-500 );
+        this.moonLight.target.position.set(200,-130,400);
+        this.sceneRenderer.AddObject(this.moonLight.target);
+        this.moonLight.castShadow = true;
+        this.moonLight.shadowDarkness =  1;
+        this.moonLight.angle = qUtils.DegToRad(270);
+
+
+        this.sceneRenderer.AddObject( this.moonLight );*/
+
+
+        /*var moonLightHelper = new THREE.SpotLightHelper( this.moonLight );
+        this.sceneRenderer.AddObject(moonLightHelper );*/
     }
+
+    AnimateSpotLight(){
+        var angle	= Date.now()/1000 * Math.PI;
+// angle	= Math.PI*2
+        this.spotLight.position.x	= Math.cos(angle*-0.1)*20;
+        //this.spotLight.position.y	= 10 + Math.sin(angle*0.5)*6;
+        this.spotLight.position.z	= Math.sin(angle*-0.1)*20;
+        //this.spotLight.target(this.userPet);
+    }
+
     OnShowMenuClick(e)
     {
         this.hud.ShowHideMenu(this.throwBall,this.userPet);
