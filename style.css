@@ -201,10 +201,11 @@ p
     position: absolute;
     width: 120px;
     height: 25px;
-    left: 46%;
-    bottom: 40%;
+    left: 0;
+    bottom: 37%;
     text-align: center;
     color:white;
+    z-index: -1;
 }
 .emotion_cloud
 {
@@ -213,6 +214,7 @@ p
     position: absolute;
     left: 0px;
     top: 0px;
+    z-index: -1;
 }
 .hud
 {
@@ -238,4 +240,5 @@ p
     position: absolute;
     left: 0px;
     top: 0px;
+    z-index: -1;
 }
