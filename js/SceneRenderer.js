@@ -25,8 +25,8 @@ class SceneRenderer
         this.scene = new THREE.Scene();
         //var aspect = window.innerWidth / window.innerHeight;
         var aspect = 1280 / 720;
-        this.camera = new THREE.PerspectiveCamera(90,aspect,0.1,5000);
-        this.renderer = new THREE.WebGLRenderer({"antialias":true});
+        this.camera = new THREE.PerspectiveCamera(60,aspect,0.1,5000);
+        this.renderer = new THREE.WebGLRenderer({ antialias: true });
         //this.renderer.antialias = true;
         //Shadows
         this.renderer.shadowMapEnabled	= true;

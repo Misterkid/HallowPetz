@@ -14,14 +14,16 @@ class ObjectLoader
     //Import Object
     ImportObject(objectPath, texturePath, pos, scale, rotate)
     {
-        console.log(pos);
+        //console.log(pos);
         var texture = new THREE.Texture();
-        this.tLoader.load(texturePath, function ( image ) {
-            //console.log(image);
-            texture.image = image;
-            texture.needsUpdate = true;
+         {
+            this.tLoader.load(texturePath, function (image) {
+                //console.log(image);
+                texture.image = image;
+                texture.needsUpdate = true;
 
-        } );
+            });
+        }
 
        /* console.log(texture);
         console.log(objectPath);
@@ -58,7 +60,7 @@ class ObjectLoader
             object.rotateZ(rotate.z);
         }
 
-        console.log(object);
+        //console.log(object);
         this.OnObjectLoadDone = new CustomEvent('onobjectloaddone', {'detail': object });
         document.dispatchEvent(this.OnObjectLoadDone);
 
