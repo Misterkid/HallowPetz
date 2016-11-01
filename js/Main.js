@@ -36,8 +36,6 @@ class Main
         var randomTime = qUtils.GetRandomBetweenInt(10000,100000);
         this.PresentSpawnTimer = setInterval((e)=>{ this.SpawnPresent(e);},randomTime);
 
-        //End
-        this.effectsMuted = false;
         //Explosion
         this.cloudExplosion = new CloudExplosion(this.sceneRenderer);
         //
@@ -73,7 +71,9 @@ class Main
         window.onbeforeunload = (e) => {this.OnBeforeUnload(e)};
         this.sceneRenderer.Render();//Start rendering
 
+        settings.Load();
         this.bgmMixer = new BGMMixer();
+        this.bgmMixer.muted = settings.bgmMuted;
         this.bgmMixer.Shuffle();//Start
 
         this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
@@ -300,6 +300,7 @@ class Main
         this.sceneRenderer.RemoveObject(e.detail);
         qUtils.RemoveObjectFromArray(this.clickableObjects,e.detail);
         this.cloudExplosion.CreateExplosion(10,e.detail.position,0);
+        this.PlaySound(audioSources.eggHatch);
         this.userPet.AddFood(1);
     }
     OnMouseObjectClick(e)
@@ -307,6 +308,11 @@ class Main
         //CLICK
         this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
         e.detail.OnClick(e.detail);
+
+        if(e.detail.uuid == this.userPet.uuid)
+        {
+            this.PlaySound(audioSources.petClick);
+        }
     }
     OnBallMove(e)
     {
@@ -339,27 +345,31 @@ class Main
     }
     OnEffectsMute(e)
     {
-        if(this.effectsMuted)
+        if(settings.sfxMuted)
         {
-            this.effectsMuted = false;
+            settings.sfxMuted = false;
         }
         else
         {
-            this.effectsMuted = true;
+            settings.sfxMuted = true;
         }
+        settings.Save();
     }
     OnBGMMute(e)
     {
-        if(this.bgmMixer.muted)
+        if(settings.bgmMuted)
         {
+            settings.bgmMuted = false;
+            this.bgmMixer.muted = settings.bgmMuted;
             this.bgmMixer.Shuffle();
-            this.bgmMixer.muted = false;
         }
         else
         {
+            settings.bgmMuted = true;
+            this.bgmMixer.muted = settings.bgmMuted;
             this.bgmMixer.Stop();
-            this.bgmMixer.muted = true;
         }
+        settings.Save();
     }
     OnPetDead(e)
     {
@@ -397,7 +407,7 @@ class Main
     }
     PlaySound(audioSource)
     {
-        if(this.effectsMuted == false)
+        if(settings.sfxMuted == false)
         {
             new OneShotAudio(audioSource);
         }
