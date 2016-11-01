@@ -38,7 +38,8 @@ class HeadsUpDisplay
         this.petNameLabel.innerText = userPet.name;
         this.foodCount.innerText = userPet.foodCount;
         this.Createbarmeter(userPet);
-        this.Sleep(userPet);
+        if(!userPet.isDead)
+            this.Sleep(userPet);
 
         //Apperently from bottom with % works fine... ohhh okay
        // this.grave.style.top = (userPet.headPoint2d.y + 40) +  'px';
@@ -66,12 +67,12 @@ class HeadsUpDisplay
     }
     Dead(userPet)
     {
-        this.funButton.style.visibility = "hidden";
-        this.eatButton.style.visibility = "hidden";
         this.grave.style.visibility = "visible";
-        this.sleepButton.style.visibility = "hidden";
         this.emotionCloud.style.visibility = "hidden";
         this.grave.innerHTML = "<p>" + userPet.name +  "</p>";
+        this.eatButton.disabled = true;
+        this.funButton.disabled = true;
+        this.sleepButton.disabled = true;
     }
     Alive()
     {
@@ -80,6 +81,9 @@ class HeadsUpDisplay
         this.eatButton.style.visibility = "visible";
         this.sleepButton.style.visibility = "visible";
         this.grave.style.visibility = "hidden";
+        this.eatButton.disabled = false;
+        this.funButton.disabled = false;
+        this.sleepButton.disabled = false;
     }
     ShowHideMenu(throwBall,userPet)
     {
