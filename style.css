@@ -1,31 +1,121 @@
+@import url('https://fonts.googleapis.com/css?family=Archivo+Black');
+
+@font-face
+{
+    font-family: 'Archivo Black', sans-serif;
+    /*font-family: "My Custom Font";
+    src: url(lettertype.ttf) format("truetype");*/
+}
+
 body
 {
+    font-family: 'Archivo Black', sans-serif;
+    /*
     margin:0;
+    overflow: hidden;
+    position: relative;
+    */
+}
+.game_container
+{
+    margin:0;
+    overflow: hidden;
+    position: relative;
 }
 canvas
 {
+    /*
     width: 1280px!important;
-    height: 720px!important;
+    height: 720px!important; */
     margin: 0 auto;
     z-index:1;
     position: relative;
 }
+
+.pet_name{
+
+    position: absolute;
+    margin-top: 2%;
+    margin-left: 5%;
+    padding: 5px;
+    float: left;
+    border: solid;
+    border-color: #ffffff;
+    border-width: medium;
+}
+
+/*-- Pet Options --*/
+button.show_hide{
+
+    position: absolute;
+    top: 3%;
+    right: 5%;
+
+}
+
+.menu.menu_obj{
+    position: absolute;
+    top: 6%;
+    right: 5%;
+
+}
+
+/*-- Health bars --*/
+p.health_bars
+{
+    text-align: center;
+    margin-top: 2%;
+}
 .honger
 {
-    width: 100px;
+    width: 120px;
     height: 30px;
+    padding-right: 20px;
 }
 .plezier
 {
     width: 100px;
     height: 30px;
+    padding-right: 20px;
 }
 .energie
 {
     width: 100px;
     height: 30px;
+    padding-right: 20px;
 }
-.ball_btn
+
+
+/*-- Buttons to keep health up --*/
+
+.take_care
+{
+    position:absolute;
+    bottom: 5%;
+}
+.take_care_container
+{
+    position: relative;
+}
+.food_count
+{
+    position: absolute;
+    right: 20%;
+    bottom: 1%;
+    color: #404040;
+    font-size: 0.9em;
+}
+.take_care_text
+{
+    font-size: 0.9em;
+    position: absolute;
+    left: 20%;
+    bottom: 1%;
+    color: #404040;
+}
+
+
+/*.ball_btn
 {
     width: 100px;
     height: 50px;
@@ -34,57 +124,101 @@ canvas
 {
     width: 100px;
     height: 50px;
+
 }
 .slapen
 {
     width: 100px;
     height: 50px;
 }
+*/
+
+/*.food_count
+{
+    position: absolute;
+    left: 15%;
+    bottom: 50%;
+<<<<<<< HEAD
+    z-index:-1;
+}
+p
+{
+    font-family: "My Custom Font", Verdana, Tahoma;
+    font-size: 40px;
+=======
+}*/
+/*
+.honger1
+{
+    width: 200px;
+    height: 150px;
+    position: absolute;
+    left: 55%;
+    bottom: 70%;
+}
+.plezier1
+{
+    width: 200px;
+    height: 150px;
+    position: absolute;
+    left: 55%;
+    bottom: 70%;
+}
+.energie1
+{
+    width: 200px;
+    height: 150px;
+    position: absolute;
+    left: 55%;
+    bottom: 70%;
+}
+*/
 /*
 .menu_obj
 {
     visibility: hidden;
 }
 */
+
 p
 {
     /*text-align: center;*/
+    /*font-family: "My Custom Font", Verdana, Tahoma;*/
+    /*font-size: 40px;*/
     color:white;
 }
 .menu
 {
     width: 720px;
-    height: 500px;
+    height: 200px;
+    padding: 1%;
+    font-size: 0.7em;
     background-color: rgba(100,100,100,0.9);
     position: absolute;
-}
-button
-{
-    /*
-    display: block;
-    margin: 0 auto;
-    */
-}
-input
-{
-    /*
-    display: block;
-    margin: 0 auto;
-    */
 }
 .grave
 {
     position: absolute;
     width: 120px;
     height: 25px;
-    left: 592px;
-    bottom: 263px;
+    left: 46%;
+    bottom: 40%;
     text-align: center;
+    color:white;
+}
+.emotion_cloud
+{
+    width: 200px;
+    height: 150px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
 }
 .hud
 {
-    width: 1280px!important;
-    height: 720px!important;
+    width: 1280px;
+    height: 720px;
+
     margin: 0 auto;
     position: absolute;
     z-index: 3;
@@ -95,7 +229,13 @@ input
     -khtml-user-select: none;    /* Konqueror */
     -moz-user-select: none;      /* Firefox */
     -ms-user-select: none;       /* Internet Explorer/Edge */
-    user-select: none;           /* Non-prefixed version, currently
-                                  not supported by any browser */
-
+    /* user-select: none;            Non-prefixed version, currently not supported by any browser */
+}
+.sleep_emoticon
+{
+    width: 200px;
+    height: 150px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
 }

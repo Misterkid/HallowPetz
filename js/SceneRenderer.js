@@ -1,6 +1,3 @@
-/**
- * Created by quget on 13-9-16.
- */
 let DeltaTime = 0;
 class SceneRenderer
 {
@@ -16,6 +13,8 @@ class SceneRenderer
         this.avgDelta = 1/30;
         this.rotation = 0;
         this.deltaTimes = new Array();
+
+        this.isFullScreen = false;
 
     }
 
@@ -39,13 +38,45 @@ class SceneRenderer
         this.renderer.shadowMap.width = 1024;
         this.renderer.shadowMap.height = 1024;*/
         //end shadows
-        this.renderer.setSize(window.innerWidth ,window.innerHeight);
+        //this.renderer.setSize(window.innerWidth ,window.innerHeight);
+        this.renderer.setSize(1280,720);
         this.renderer.setClearColor(0x000000);
-        document.body.appendChild(this.renderer.domElement);
+        this.gameContainer = document.getElementsByClassName("game_container")[0];
+        this.gameContainer.appendChild(this.renderer.domElement);
+        //document.body.appendChild(this.renderer.domElement);
         //Camera position
         this.camera.position.set(0,2,10);
         this.lookAtPosition = new THREE.Vector3(0,2,0);
         this.camera.lookAt( this.lookAtPosition );
+    }
+    RequestFullScreen()
+    {
+        // Get the canvas element form the page
+        if(this.isFullScreen)
+        {
+            //this.BackToNormal();
+
+        }
+        else
+        {
+            var el = this.gameContainer;//document.documentElement;//document.getElementsByTagName('canvas')[0];
+            if (el.webkitRequestFullScreen)
+            {
+                el.webkitRequestFullScreen();
+            }
+            else {
+                el.mozRequestFullScreen();
+            }
+            this.renderer.setSize(window.screen.width, window.screen.height);
+            document.getElementsByClassName("hud")[0].style.width = window.screen.width +'px';
+            document.getElementsByClassName("hud")[0].style.height = window.screen.height +'px';
+        }
+    }
+    BackToNormal()
+    {
+        this.renderer.setSize(1280,720);
+        document.getElementsByClassName("hud")[0].style.width = '1280px';
+        document.getElementsByClassName("hud")[0].style.height = '720px';
     }
     Render(e)
     {
@@ -55,7 +86,7 @@ class SceneRenderer
             DeltaTime = 0;
         }
 
-       // this.CalcAvgDelta();
+        //this.CalcAvgDelta();
         //ToDo find a better way?  well it works like events :P
         //Dispatch events to our listener(Most likely Main)
         document.dispatchEvent(this.OnRenderEvent);//Send update event to main class.
@@ -97,6 +128,10 @@ class SceneRenderer
     }
     RemoveObject(object)
     {
+
         this.scene.remove(object);
+        object.material.dispose();
+        object.geometry.dispose();
+        object = null;
     }
 }

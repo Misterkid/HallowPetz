@@ -1,6 +1,3 @@
-/**
- * Created by quget on 11-10-16.
- */
 class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
 {
     constructor(map,width,height,name = "no_name")
@@ -13,6 +10,8 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         //Standard pet stuff here
         this.petId = -1;
         this.name = name;
+        this.height = height;
+        this.width = width;
         this.maxMeter = 100;//Max for all.
         //meters
         this.hunger = 100;
@@ -22,6 +21,7 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         this.energy = 100;
         this.energySteps = 0.7;
         this.timesClicked = 0;
+        this.foodCount = 1;
         this.position.set(0,(height/2)-2,0);
         var date = new Date();
         this.creationDate = date.getTime();
@@ -29,6 +29,16 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         this.asleep = false;
         this.isDead = false;
         this.OnPetDead = new Event('onpetdead');
+        this.headPoint = new THREE.Vector3(this.position.x,height,0);
+        this.headPoint2d = new THREE.Vector3(1280 * 0.5,720 * 0.5,0);
+
+    }
+    AddFood(add = 0)
+    {
+
+        this.foodCount =  this.foodCount + add;
+        if(this.foodCount < 0)
+            this.foodCount = 0;
     }
     AddToJoy(add)
     {
@@ -52,7 +62,7 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
     {
         this.timesClicked ++;
     }
-    Update(camera)
+    OnUpdate(camera)
     {
         this.lookAt(camera.position);
         this.DoSteps();
@@ -82,6 +92,16 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
 
         this.startTime = date.getTime();
         this.DeathCheck();
+    }
+    Transfer(currentPet)
+    {
+        this.energy = currentPet.energy;
+        this.hunger = currentPet.hunger;
+        this.joy = currentPet.joy;
+        this.timesClicked = currentPet.timesClicked;
+        this.name = currentPet.name;
+        this.asleep = currentPet.asleep;
+        this.creationDate = currentPet.creationDate;
     }
     DeathCheck()
     {
@@ -117,6 +137,7 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         qUtils.SetCookie("pet_joy",this.joy);
         qUtils.SetCookie("pet_energy",this.energy);
         qUtils.SetCookie("pet_times_clicked",this.timesClicked );
+        qUtils.SetCookie("pet_food_count",this.foodCount);
         var date = new Date();
         qUtils.SetCookie("pet_last_save",date.getTime());
         qUtils.SetCookie("pet_creation_date",this.creationDate);
@@ -130,11 +151,47 @@ class Pet extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
         diffrence = (diffrence/1000)/60;//minutes
         this.name = qUtils.GetCookie("pet_name");
         //Moeten natuurlijk ook de offline tijd berekenen.
-        this.hunger = qUtils.GetCookie("pet_hunger") - (this.hungerSteps * diffrence);
-        this.joy = qUtils.GetCookie("pet_joy")- (this.joySteps * diffrence);
-        this.energy = qUtils.GetCookie("pet_energy")- (this.energySteps * diffrence);
-        this.DeathCheck();
+
+        this.hunger =  parseFloat(qUtils.GetCookie("pet_hunger") - (this.hungerSteps * diffrence));
+        this.joy =  parseFloat(qUtils.GetCookie("pet_joy")- (this.joySteps * diffrence));
+        this.energy =  parseFloat(qUtils.GetCookie("pet_energy")- (this.energySteps * diffrence));
+        //this.DeathCheck();
         this.timesClicked = qUtils.GetCookie("pet_times_clicked" );
         this.creationDate = qUtils.GetCookie("pet_creation_date");
+        this.foodCount = parseInt(qUtils.GetCookie("pet_food_count"));
+    }
+    ToScreenPosition(camera)
+    {
+        var vector = new THREE.Vector3();
+        var widthHalf = 0.5*1280;
+        var heightHalf = 0.5*720;
+
+        var projector = new THREE.Projector();
+        projector.projectVector(vector.setFromMatrixPosition( this.headPoint.matrixWorld ), camera )
+        vector.x = ( vector.x * widthHalf ) + widthHalf;
+        vector.y = - ( vector.y * heightHalf ) + heightHalf;
+        return vector;
+
+        /*
+         var width = 640, height = 480;
+         var widthHalf = width / 2, heightHalf = height / 2;
+
+         var vector = new THREE.Vector3();
+         var projector = new THREE.Projector();
+         projector.projectVector( vector.setFromMatrixPosition( object.matrixWorld ), camera );
+
+         vector.x = ( vector.x * widthHalf ) + widthHalf;
+         vector.y = - ( vector.y * heightHalf ) + heightHalf;
+        */
+
+    }
+    CreateVector(x, y, z, camera, width, height)
+    {
+        var p = new THREE.Vector3(x, y, z);
+        var vector = p.project(camera);
+        vector.x = (vector.x + 1) / 2 * width;
+        vector.y = -(vector.y - 1) / 2 * height;
+
+        return vector;
     }
 }

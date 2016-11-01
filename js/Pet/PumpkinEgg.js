@@ -1,11 +1,10 @@
-/**
- * Created by quget on 11-10-16.
- */
 class PumpkinEgg extends Pet
 {
-    constructor(map,width,height)
+    constructor(name)
     {
-        super(map,width,height);
+        var loader = new THREE.TextureLoader();
+        var map = loader.load("assets/textures/pumpkin.png");
+        super(map,2,2,name);
         this.petId = 0;
         //Standard Egg stuff here
         this.hatchTimeMinutes = 0.5;
@@ -15,12 +14,13 @@ class PumpkinEgg extends Pet
         this.clicksToHatch = 25;
         this.scaling = 1;
         this.scaleSteps = 0.05;
-        this.height = height;
+        this.headPoint = new THREE.Vector3(this.position.x,0,0);
+        this.headPoint2d = new THREE.Vector3(1280 * 0.5,720 * 0.5,0);
         //
     }
-    Update(camera)
+    OnUpdate(camera)
     {
-        super.Update(camera);
+        super.OnUpdate(camera);
         //this.TimedHatching();
         this.ClickHatching();
     }
@@ -40,49 +40,9 @@ class PumpkinEgg extends Pet
         super.OnClick();
         this.scaling += this.scaleSteps;
         var newY = (this.scaling - 1) + (this.height/2)-2;
-        console.log(newY);
         this.position.set(0,newY,0);
-        this.scale.set(this.scaling,this.scaling,1)
-    }
+        this.scale.set(this.scaling,this.scaling,1);
 
-    TimedHatching()
-    {
-        var date = new Date();
-        var diffrence = date.getTime() - this.creationDate;
-        diffrence = (diffrence/1000)/60;//minutes
-        if(diffrence >= this.hatchTimeMinutes)
-        {
-            document.dispatchEvent(this.OnPumpkinHatch);
-        }
-
-    }
-    //Don't call it in here. We don't need a pet in a pet.
-    Hatch(petId,map)
-    {
-        var map = this.loader.load("assets/textures/pumpkin.png");
-        var newPet = new PumpkinEgg(map,1,1);
-        switch(petId)
-        {
-            case '0':
-                break;
-            case '1':
-                map = this.loader.load("assets/textures/ghost_test.png");
-                newPet = new Ghost(map,4,8);
-                break;
-            case '2':
-                map = this.loader.load("assets/textures/zombie.png");
-                newPet = new Zombie(map,4,8);
-                break;
-            case '3':
-                map = this.loader.load("assets/textures/skalet.png");
-                newPet = new Skeleton(map,4,8);
-                break;
-            default:
-                break;
-        }
-        newPet.timesClicked = this.timesClicked;
-        newPet.name = this.name;
-        newPet.creationDate = this.creationDate;
-        return newPet;
+        this.headPoint.set(0,this.headPoint.y + this.scaleSteps,0);
     }
 }

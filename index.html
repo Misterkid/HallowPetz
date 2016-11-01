@@ -7,30 +7,74 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <div class = "hud">
-        <button class="show_hide">Pet Options</button>
-        <div class = "menu menu_obj" style = "visibility: hidden">
-            <input type="text" class ="pet_name menu_obj" style = "visibility: hidden" name="pet_name" value ="no_name">
-            <button class="save_pet menu_obj" style = "visibility: hidden">Save Pet</button>
-            <button class="test_reset menu_obj" style = "visibility: hidden">Reset</button>
-            <P>
-                A & D to move the camera <br>
-                Feed your pet by clicking on the food <br>
-                Get a ball by clicking on the ball and play with your pet! <br>
-            </P>
-            <p>This game uses cookies to save your pet! Cookies get destroyed after 31 days inactivity.</p>
-        </div>
-        <p class = "test_stats">ToDo</p>
-        <p>Hunger: <img class = "honger" src = "assets/textures/100.png">
-            Energy: <img class = "energie" src = "assets/textures/100.png">
-            Joy: <img class = "plezier" src = "assets/textures/100.png"></p>
-        <img class = "ball_btn" src = "assets/textures/bal.png">
-        <img class = "eten1" src = "assets/textures/eten1.png">
-        <img class = "slapen" src = "assets/textures/bed.png">
-        <div class = "grave" style = "visibility: hidden">
-            <p>Rest in peperoni</p>
-        </div>
+    <div class = "game_container">
+        <div class = "hud">
+            <button class="show_hide">Pet Options</button>
+            <div class = "menu menu_obj" style = "visibility: hidden">
+                <input type="text" class ="pet_rename menu_obj" style = "visibility: hidden" name="pet_name" value ="no_name">
+                <button class="save_pet menu_obj" style = "visibility: hidden">Save Pet</button>
+                <button class="test_reset menu_obj" style = "visibility: hidden">Reset</button>
+                <button class="bgm_mute menu_obj" style = "visibility: hidden">Toggle Music</button>
+                <button class="effects_mute menu_obj" style = "visibility: hidden">Toggle Sound</button>
+                <button class ="full_screen menu_obj" style = "visibility: hidden">Full Screen</button>
+                <P>
+                    A & D to move the camera <br>
+                    Feed your pet by clicking on the food <br>
+                    Get a ball by clicking on the ball and play with your pet! <br>
+                </P>
+                <p>This game uses cookies to save your pet! Cookies get destroyed after 31 days inactivity.</p>
+            </div>
+            <p class ="pet_name">ToDo</p>
 
+            <!-- Health Bars -->
+            <p class="health_bars">
+                Hunger: <img class = "honger" src = "assets/textures/100.png">
+                Energy: <img class = "energie" src = "assets/textures/100.png">
+                Joy: <img class = "plezier" src = "assets/textures/100.png">
+            </p>
+
+            <!--
+            <img class = "ball_btn" src = "assets/textures/bal.png">
+            <img class = "eten1" src = "assets/textures/eten1.png">
+            <img class = "slapen" src = "assets/textures/bed.png"> -->
+            <img class = "emotion_cloud" src = "assets/textures/slapen.png">
+
+            <img class = "sleep_emoticon" src ="assets/textures/sleeping.png">
+<!--
+            <img class = "honger1 emotion_cloud" src = "assets/textures/honger.png">
+            <img class = "energie1 emotion_cloud" src = "assets/textures/slapen.png">
+            <img class = "plezier1 emotion_cloud" src = "assets/textures/plezier.png">
+-->
+
+
+
+            <!-- Keep Health Up-->
+            <div class="take_care">
+                <div class="take_care_container">
+                    <p class = "food_count">0</p>
+                    <img class = "eten1" src="assets/textures/voeden_btn.png">
+                </div>
+                <div class="take_care_container">
+                    <p class="take_care_text">PLAY</p>
+                    <img class = "ball_btn" src = "assets/textures/spelen_btn.png">
+                </div>
+                <div class="take_care_container">
+                    <p class="take_care_text">SLEEP</p>
+                    <img class = "slapen" src = "assets/textures/slapen_btn.png">
+                </div>
+            </div>
+
+
+            <!--
+                        <img class = "honger1 emotion_cloud" src = "assets/textures/honger.png">
+                        <img class = "energie1 emotion_cloud" src = "assets/textures/slapen.png">
+                        <img class = "plezier1 emotion_cloud" src = "assets/textures/plezier.png">
+            -->
+
+            <div class = "grave" id="grave-hax" style = "visibility: hidden">
+                Rest in peperoni
+            </div>
+        </div>
     </div>
     <script src = "js/lib/three.min.js"></script>
     <script src = "js/lib/OBJLoader.js"></script>
@@ -38,7 +82,11 @@
     <script src = "js/Keyboard.js"></script>
     <script src = "js/Mouse.js"></script>
     <script src = "js/QUtils.js"></script>
+    <script src = "js/Sound/AudioSources.js"></script>
+    <script src = "js/Sound/OneShotAudio.js"></script>
+    <script src = "js/Sound/BGMMixer.js"></script>
     <script src = "js/Eten.js"></script>
+    <script src="js/EtenVerzamelen.js"></script>
     <!-- petz -->
     <script src = "js/Pet/Pet.js"></script>
     <script src = "js/Pet/PumpkinEgg.js"></script>
@@ -47,13 +95,12 @@
     <script src = "js/Pet/Zombie.js"></script>
     <script src = "js/Pet/Death.js"></script>
     <!-- Mini Games -->
-    <script src = "js/MiniGames/MiniGame.js"></script>
+    <script src = "js/MiniGames/ThrowBall.js"></script>
     <!-- Effects -->
     <script src = "js/Effects/Cloud.js"></script>
     <script src = "js/Effects/CloudExplosion.js"></script>
-
+    <script src = "js/HeadsUpDisplay.js"></script>
     <script src = "js/SceneRenderer.js"></script>
     <script src = "js/Main.js"></script>
-
 </body>
 </html>

@@ -1,6 +1,3 @@
-/**
- * Created by quget on 10-10-16.
- */
 class Main
 {
     constructor()
@@ -8,6 +5,7 @@ class Main
         this.objectL = new ObjectLoader();
         this.sceneRenderer = new SceneRenderer();
         this.sceneRenderer.CreateScene();
+        this.mouse = new Mouse();
         //Texture loader, Keep using this.loader to avoid making more loaders!
         this.loader = new THREE.TextureLoader();
         this.CreateLights();// You will see the light!
@@ -16,20 +14,31 @@ class Main
         //Pet making test
         console.log( document.cookie);
         this.userPet = null;//Need to load
+        this.hud = new HeadsUpDisplay();
         this.LoadPet();//Loaded
         this.userPet.SavePet();//saved
         //this.userPet.position.set(0,-1,0);
         //this.userPet.castShadow = true;
         this.sceneRenderer.AddObject(this.userPet);
-        document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
+
         //End Test
         this.clickableObjects = new Array();
         this.clickableObjects.push(this.userPet);
         this.updateObjects = new Array ();
         //Mini Game
-        this.miniGame = new MiniGame();
+        this.throwBall = new ThrowBall(this.sceneRenderer.gameContainer);
         this.isDag = true;
+
+        //presents (food)
+        //this.clickablePresent = new Array();
+        this.presentSpawnPositions = new Array();
+        this.SetPresentPosition();
+
+        var randomTime = qUtils.GetRandomBetweenInt(10000,100000);
+        this.PresentSpawnTimer = setInterval((e)=>{ this.SpawnPresent(e);},randomTime);
+
         //End
+        this.effectsMuted = false;
         //Explosion
         this.cloudExplosion = new CloudExplosion(this.sceneRenderer);
         //
@@ -41,40 +50,115 @@ class Main
         //Reset button
         document.addEventListener("onmouseobjectclick",(e)=>{this.OnMouseObjectClick(e);});
         document.addEventListener("onballmoving",(e)=>{this.OnBallMove(e);});
+        document.addEventListener("onballhitwall",(e)=>{this.OnBallHitWall(e);});
         document.addEventListener("onetentimerend",(e)=>{this.OnEtenTimer(e);});
         document.addEventListener("oncloudtimerend",(e)=>{this.OnCloudTimerEnd(e);});
         document.addEventListener("onpetdead",(e)=>{this.OnPetDead(e);});
-        //Menu stuff
-        document.getElementsByClassName("save_pet")[0].onclick = (e) => {this.OnSaveClick(e)};
-        document.getElementsByClassName("test_reset")[0].onclick = (e) => {this.OnResetClick(e)};
-        document.getElementsByClassName("show_hide")[0].onclick = (e) => {this.OnShowMenuClick(e)};
-        document.getElementsByClassName("ball_btn")[0].onclick = (e) => {this.OnBallBtnClick(e)};
-        document.getElementsByClassName("eten1")[0].onclick = (e) => {this.OnEten1Click(e)};
-        document.getElementsByClassName("slapen")[0].onclick = (e) => {this.OnSlapenClick(e)};
+        document.addEventListener("onpresentclick",(e)=>{this.OnPresentClick(e);});
+        document.addEventListener('webkitfullscreenchange',(e)=> {this.FullScreenChange(e);}, false);
+        document.addEventListener('mozfullscreenchange',(e)=> {this.FullScreenChange(e);}, false);
+        document.addEventListener('fullscreenchange', (e)=> {this.FullScreenChange(e);}, false);
+
+        //Hud
+        this.hud.savePetButton.onclick = (e) => {this.OnSaveClick(e)};
+        this.hud.resetPetButton.onclick = (e) => {this.OnResetClick(e)};
+        this.hud.muteSFXButton.onclick = (e) => {this.OnEffectsMute(e)};
+        this.hud.muteBGMButton.onclick = (e) => {this.OnBGMMute(e)};
+        this.hud.fullScreenButton.onclick = (e) => {this.OnFullScreenClick(e)};
+        this.hud.menuButton.onclick = (e) => {this.OnShowMenuClick(e)};
+        this.hud.funButton.onclick = (e) => {this.OnBallBtnClick(e)};
+        this.hud.sleepButton.onclick = (e) => {this.OnSlapenClick(e)};
+        this.hud.eatButton.onclick = (e) => {this.OnEten1Click(e)};
 
         //Save before closing,refreshing etc...
         window.onbeforeunload = (e) => {this.OnBeforeUnload(e)};
         this.sceneRenderer.Render();//Start rendering
+
+        this.bgmMixer = new BGMMixer();
+        this.bgmMixer.Shuffle();//Start
+
+        this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
     }
+
+
     //On Every frame do actions here. This is the main loop.
 
+    FullScreenChange(e)
+    {
+        if(this.sceneRenderer.isFullScreen)
+        {
+            this.sceneRenderer.isFullScreen = false;
+            this.sceneRenderer.BackToNormal();
+        }
+        else
+        {
+            this.sceneRenderer.isFullScreen = true;
+        }
+        this.throwBall.Hide();
+        this.hud.ShowHideMenu(this.throwBall,this.userPet);
+        this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
+    }
+
+    OnFullScreenClick(e)
+    {
+        this.sceneRenderer.RequestFullScreen();
+    }
+    SetPresentPosition()
+    {
+        this.AddPresentPosition(2, 0, 5);
+        this.AddPresentPosition(3, 0, 7);
+        this.AddPresentPosition(5, 0, 7);
+        this.AddPresentPosition(9, 0, 2);
+        this.AddPresentPosition(10,0,9);
+    }
+
+    SpawnPresent()
+    {
+        var gPresent = new THREE.BoxGeometry(0.5,0.5,0.5);
+        var mPresent = new THREE.MeshPhongMaterial();
+        var etenObject = new EtenVerzamelen(gPresent, mPresent);
+        var i = qUtils.GetRandomBetweenInt(0,this.presentSpawnPositions.length -1);
+
+        clearInterval(this.PresentSpawnTimer);
+        var randomTime = qUtils.GetRandomBetweenInt(10000,100000);
+        this.PresentSpawnTimer = setInterval((e)=>{ this.SpawnPresent(e);},randomTime);
+
+        for(var j = 0; j < this.clickableObjects.length; j++ )
+        {
+            if(this.presentSpawnPositions[i].x == this.clickableObjects[j].position.x,
+                this.presentSpawnPositions[i].y == this.clickableObjects[j].position.y,
+                this.presentSpawnPositions[i].z == this.clickableObjects[j].position.z)
+            {
+                return;
+            }
+        }
+        etenObject.position.set(this.presentSpawnPositions[i].x,this.presentSpawnPositions[i].y,this.presentSpawnPositions[i].z);
+        this.clickableObjects.push(etenObject);
+        this.sceneRenderer.AddObject(etenObject);
+
+    }
+
+    AddPresentPosition(x,y,z)
+    {
+        var position = new THREE.Vector3(x,y,z);
+        this.presentSpawnPositions.push(position);
+    }
 
     OnObjectLoadDone(e)
     {
         this.sceneRenderer.AddObject(e.detail);
-
     }
 
     OnRenderUpdate(e)
     {
-        //Pet.Update looks at camera, update it each frame.
-        this.userPet.Update(this.sceneRenderer.camera);
-        //Our test meter!
-        document.getElementsByClassName("test_stats")[0].innerText =
-            "Name: " + this.userPet.name ;
 
-        this.Createbarmeter();
         this.AnimateSpotLight();
+
+
+        //updates heads up display
+        this.hud.OnUpdate(this.userPet);
+        //Pet.OnUpdate looks at camera, update it each frame.
+        this.userPet.OnUpdate(this.sceneRenderer.camera);
 
         //Rotate around the pet
         if(keyboard.GetKey('a'))
@@ -85,7 +169,7 @@ class Main
         {
             this.sceneRenderer.RotateCameraAround(this.userPet,-1);
         }
-        this.miniGame.OnUpdate(e);
+        this.throwBall.OnUpdate(e);
         this.cloudExplosion.OnUpdate(this.sceneRenderer.camera);
 
         for (var i=0; i<this.updateObjects.length; i++)
@@ -93,12 +177,12 @@ class Main
             this.updateObjects[i].OnUpdate(this.sceneRenderer.camera);
         }
         this.Cheats();//Remove on release
-
     }
+
     //On Every frame after RenderUpdate do COLLISION detection here.
     OnCollisionUpdate(e)
     {
-        mouse.OnMouseRayUpdate(this.clickableObjects,this.sceneRenderer.camera);
+        this.mouse.OnMouseRayUpdate(this.clickableObjects,this.sceneRenderer.camera);
     }
 
     CreateEnvirement()
@@ -111,6 +195,7 @@ class Main
         mesh.position.set(0,-2,0);
         mesh.receiveShadow = true;
         this.sceneRenderer.AddObject(mesh);
+
 
 
         this.aantalhekjes = 15;
@@ -259,11 +344,7 @@ class Main
             }
         }
 
-
-
-
     }
-
     CreateSkydome()
     {
 
@@ -342,51 +423,50 @@ class Main
 
     OnShowMenuClick(e)
     {
-        this.ShowHideMenu();
-    }
-    ShowHideMenu()
-    {
-        var menuItems = document.getElementsByClassName("menu_obj");
-        for(var i = 0; i < menuItems.length; i ++)
-        {
-            if( menuItems[i].style.visibility == "hidden")
-            {
-                menuItems[i].style.visibility = "visible";
-                this.miniGame.Hide();
-            }
-            else
-            {
-                menuItems[i].style.visibility = "hidden";
-            }
-        }
-        if(this.userPet.isDead)
-        {
-            document.getElementsByClassName("pet_name")[0].style.visibility ="hidden";
-        }
+        this.hud.ShowHideMenu(this.throwBall,this.userPet);
     }
     OnBallBtnClick(e)
     {
-        if(this.miniGame.isHidden == false)
+        if(this.throwBall.isHidden == false)
         {
-            this.miniGame.Hide();
+            this.throwBall.Hide();
         }
         else
         {
-            this.miniGame.Show();
+            this.throwBall.Show();
         }
     }
     OnEten1Click (e)
     {
-        var map = this.loader.load("assets/textures/eten1.png");
-        var eten1 = new Eten (map,1.5,1);
-        this.sceneRenderer.AddObject(eten1);
-        this.updateObjects.push(eten1);
+        if(this.userPet.foodCount > 0)
+        {
+            var map = this.loader.load("assets/textures/eten1.png");
+            var eten1 = new Eten(map, 1.5, 1);
+
+            switch(this.userPet.petId)
+            {
+                case 1:
+                    eten1.position.set(this.userPet.headPoint.x,this.userPet.headPoint.y - 2,0);
+                    break;
+                case 2:
+                    eten1.position.set(this.userPet.headPoint.x,this.userPet.headPoint.y - 2.5,0);
+                    break;
+
+                default:
+                    eten1.position.set(this.userPet.headPoint.x,this.userPet.headPoint.y,0);
+                    break;
+            }
+            this.sceneRenderer.AddObject(eten1);
+            this.updateObjects.push(eten1);
+            this.PlaySound(audioSources.eating);
+            this.userPet.AddFood(-1);
+        }
     }
     OnEtenTimer(e)
     {
-        this.updateObjects.slice(e.detail);
+        this.updateObjects.slice(e.detail);//Ohhh...
         this.sceneRenderer.RemoveObject(e.detail);
-        this.userPet.AddToHunger(3);
+        this.userPet.AddToHunger(10);
     }
     OnSlapenClick(e)
     {
@@ -401,16 +481,17 @@ class Main
             this.userPet.asleep = false;
             this.isDag = true;
         }
+        this.PlaySound(audioSources.lightSwitch);
         console.log(this.isDag);
     }
     OnResetClick(e)
     {
-        this.ShowHideMenu();
+        this.hud.ShowHideMenu(this.throwBall,this.userPet);
         this.ResetPet();
     }
     OnSaveClick(e)
     {
-        this.ShowHideMenu();
+        this.hud.ShowHideMenu(this.throwBall,this.userPet);
         this.SavePet();
     }
     OnBeforeUnload()
@@ -419,105 +500,30 @@ class Main
     }
     SavePet()
     {
-        this.userPet.name = document.getElementsByClassName("pet_name")[0].value;//SetName
+        this.userPet.name = this.hud.petRenameField.value;
         this.userPet.SavePet();
+    }
+    OnPresentClick(e)
+    {
+        this.sceneRenderer.RemoveObject(e.detail);
+        qUtils.RemoveObjectFromArray(this.clickableObjects,e.detail);
+        this.cloudExplosion.CreateExplosion(10,e.detail.position,0);
+        this.userPet.AddFood(1);
     }
     OnMouseObjectClick(e)
     {
-        //Userpet clicked
-        if(e.detail.object.uuid == this.userPet.uuid)
-        {
-            this.userPet.OnClick();
-            console.log("clicked");
-        }
+        //CLICK
+        this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
+        e.detail.OnClick(e.detail);
     }
     OnBallMove(e)
     {
         //add 0.1 joy per second
-        this.userPet.AddToJoy(0.5 * DeltaTime);
+        this.userPet.AddToJoy(0.75 * DeltaTime);
     }
-    Createbarmeter()
+    OnBallHitWall(e)
     {
-        // honger
-        if (Math.floor(this.userPet.hunger) < 101)
-        {
-            if (Math.floor(this.userPet.hunger) > 95)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/100.png"}
-            if (Math.floor(this.userPet.hunger) > 85 && Math.floor(this.userPet.hunger) < 95)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/90.png"}
-            if (Math.floor(this.userPet.hunger) > 75 && Math.floor(this.userPet.hunger) < 85)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/80.png"}
-            if (Math.floor(this.userPet.hunger) > 65 && Math.floor(this.userPet.hunger) < 75)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/70.png"}
-            if (Math.floor(this.userPet.hunger) > 55 && Math.floor(this.userPet.hunger) < 65)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/60.png"}
-            if (Math.floor(this.userPet.hunger) > 45 && Math.floor(this.userPet.hunger) < 55)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/50.png"}
-            if (Math.floor(this.userPet.hunger) > 35 && Math.floor(this.userPet.hunger) < 45)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/40.png"}
-            if (Math.floor(this.userPet.hunger) > 25 && Math.floor(this.userPet.hunger) < 35)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/30.png"}
-            if (Math.floor(this.userPet.hunger) > 15 && Math.floor(this.userPet.hunger) < 25)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/20.png"}
-            if (Math.floor(this.userPet.hunger) > 5 && Math.floor(this.userPet.hunger) < 15)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/10.png"}
-            if (Math.floor(this.userPet.hunger) <5)
-            {document.getElementsByClassName("honger")[0].src = "assets/textures/0.png"}
-        }
-
-        //energie
-        if (Math.floor(this.userPet.energy) < 101)
-        {
-            if (Math.floor(this.userPet.energy) > 95)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/100.png"}
-            if (Math.floor(this.userPet.energy) > 85 && Math.floor(this.userPet.energy) < 95)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/90.png"}
-            if (Math.floor(this.userPet.energy) > 75 && Math.floor(this.userPet.energy) < 85)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/80.png"}
-            if (Math.floor(this.userPet.energy) > 65 && Math.floor(this.userPet.energy) < 75)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/70.png"}
-            if (Math.floor(this.userPet.energy) > 55 && Math.floor(this.userPet.energy) < 65)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/60.png"}
-            if (Math.floor(this.userPet.energy) > 45 && Math.floor(this.userPet.energy) < 55)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/50.png"}
-            if (Math.floor(this.userPet.energy) > 35 && Math.floor(this.userPet.energy) < 45)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/40.png"}
-            if (Math.floor(this.userPet.energy) > 25 && Math.floor(this.userPet.energy) < 35)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/30.png"}
-            if (Math.floor(this.userPet.energy) > 15 && Math.floor(this.userPet.energy) < 25)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/20.png"}
-            if (Math.floor(this.userPet.energy) > 5 && Math.floor(this.userPet.energy) < 15)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/10.png"}
-            if (Math.floor(this.userPet.energy) <5)
-            {document.getElementsByClassName("energie")[0].src = "assets/textures/0.png"}
-        }
-
-        // plezier
-        if (Math.floor(this.userPet.joy) < 101)
-        {
-            if (Math.floor(this.userPet.joy) > 95)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/100.png"}
-            if (Math.floor(this.userPet.joy) > 85 && Math.floor(this.userPet.joy) < 95)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/90.png"}
-            if (Math.floor(this.userPet.joy) > 75 && Math.floor(this.userPet.joy) < 85)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/80.png"}
-            if (Math.floor(this.userPet.joy) > 65 && Math.floor(this.userPet.joy) < 75)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/70.png"}
-            if (Math.floor(this.userPet.joy) > 55 && Math.floor(this.userPet.joy) < 65)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/60.png"}
-            if (Math.floor(this.userPet.joy) > 45 && Math.floor(this.userPet.joy) < 55)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/50.png"}
-            if (Math.floor(this.userPet.joy) > 35 && Math.floor(this.userPet.joy) < 45)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/40.png"}
-            if (Math.floor(this.userPet.joy) > 25 && Math.floor(this.userPet.joy) < 35)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/30.png"}
-            if (Math.floor(this.userPet.joy) > 15 && Math.floor(this.userPet.joy) < 25)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/20.png"}
-            if (Math.floor(this.userPet.joy) > 5 && Math.floor(this.userPet.joy) < 15)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/10.png"}
-            if (Math.floor(this.userPet.joy) <5)
-            {document.getElementsByClassName("plezier")[0].src = "assets/textures/0.png"}
-        }
+        this.PlaySound(audioSources.ballHit);
     }
     Cheats()
     {
@@ -527,38 +533,58 @@ class Main
             this.userPet.AddToEnergy(-25 * DeltaTime);
             this.userPet.AddToHunger(-25 * DeltaTime);
         }
+        if(keyboard.GetKey('v'))
+        {
+            this.userPet.AddToJoy(25 * DeltaTime);
+            this.userPet.AddToEnergy(25 * DeltaTime);
+            this.userPet.AddToHunger(25 * DeltaTime);
+        }
+        if(keyboard.GetKey('b'))
+        {
+            this.userPet.foodCount ++;
+        }
+
+    }
+    OnEffectsMute(e)
+    {
+        if(this.effectsMuted)
+        {
+            this.effectsMuted = false;
+        }
+        else
+        {
+            this.effectsMuted = true;
+        }
+    }
+    OnBGMMute(e)
+    {
+        if(this.bgmMixer.muted)
+        {
+            this.bgmMixer.Shuffle();
+            this.bgmMixer.muted = false;
+        }
+        else
+        {
+            this.bgmMixer.Stop();
+            this.bgmMixer.muted = true;
+        }
     }
     OnPetDead(e)
     {
-        var map = this.loader.load("assets/textures/grave.png");
         this.sceneRenderer.RemoveObject(this.userPet);
-        this.clickableObjects.splice(this.userPet);
-        this.userPet = new Death(map,4,4,this.userPet.name);
+        qUtils.RemoveObjectFromArray(this.clickableObjects,this.userPet);
+        this.userPet = new Death(this.userPet.name);
         this.userPet.hunger = 0;
         this.userPet.joy = 100;
         this.userPet.energy = 0;
         this.userPet.SavePet();
-        document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
+
         this.sceneRenderer.AddObject(this.userPet);
         this.clickableObjects.push(this.userPet);
-        this.Dead();
-    }
-    Dead()
-    {
-        document.getElementsByClassName("ball_btn")[0].style.visibility = "hidden";
-        document.getElementsByClassName("eten1")[0].style.visibility = "hidden";
-        document.getElementsByClassName("grave")[0].style.visibility = "visible"
-        document.getElementsByClassName("grave")[0].innerHTML = "<p>" + this.userPet.name +  "</p>";
-        document.getElementsByClassName("slapen")[0].style.visibility = "hidden";
-    }
-    Alive()
-    {
-        document.getElementsByClassName("ball_btn")[0].style.visibility = "visible";
-        document.getElementsByClassName("eten1")[0].style.visibility = "visible";
-        document.getElementsByClassName("grave")[0].style.visibility = "hidden";
-        document.getElementsByClassName("slapen")[0].style.visibility = "visible";
-    }
+        this.hud.Dead(this.userPet);
 
+        this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
+    }
     ResetPet()
     {
         //NewPet
@@ -566,83 +592,97 @@ class Main
         if(result == true)
         {
             this.sceneRenderer.RemoveObject(this.userPet);
-            this.clickableObjects.splice(this.userPet);
-            var map = this.loader.load("assets/textures/pumpkin.png");
-            this.userPet = new PumpkinEgg(map,1,2);
+            qUtils.RemoveObjectFromArray(this.clickableObjects,this.userPet);
+            this.userPet = new PumpkinEgg();
             this.userPet.SavePet();
-
-            document.getElementsByClassName("pet_name")[0].value = this.userPet.name;
+            this.hud.petRenameField.value = this.userPet.name;
             this.sceneRenderer.AddObject(this.userPet);
             this.clickableObjects.push(this.userPet);
-            this.Alive();
+            this.hud.Alive();
+            this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
+            this.userPet.asleep = !this.isDag;
+        }
+    }
+    PlaySound(audioSource)
+    {
+        if(this.effectsMuted == false)
+        {
+            new OneShotAudio(audioSource);
         }
     }
     OnPumpkinHatch(e)
     {
         var id = qUtils.GetRandomBetweenInt(1,3);
-        var newPet = this.userPet.Hatch(id.toString());
-        this.cloudExplosion.CreateExplosion(100,newPet.position,2);
-        this.sceneRenderer.RemoveObject(this.userPet);
+        var newPet = this.PetSelect(id.toString());//this.userPet.Hatch(id.toString());
 
+        newPet.Transfer(this.userPet);
+        this.cloudExplosion.CreateExplosion(20,newPet.position,2);
+        this.PlaySound(audioSources.eggHatch);
+
+        this.sceneRenderer.RemoveObject(this.userPet);
         this.clickableObjects.splice(this.userPet);
+
         this.userPet = newPet;
         this.userPet.SavePet();
         this.sceneRenderer.AddObject(this.userPet);
         this.clickableObjects.push(this.userPet);
+        this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
         //var explosion = new CloudExplosion(25,this.userPet.position,2,this.sceneRenderer);
-
     }
     OnCloudTimerEnd(e)
     {
-        this.cloudExplosion.clouds.splice(e.detail);
         this.sceneRenderer.RemoveObject(e.detail);
+        qUtils.RemoveObjectFromArray(this.cloudExplosion.clouds,e.detail);
+    }
+    PetSelect(petId)
+    {
+        var  map = this.loader.load("assets/textures/grave.png");
+        switch(petId)
+        {
+            case '-1':
+                return new Death();
+                break;
+            //case '0': break; //default and 0 is the same...
+            case '1':
+                return new Ghost();
+                break;
+            case '2':
+                return new Zombie();
+                break;
+
+            case '3':
+                return new Skeleton();
+                break;
+
+            default:
+                return new PumpkinEgg();
+                break;
+        }
+        return null;
     }
     LoadPet()
     {
         var petId = qUtils.GetCookie("pet_id");
-        var map = this.loader.load("assets/textures/pumpkin.png");
-        if(petId == null || petId == "")
+        var newPet = this.PetSelect(petId);
+        this.userPet = newPet;
+        this.userPet.LoadPet();
+        if(this.userPet.isDead == true)
         {
-            //NewPet
-            this.userPet = new PumpkinEgg(map,1,1);
+            this.hud.Dead(this.userPet);
         }
-        else
-        {
-            switch(petId)
-            {
-                case '-1':
-                    map = this.loader.load("assets/textures/grave.png");
-                    this.userPet = new Death(map,4,4);
-                    break;
-                case '0':
-                    this.userPet = new PumpkinEgg(map,1,1);
-                    break;
-                case '1':
-                    map = this.loader.load("assets/textures/ghost_test.png");
-                    this.userPet = new Ghost(map,4,8);
-                    break;
-                case '2':
-                    map = this.loader.load("assets/textures/zombie.png");
-                    this.userPet = new Zombie(map,4,8);
-                    break;
-                case '3':
-                    map = this.loader.load("assets/textures/skalet.png");
-                    this.userPet = new Skeleton(map,4,8);
-                    break;
-                default:
-                    //Someone cheating most likely xD
-                    console.log("cheater");
-                    //qUtils.DeleteAllCookies();
-                    map = this.loader.load("assets/textures/grave.png");
-                    this.userPet = new Death(map,4,4);
-                    this.Dead();
-                    return;
-                    break;
-            }
-            this.userPet.LoadPet();
-            if(this.userPet.isDead)
-                this.Dead();
-        }
+
+    }
+    WorldToScreen( position )
+    {
+        var width = this.hud.hudDiv.offsetWidth, height = this.hud.hudDiv.offsetHeight;
+        var widthHalf = width / 2;
+        var heightHalf = height / 2;
+
+        var pos = position.clone();
+        pos.project(this.sceneRenderer.camera);
+        pos.x = Math.round( (   pos.x + 1 ) * widthHalf );
+        pos.y = Math.round( ( - pos.y + 1 ) * heightHalf );
+        return new THREE.Vector3(pos.x,pos.y,0);
     }
 }
 new Main();
