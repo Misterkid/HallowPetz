@@ -40,6 +40,10 @@ class HeadsUpDisplay
         this.Createbarmeter(userPet);
         this.Sleep(userPet);
 
+        //Apperently from bottom with % works fine... ohhh okay
+       // this.grave.style.top = (userPet.headPoint2d.y + 40) +  'px';
+        this.grave.style.left = (userPet.headPoint2d.x - 50 )+ 'px';
+
     }
     Sleep(userPet)
     {

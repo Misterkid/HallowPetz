@@ -16,6 +16,9 @@ class AudioSources
 
         this.lightSwitch = document.createElement('source');
         this.lightSwitch.src = 'assets/sounds/lightSwitch.wav';
+
+        this.petClick = document.createElement('source');
+        this.petClick.src = 'assets/sounds/woo.wav';
     }
 }
 let audioSources = new AudioSources();

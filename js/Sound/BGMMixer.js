@@ -38,7 +38,7 @@ class BGMMixer
     }
     Shuffle()
     {
-        if(this.bgm.childElementCount == 0)
+        if(this.bgm.childElementCount == 0 && this.muted == false)
         {
             var bgmSound = this.bgmList[qUtils.GetRandomBetweenInt(0, this.bgmList.length - 1)];
             this.bgm.appendChild(bgmSound);
