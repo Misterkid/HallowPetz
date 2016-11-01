@@ -78,6 +78,7 @@ class Main
         this.bgmMixer.Shuffle();//Start
 
         this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
+        this.hud.petRenameField.value = this.userPet.name;
     }
 
 
