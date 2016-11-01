@@ -10,7 +10,7 @@ class Main
         this.loader = new THREE.TextureLoader();
         this.CreateLights();// You will see the light!
         this.CreateSkydome();
-        this.CreateEnvirement();
+        //this.CreateEnvirement();
         //Pet making test
         console.log( document.cookie);
         this.userPet = null;//Need to load
@@ -79,6 +79,11 @@ class Main
 
         this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
         this.hud.petRenameField.value = this.userPet.name;
+
+        this.dummyMaxLoad = 4;
+        this.dummyLoadCount = 0;
+        this.LoadDummies();
+        //this.CreateEnvirement();
     }
 
 
@@ -147,7 +152,21 @@ class Main
 
     OnObjectLoadDone(e)
     {
-        this.sceneRenderer.AddObject(e.detail);
+        if(this.dummyLoadCount == this.dummyMaxLoad - 1)
+        {
+            console.log("?");
+            this.dummyLoadCount++;
+           // this.objectL.ImportObject('assets/models/fench.obj', 'assets/textures/ColorsheetFenceBrown.png', new THREE.Vector3(0,0,0), 1, 0);
+            this.CreateEnvirement();
+        }
+        else if(this.dummyLoadCount < this.dummyMaxLoad - 1)
+        {
+            this.dummyLoadCount++;
+        }
+        else
+        {
+           this.sceneRenderer.AddObject(e.detail);
+        }
     }
 
     OnRenderUpdate(e)
@@ -185,7 +204,17 @@ class Main
     {
         this.mouse.OnMouseRayUpdate(this.clickableObjects,this.sceneRenderer.camera);
     }
-
+    LoadDummies()
+    {
+        var badPos = new THREE.Vector3(-10,-10,-10);
+        this.dummyMaxLoad = 6;// - 1;
+        this.objectL.ImportObject('assets/models/fench.obj', 'assets/textures/ColorsheetFenceBrown.png', badPos, 1);
+        this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal.png', badPos, 1);
+        this.objectL.ImportObject('assets/models/Moon.obj', 'assets/textures/colorsheettreenormal.png', badPos, 1);
+        this.objectL.ImportObject('assets/models/cloud.obj', 'assets/textures/colorsheettreenormal.png', badPos, 1);
+        this.objectL.ImportObject('assets/models/cloud2.obj', 'assets/textures/colorsheettreenormal.png', badPos, 1 );
+        this.objectL.ImportObject('assets/models/Church.obj', 'assets/textures/concretetext.png', badPos, 1);
+    }
     CreateEnvirement()
     {
         var geometry = new THREE.PlaneGeometry(500,500);
