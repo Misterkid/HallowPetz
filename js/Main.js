@@ -474,6 +474,7 @@ class Main
         {
             this.userPet.asleep = true;
             this.isDag = false;
+            this.throwBall.Hide();
             // moet nog iets toegevoegd worden zodat je kan zien dat hij slaapt
         }
         else
