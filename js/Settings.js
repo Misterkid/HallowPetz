@@ -7,6 +7,7 @@ class Settings
     {
         this.sfxMuted = false;
         this.bgmMuted = false;
+        this.ambMuted = false;
     }
     Load()
     {
@@ -30,12 +31,21 @@ class Settings
         {
             this.bgmMuted = false;
         }
-        console.log(this.bgmMuted);
+        var amb = qUtils.GetCookie("hellowPetz_amb");
+        if(amb == 'true')
+        {
+            this.ambMuted = true;
+        }
+        else
+        {
+            this.ambMuted = false;
+        }
     }
     Save()
     {
         qUtils.SetCookie("hellowPetz_sfx",this.sfxMuted.toString());
         qUtils.SetCookie("hellowPetz_bgm",this.bgmMuted.toString());
+        qUtils.SetCookie("hellowPetz_amb",this.ambMuted.toString());
     }
 }
 let settings = new Settings();

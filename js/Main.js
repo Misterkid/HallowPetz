@@ -62,6 +62,7 @@ class Main
         this.hud.resetPetButton.onclick = (e) => {this.OnResetClick(e)};
         this.hud.muteSFXButton.onclick = (e) => {this.OnEffectsMute(e)};
         this.hud.muteBGMButton.onclick = (e) => {this.OnBGMMute(e)};
+        this.hud.muteAmbButton.onclick = (e) =>{this.OnAmbMute(e)};
         this.hud.fullScreenButton.onclick = (e) => {this.OnFullScreenClick(e)};
         this.hud.menuButton.onclick = (e) => {this.OnShowMenuClick(e)};
         this.hud.funButton.onclick = (e) => {this.OnBallBtnClick(e)};
@@ -84,6 +85,19 @@ class Main
         this.dummyLoadCount = 0;
         this.LoadDummies();
         //this.CreateEnvirement();
+/*
+        this.ambient = document.createElement('audio');
+        this.ambient.appendChild(audioSources.dayAmbient);
+        this.ambient.volume = 0.3;
+        this.ambient.loop = true;
+        this.ambient.play();
+*/
+        this.ambient = new AmbientMixer();
+        console.log(settings.ambMuted);
+        if(!settings.ambMuted)
+            this.ambient.Switch(true);
+
+
     }
 
 
@@ -512,6 +526,9 @@ class Main
             this.userPet.asleep = false;
             this.isDag = true;
         }
+        if(!settings.ambMuted)
+            this.ambient.Switch(this.isDag);
+
         this.PlaySound(audioSources.lightSwitch);
         console.log(this.isDag);
     }
@@ -581,6 +598,20 @@ class Main
             this.userPet.foodCount ++;
         }
 
+    }
+    OnAmbMute(e)
+    {
+        if(settings.ambMuted)
+        {
+            settings.ambMuted = false;
+            this.ambient.Switch(this.isDag);
+        }
+        else
+        {
+            settings.ambMuted = true;
+            this.ambient.Stop();
+        }
+        settings.Save();
     }
     OnEffectsMute(e)
     {
