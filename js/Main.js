@@ -186,7 +186,7 @@ class Main
     OnRenderUpdate(e)
     {
 
-        this.AnimateSpotLight();
+        //this.AnimateSpotLight();
 
 
         //updates heads up display
@@ -241,8 +241,9 @@ class Main
         this.sceneRenderer.AddObject(mesh);
 
 
-
+        //Creating Fenches
         this.aantalhekjes = 15;
+
         for(var i = 0; i < this.aantalhekjes; i++) {
             var k = 0.01;
             var x = -20;
@@ -266,7 +267,7 @@ class Main
             this.boomRotate = new THREE.Vector3(0, qUtils.DegToRad(-90), 0);
             this.objectL.ImportObject('assets/models/fench.obj', 'assets/textures/ColorsheetFenceBrown.png', this.boomPos, this.boomScale, this.boomRotate);
         }
-
+        //Creating Tree's
         for(var i = 0; i < 75; i++) {
             var k = qUtils.GetRandomBetweenInt(15, 25)/1000;
             var x = qUtils.GetRandomBetweenInt(-50, 50);
@@ -312,9 +313,9 @@ class Main
         }
 
 
-        this.moonPos = new THREE.Vector3(220, 500,-1000);
-        this.moonScale = new THREE.Vector3(100,100,100);
-        this.objectL.ImportObject('assets/models/Moon.obj', 'assets/textures/colorsheettreenormal.png', this.moonPos, this.moonScale);
+        this.moonPos = new THREE.Vector3(0, 25,-100);
+        this.moonScale = new THREE.Vector3(10,10,10);
+        this.objectL.ImportObject('assets/models/Moon.obj', 'assets/textures/yellow.jpg', this.moonPos, this.moonScale);
 
         var cScale = 0.3;
         this.churchPos = new THREE.Vector3(35,-3.2,20);
@@ -332,7 +333,7 @@ class Main
 
 
         //Clouds
-        for(var i = 0; i < 75; i++) {
+        for(var i = 0; i < 25; i++) {
             var k = qUtils.GetRandomBetweenInt(10, 20)/10;
             var x = qUtils.GetRandomBetweenInt(-100, 100);
             var y = qUtils.GetRandomBetweenInt(12, 18);
@@ -343,7 +344,7 @@ class Main
             this.objectL.ImportObject('assets/models/cloud.obj', 'assets/textures/colorsheettreenormal.png', this.cloudPos, this.cloudScale, this.cloudRotate );
         }
 
-        for(var i = 0; i < 75; i++) {
+        for(var i = 0; i < 25; i++) {
             var k = qUtils.GetRandomBetweenInt(10, 20)/10;
             var x = qUtils.GetRandomBetweenInt(-100, 100);
             var y = qUtils.GetRandomBetweenInt(12, 18);
@@ -357,18 +358,26 @@ class Main
 
         //Graves
         for(var i = 0; i < 3; i++) {
-            var gScale = 0.05;
+            var gScale = 0.15;
             var x = -18;
-            var y = -2.5;
+            var y = -2.0;
             var z = -18;
             this.gravePos = new THREE.Vector3(x+(6*i), y, z);
             this.graveScale = new THREE.Vector3(gScale, gScale, gScale);
-            this.graveRotate = new THREE.Vector3(0,qUtils.DegToRad(qUtils.GetRandomBetweenInt(0,360)), 0);
-            this.objectL.ImportObject('assets/models/pumpkin.obj', 'assets/textures/orange.png', this.gravePos, this.graveScale, this.graveRotate );
-            for(var k = 0; k < 6; k++){
-                this.gravePos = new THREE.Vector3(x+(6*i),y, z+(6*k));
-                this.graveRotate = new THREE.Vector3(0,qUtils.DegToRad(qUtils.GetRandomBetweenInt(0,360)), 0);
-                this.objectL.ImportObject('assets/models/pumpkin.obj', 'assets/textures/orange.png', this.gravePos, this.graveScale, this.graveRotate );
+            this.graveRotate = new THREE.Vector3(0,qUtils.DegToRad(90),0);
+            if(0 == qUtils.GetRandomBetweenInt(0,1))
+                this.objectL.ImportObject('assets/models/gravestone.obj', 'assets/textures/concretetext.png', this.gravePos, this.graveScale, this.graveRotate );
+            else
+                this.objectL.ImportObject('assets/models/stone_grave.obj', 'assets/textures/concretetext.png', this.gravePos, this.graveScale, this.graveRotate );
+
+            for(var k = 0; k < 4; k++){
+                this.gravePos = new THREE.Vector3(x+(6*i),y, z+(10*k));
+                //this.graveRotate = new THREE.Vector3(0,0, 0);
+                if(0 == qUtils.GetRandomBetweenInt(0,1))
+                    this.objectL.ImportObject('assets/models/gravestone.obj', 'assets/textures/concretetext.png', this.gravePos, this.graveScale, this.graveRotate );
+                else
+                    this.objectL.ImportObject('assets/models/stone_grave.obj', 'assets/textures/concretetext.png', this.gravePos, this.graveScale, this.graveRotate );
+
             }
         }
 
@@ -392,78 +401,99 @@ class Main
     CreateSkydome()
     {
 
+        this.skyDayColor = 0x78E6FF;
+        this.skyNightColor = 0x003366;
 
-        var skyGeo = new THREE.SphereGeometry(4000, 25, 25);
-
-
-        //var skytexture = THREE.ImageUtils.loadTexture( "assets/textures/milky.jpg" );
-
-
-        var skymaterial = new THREE.MeshBasicMaterial( { color: 0x003366 } );
+        this.skyGeo = new THREE.SphereGeometry(4000, 25, 25);
+        this.skyDayMaterial = new THREE.MeshBasicMaterial( { color: this.skyNightColor } );
 
 
-        var sky = new THREE.Mesh(skyGeo, skymaterial);
-        sky.material.side = THREE.BackSide;
-        this.sceneRenderer.AddObject(sky);
+        this.sky = new THREE.Mesh(this.skyGeo, this.skyDayMaterial);
+        this.sky.material.side = THREE.BackSide;
+        this.sceneRenderer.AddObject(this.sky);
+
     }
     CreateLights()
     {
-        //var light = new THREE.AmbientLight( 0x003366,0.5);
-        var light = new THREE.AmbientLight( 0xFFFFFF,0.5);
-        light.position.set( 0, 10, 1 );
-        this.sceneRenderer.AddObject(light);
+        this.nightColor = 0x003366;
+        this.dayColor = 0xFFFFFF;
+        this.ambientDayIntensity = 0.7;
+        this.ambientNightIntensity = 1.5;
+        this.light = new THREE.AmbientLight( this.nightColor, this.ambientNightIntensity);
 
-        //this.spotLight = new THREE.SpotLight( 0x003366,1 );
-        this.spotLight = new THREE.SpotLight( 0xFFFFFF,1 );
+        this.light.position.set( 0, 10, 1 );
+        this.sceneRenderer.AddObject(this.light);
+
+/*        this.spotLight = new THREE.SpotLight( 0xFFFFFF,0 );
 
         this.spotLight.position.set( 150, 10, 150 ); //y = 50
         this.spotLight.castShadow = true;
-        this.spotLight.shadowDarkness =  1;
+        this.spotLight.shadowDarkness =  0.5;
         this.spotLight.angle = 240;
 
 
-        this.sceneRenderer.AddObject( this.spotLight );
-
-        var spotLightHelper = new THREE.SpotLightHelper( this.spotLight );
-        this.sceneRenderer.AddObject(spotLightHelper );
-
-/*        this.spotLight2 = new THREE.SpotLight( 0x003366,1 );
-        //this.spotLight2 = new THREE.SpotLight( 0xFFFFFF,0 );
-        this.spotLight2.position.set( 20, 5, -40 );
-        this.spotLight2.castShadow = true;
-        this.spotLight2.shadowDarkness =  1;
-        this.spotLight2.angle = 240;
 
 
-        this.sceneRenderer.AddObject( this.spotLight2 );
+        this.sceneRenderer.AddObject( this.spotLight );*/
 
-        var spotLightHelper2 = new THREE.SpotLightHelper( this.spotLight2 );
-        this.sceneRenderer.AddObject(spotLightHelper2 );*/
+        //Light on Moon/Sun
+        this.moonLighting = new THREE.SpotLight( 0xFFFFFF,1);
+        this.moonLighting.position.set( 0, 25, -70 );
+        this.moonLighting.penumbra = 0;
+        this.moonLighting.angle = 0.4;
+        this.moonLighting.distance = 1000;
+        this.moonLighting.decay = 0;
 
-        /*this.moonLight = new THREE.SpotLight( 0xFFFFFF,0.5 );
-        this.moonLight.position.set( 100, 450,-500 );
-        this.moonLight.target.position.set(200,-130,400);
-        this.sceneRenderer.AddObject(this.moonLight.target);
+        //Moon target
+        this.geometry = new THREE.BoxGeometry(1,1,1);
+        this.material = new THREE.MeshBasicMaterial(0xFFFFFF);
+        this.lighttarget = new THREE.Mesh(this.geometry,this.material);
+        this.lighttarget.position.set(0, 39,-100);
+        this.lighttarget.receiveShadow = false;
+        this.lighttarget.castShadow = false;
+        this.lighttarget.visible = false;
+        this.sceneRenderer.AddObject(this.lighttarget);
+
+        this.moonLighting.target = this.lighttarget;
+        this.sceneRenderer.AddObject( this.moonLighting );
+        this.sceneRenderer.AddObject(this.moonLighting.target);
+
+        //Moon Sun Light
+        this.moonLight = new THREE.SpotLight(this.nightColor, 1.0);
+        this.moonLight.position.set( 0, 25, -70 );
         this.moonLight.castShadow = true;
         this.moonLight.shadowDarkness =  1;
-        this.moonLight.angle = qUtils.DegToRad(270);
+        //this.moonLight.angle = 240;
+
+        this.sceneRenderer.AddObject( this.moonLight );
 
 
-        this.sceneRenderer.AddObject( this.moonLight );*/
-
-
-        /*var moonLightHelper = new THREE.SpotLightHelper( this.moonLight );
-        this.sceneRenderer.AddObject(moonLightHelper );*/
     }
 
-    AnimateSpotLight(){
+    DayLight()
+    {
+        this.light.color.setHex(this.dayColor);
+        this.light.intensity = this.ambientDayIntensity;
+        this.moonLight.color.setHex(this.dayColor);
+        this.sky.material.color.setHex(this.skyDayColor);
+    }
+
+    NightLight()
+    {
+        this.light.color.setHex(this.nightColor);
+        this.light.intensity = this.ambientNightIntensity;
+        this.moonLight.color.setHex(this.nightColor);
+        this.sky.material.color.setHex(this.skyNightColor);
+    }
+
+/*    AnimateSpotLight(){
         var angle	= Date.now()/1000 * Math.PI;
 // angle	= Math.PI*2
         this.spotLight.position.x	= Math.cos(angle*-0.1)*20;
         //this.spotLight.position.y	= 10 + Math.sin(angle*0.5)*6;
         this.spotLight.position.z	= Math.sin(angle*-0.1)*20;
         //this.spotLight.target(this.userPet);
-    }
+    }*/
 
     OnShowMenuClick(e)
     {
@@ -519,12 +549,15 @@ class Main
             this.userPet.asleep = true;
             this.isDag = false;
             this.throwBall.Hide();
+
+            this.DayLight();
             // moet nog iets toegevoegd worden zodat je kan zien dat hij slaapt
         }
         else
         {
             this.userPet.asleep = false;
             this.isDag = true;
+            this.NightLight();
         }
         if(!settings.ambMuted)
             this.ambient.Switch(this.isDag);
