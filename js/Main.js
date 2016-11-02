@@ -597,28 +597,32 @@ class Main
         e.detail.OnClick(e.detail);
         if(e.detail.uuid == this.userPet.uuid)
         {
-            //easter egg
-            if(this.userPet.name.toLowerCase() == "michael")
+            if(this.throwBall.isHidden && !this.hud.menuIsShown)
             {
-                this.PlaySound(audioSources.eggHatch);
-                this.userPet.AddToJoy(-10);
-            }
-            else
-            {
-                this.PlaySound(audioSources.petClick);
-            }
-            //cheat
-            if(this.userPet.name.toLowerCase() == "eduard")
-            {
-                this.userPet.foodCount += 100;
-            }
-            if(this.userPet.name.toLowerCase() == "kelly")
-            {
-                this.userPet.AddToJoy(10);
-            }
-            if(this.userPet.name.toLowerCase() == "sandra")
-            {
-                this.userPet.AddToEnergy(10);
+                //easter egg
+                if (this.userPet.name.toLowerCase() == "michael")
+                {
+                    this.PlaySound(audioSources.eggHatch);
+                    this.userPet.AddToJoy(-10);
+                }
+                else
+                {
+                    this.PlaySound(audioSources.petClick);
+                }
+                //cheat
+                if (this.userPet.name.toLowerCase() == "eduard")
+                {
+                    this.userPet.foodCount += 100;
+                }
+                else if (this.userPet.name.toLowerCase() == "kelly")
+                {
+                    this.userPet.AddToJoy(10);
+                }
+                else if (this.userPet.name.toLowerCase() == "sandra")
+                {
+                    this.userPet.AddToEnergy(10);
+
+                }
             }
         }
     }
