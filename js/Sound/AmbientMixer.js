@@ -13,7 +13,6 @@ class AmbientMixer
     {
         this.Stop();
         this.Play(night);
-        console.log("work");
     }
     Stop()
     {

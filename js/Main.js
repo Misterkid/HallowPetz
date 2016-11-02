@@ -168,7 +168,6 @@ class Main
     {
         if(this.dummyLoadCount == this.dummyMaxLoad - 1)
         {
-            console.log("?");
             this.dummyLoadCount++;
            // this.objectL.ImportObject('assets/models/fench.obj', 'assets/textures/ColorsheetFenceBrown.png', new THREE.Vector3(0,0,0), 1, 0);
             this.CreateEnvirement();
@@ -563,7 +562,6 @@ class Main
             this.ambient.Switch(this.isDag);
 
         this.PlaySound(audioSources.lightSwitch);
-        console.log(this.isDag);
     }
     OnResetClick(e)
     {
@@ -589,7 +587,7 @@ class Main
         this.sceneRenderer.RemoveObject(e.detail);
         qUtils.RemoveObjectFromArray(this.clickableObjects,e.detail);
         this.cloudExplosion.CreateExplosion(10,e.detail.position,0);
-        this.PlaySound(audioSources.eggHatch);
+        this.PlaySound(audioSources.explosion);
         this.userPet.AddFood(1);
     }
     OnMouseObjectClick(e)
@@ -598,9 +596,33 @@ class Main
         this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
         e.detail.OnClick(e.detail);
 
+        console.log(e.detail);
+
         if(e.detail.uuid == this.userPet.uuid)
         {
-            this.PlaySound(audioSources.petClick);
+            //easter egg
+            if(this.userPet.name.toLowerCase() == "michael")
+            {
+                this.PlaySound(audioSources.eggHatch);
+                this.userPet.AddToJoy(-10);
+            }
+            else
+            {
+                this.PlaySound(audioSources.petClick);
+            }
+            //cheat
+            if(this.userPet.name.toLowerCase() == "eduard")
+            {
+                this.userPet.foodCount += 100;
+            }
+            if(this.userPet.name.toLowerCase() == "kelly")
+            {
+                this.userPet.AddToJoy(10);
+            }
+            if(this.userPet.name.toLowerCase() == "sandra")
+            {
+                this.userPet.AddToEnergy(10);
+            }
         }
     }
     OnBallMove(e)

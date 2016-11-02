@@ -5,8 +5,11 @@ class AudioSources
 {
     constructor()
     {
+        this.explosion = document.createElement('source');
+        this.explosion.src = 'assets/sounds/explosion.wav';
+
         this.eggHatch = document.createElement('source');
-        this.eggHatch.src = 'assets/sounds/explosion.wav';
+        this.eggHatch.src = 'assets/sounds/hello.wav';
 
         this.ballHit = document.createElement('source');
         this.ballHit.src = 'assets/sounds/ballHit.wav';
