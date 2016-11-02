@@ -595,9 +595,6 @@ class Main
         //CLICK
         this.userPet.headPoint2d = this.WorldToScreen(this.userPet.headPoint);
         e.detail.OnClick(e.detail);
-
-        console.log(e.detail);
-
         if(e.detail.uuid == this.userPet.uuid)
         {
             //easter egg
@@ -747,7 +744,7 @@ class Main
         this.PlaySound(audioSources.eggHatch);
 
         this.sceneRenderer.RemoveObject(this.userPet);
-        this.clickableObjects.splice(this.userPet);
+        qUtils.RemoveObjectFromArray(this.clickableObjects,this.userPet);
 
         this.userPet = newPet;
         this.userPet.SavePet();
