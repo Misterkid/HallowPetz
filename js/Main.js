@@ -152,7 +152,7 @@ class Main
     OnRenderUpdate(e)
     {
 
-        this.AnimateSpotLight();
+        //this.AnimateSpotLight();
 
 
         //updates heads up display
@@ -357,30 +357,30 @@ class Main
     CreateSkydome()
     {
 
+        this.skyDayColor = 0x78E6FF;
+        this.skyNightColor = 0x003366;
 
-        var skyGeo = new THREE.SphereGeometry(4000, 25, 25);
-
-
-        //var skytexture = THREE.ImageUtils.loadTexture( "assets/textures/milky.jpg" );
-
-
-        //var skymaterial = new THREE.MeshBasicMaterial( { color: 0x003366 } );
-        var skymaterial = new THREE.MeshBasicMaterial( { color: 0x78E6FF } );
+        this.skyGeo = new THREE.SphereGeometry(4000, 25, 25);
+        this.skyDayMaterial = new THREE.MeshBasicMaterial( { color: this.skyNightColor } );
 
 
-        var sky = new THREE.Mesh(skyGeo, skymaterial);
-        sky.material.side = THREE.BackSide;
-        this.sceneRenderer.AddObject(sky);
+        this.sky = new THREE.Mesh(this.skyGeo, this.skyDayMaterial);
+        this.sky.material.side = THREE.BackSide;
+        this.sceneRenderer.AddObject(this.sky);
+
     }
     CreateLights()
     {
-        //var light = new THREE.AmbientLight( 0x003366,1.5);
-        var light = new THREE.AmbientLight( 0xFFFFFF,0.7);
-        light.position.set( 0, 10, 1 );
-        this.sceneRenderer.AddObject(light);
+        this.nightColor = 0x003366;
+        this.dayColor = 0xFFFFFF;
+        this.ambientDayIntensity = 0.7;
+        this.ambientNightIntensity = 1.5;
+        this.light = new THREE.AmbientLight( this.nightColor, this.ambientNightIntensity);
 
-        //this.spotLight = new THREE.SpotLight( 0x003366,1 );
-        this.spotLight = new THREE.SpotLight( 0xFFFFFF,0.2 );
+        this.light.position.set( 0, 10, 1 );
+        this.sceneRenderer.AddObject(this.light);
+
+/*        this.spotLight = new THREE.SpotLight( 0xFFFFFF,0 );
 
         this.spotLight.position.set( 150, 10, 150 ); //y = 50
         this.spotLight.castShadow = true;
@@ -390,66 +390,66 @@ class Main
 
 
 
-        this.sceneRenderer.AddObject( this.spotLight );
-/*
-        var spotLightHelper = new THREE.SpotLightHelper( this.spotLight );
-        this.sceneRenderer.AddObject(spotLightHelper );*/
+        this.sceneRenderer.AddObject( this.spotLight );*/
 
- /*       //this.spotLight2 = new THREE.SpotLight( 0x003366,1 );
-        this.spotLight2 = new THREE.SpotLight( 0xFFFFFF,1 );
-        this.spotLight2.position.set( 20, 10, -20 );
-        this.spotLight2.castShadow = true;
-        this.spotLight2.shadowDarkness =  1;
-        this.spotLight2.angle = 240;
-
-
-        this.sceneRenderer.AddObject( this.spotLight2 );
-
-        var spotLightHelper2 = new THREE.SpotLightHelper( this.spotLight2 );
-        this.sceneRenderer.AddObject(spotLightHelper2 );*/
-
-        //this.moonPos = new THREE.Vector3(0, 25,-100);
-
+        //Light on Moon/Sun
         this.moonLighting = new THREE.SpotLight( 0xFFFFFF,1);
         this.moonLighting.position.set( 0, 25, -70 );
-        //this.moonLighting.castShadow = true;
-        this.moonLighting.shadowDarkness =  0.5;
         this.moonLighting.penumbra = 0;
         this.moonLighting.angle = 0.4;
         this.moonLighting.distance = 1000;
         this.moonLighting.decay = 0;
 
         //Moon target
-        var geometry = new THREE.BoxGeometry(1,1,1);
-        var material = new THREE.MeshBasicMaterial(0xFFFFFF);
-        var lighttarget = new THREE.Mesh(geometry,material);
-        lighttarget.position.set(0, 39,-100);
-        lighttarget.receiveShadow = false;
-        lighttarget.castShadow = false;
-        lighttarget.visible = false;
-        this.sceneRenderer.AddObject(lighttarget);
+        this.geometry = new THREE.BoxGeometry(1,1,1);
+        this.material = new THREE.MeshBasicMaterial(0xFFFFFF);
+        this.lighttarget = new THREE.Mesh(this.geometry,this.material);
+        this.lighttarget.position.set(0, 39,-100);
+        this.lighttarget.receiveShadow = false;
+        this.lighttarget.castShadow = false;
+        this.lighttarget.visible = false;
+        this.sceneRenderer.AddObject(this.lighttarget);
 
-        this.moonLighting.target = lighttarget;
+        this.moonLighting.target = this.lighttarget;
         this.sceneRenderer.AddObject( this.moonLighting );
         this.sceneRenderer.AddObject(this.moonLighting.target);
 
-
-        this.moonLight = new THREE.SpotLight( 0x003366,1.2);
+        //Moon Sun Light
+        this.moonLight = new THREE.SpotLight(this.nightColor, 1.0);
         this.moonLight.position.set( 0, 25, -70 );
         this.moonLight.castShadow = true;
+        this.moonLight.shadowDarkness =  1;
         //this.moonLight.angle = 240;
 
         this.sceneRenderer.AddObject( this.moonLight );
+
+
     }
 
-    AnimateSpotLight(){
+    DayLight()
+    {
+        this.light.color.setHex(this.dayColor);
+        this.light.intensity = this.ambientDayIntensity;
+        this.moonLight.color.setHex(this.dayColor);
+        this.sky.material.color.setHex(this.skyDayColor);
+    }
+
+    NightLight()
+    {
+        this.light.color.setHex(this.nightColor);
+        this.light.intensity = this.ambientNightIntensity;
+        this.moonLight.color.setHex(this.nightColor);
+        this.sky.material.color.setHex(this.skyNightColor);
+    }
+
+/*    AnimateSpotLight(){
         var angle	= Date.now()/1000 * Math.PI;
 // angle	= Math.PI*2
         this.spotLight.position.x	= Math.cos(angle*-0.1)*20;
         //this.spotLight.position.y	= 10 + Math.sin(angle*0.5)*6;
         this.spotLight.position.z	= Math.sin(angle*-0.1)*20;
         //this.spotLight.target(this.userPet);
-    }
+    }*/
 
     OnShowMenuClick(e)
     {
@@ -504,12 +504,14 @@ class Main
         {
             this.userPet.asleep = true;
             this.isDag = false;
+            this.DayLight();
             // moet nog iets toegevoegd worden zodat je kan zien dat hij slaapt
         }
         else
         {
             this.userPet.asleep = false;
             this.isDag = true;
+            this.NightLight();
         }
         this.PlaySound(audioSources.lightSwitch);
         console.log(this.isDag);
