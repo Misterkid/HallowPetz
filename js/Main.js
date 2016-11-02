@@ -221,13 +221,16 @@ class Main
     LoadDummies()
     {
         var badPos = new THREE.Vector3(-10,-10,-10);
-        this.dummyMaxLoad = 6;// - 1;
+        this.dummyMaxLoad = 8;// - 1;
         this.objectL.ImportObject('assets/models/fench.obj', 'assets/textures/ColorsheetFenceBrown.png', badPos, 1);
-        this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal.png', badPos, 1);
-        this.objectL.ImportObject('assets/models/Moon.obj', 'assets/textures/colorsheettreenormal.png', badPos, 1);
+        this.objectL.ImportObject('assets/models/boom.obj', 'assets/textures/colorsheettreenormal.png', badPos, 1)
+        this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal2.png', badPos, 1);
+        this.objectL.ImportObject('assets/models/Moon.obj', 'assets/textures/yellow.png', badPos, 1);
         this.objectL.ImportObject('assets/models/cloud.obj', 'assets/textures/colorsheettreenormal.png', badPos, 1);
         this.objectL.ImportObject('assets/models/cloud2.obj', 'assets/textures/colorsheettreenormal.png', badPos, 1 );
         this.objectL.ImportObject('assets/models/Church.obj', 'assets/textures/concretetext.png', badPos, 1);
+        this.objectL.ImportObject('assets/models/mountain2.obj', 'assets/textures/concretetext.png', badPos, 1);
+
     }
     CreateEnvirement()
     {
@@ -268,7 +271,7 @@ class Main
             this.objectL.ImportObject('assets/models/fench.obj', 'assets/textures/ColorsheetFenceBrown.png', this.boomPos, this.boomScale, this.boomRotate);
         }
         //Creating Tree's
-        for(var i = 0; i < 75; i++) {
+        for(var i = 0; i < 100; i++) {
             var k = qUtils.GetRandomBetweenInt(15, 25)/1000;
             var x = qUtils.GetRandomBetweenInt(-50, 50);
             var y = -2;
@@ -276,10 +279,13 @@ class Main
             this.boomPos = new THREE.Vector3(x, y, z);
             this.boomScale = new THREE.Vector3(k, k, k);
             this.boomRotate = new THREE.Vector3(0,qUtils.DegToRad(qUtils.GetRandomBetweenInt(0,360)), 0);
-            this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale, this.boomRotate );
+            if(0 == qUtils.GetRandomBetweenInt(0,1))
+                this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal2.png', this.boomPos, this.boomScale, this.boomRotate );
+            else
+                this.objectL.ImportObject('assets/models/boom.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale, this.boomRotate );
         }
 
-        for(var i = 0; i < 75; i++) {
+        for(var i = 0; i < 100; i++) {
             var k = qUtils.GetRandomBetweenInt(10, 25)/1000;
             var x = qUtils.GetRandomBetweenInt(-50, 50);
             var y = -2;
@@ -287,10 +293,13 @@ class Main
             this.boomPos = new THREE.Vector3(x, y, z);
             this.boomScale = new THREE.Vector3(k, k, k);
             this.boomRotate = new THREE.Vector3(0,qUtils.DegToRad(qUtils.GetRandomBetweenInt(0,360)), 0);
-            this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale, this.boomRotate );
+            if(0 == qUtils.GetRandomBetweenInt(0,1))
+                this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal2.png', this.boomPos, this.boomScale, this.boomRotate );
+            else
+                this.objectL.ImportObject('assets/models/boom.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale, this.boomRotate );
         }
 
-        for(var i = 0; i < 50; i++) {
+        for(var i = 0; i < 75; i++) {
             var k = qUtils.GetRandomBetweenInt(10, 25)/1000;
             var x = qUtils.GetRandomBetweenInt(-22, -40);
             var y = -2;
@@ -298,10 +307,13 @@ class Main
             this.boomPos = new THREE.Vector3(x, y, z);
             this.boomScale = new THREE.Vector3(k, k, k);
             this.boomRotate = new THREE.Vector3(0,qUtils.DegToRad(qUtils.GetRandomBetweenInt(0,360)), 0);
-            this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale, this.boomRotate );
+            if(0 == qUtils.GetRandomBetweenInt(0,1))
+                this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal2.png', this.boomPos, this.boomScale, this.boomRotate );
+            else
+                this.objectL.ImportObject('assets/models/boom.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale, this.boomRotate );
         }
 
-        for(var i = 0; i < 50; i++) {
+        for(var i = 0; i < 75; i++) {
             var k = qUtils.GetRandomBetweenInt(10, 25)/1000;
             var x = qUtils.GetRandomBetweenInt(50, 60);
             var y = -2;
@@ -309,20 +321,25 @@ class Main
             this.boomPos = new THREE.Vector3(x, y, z);
             this.boomScale = new THREE.Vector3(k, k, k);
             this.boomRotate = new THREE.Vector3(0,qUtils.DegToRad(qUtils.GetRandomBetweenInt(0,360)), 0);
-            this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale, this.boomRotate );
+            if(0 == qUtils.GetRandomBetweenInt(0,1))
+                this.objectL.ImportObject('assets/models/boom2.obj', 'assets/textures/colorsheettreenormal2.png', this.boomPos, this.boomScale, this.boomRotate );
+            else
+                this.objectL.ImportObject('assets/models/boom.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale, this.boomRotate );
         }
 
-
+        //moon
         this.moonPos = new THREE.Vector3(0, 25,-100);
         this.moonScale = new THREE.Vector3(10,10,10);
         this.objectL.ImportObject('assets/models/Moon.obj', 'assets/textures/yellow.jpg', this.moonPos, this.moonScale);
 
+        //church
         var cScale = 0.3;
         this.churchPos = new THREE.Vector3(35,-3.2,20);
         this.churchScale = new THREE.Vector3(cScale,cScale,cScale);
         this.churchRotate = new THREE.Vector3(0,qUtils.DegToRad(-90), 0);
         this.objectL.ImportObject('assets/models/Church.obj', 'assets/textures/concretetext.png', this.churchPos, this.churchScale, this.churchRotate);
 
+        //pumpkin
         var pScale = 0.05;
         this.pumpkinPos = new THREE.Vector3(30,-2.5,15);
         this.pumpkinScale = new THREE.Vector3(pScale,pScale,pScale);
@@ -357,6 +374,7 @@ class Main
 
 
         //Graves
+        this.graveTexture = new Array('assets/textures/concretetext.png', 'assets/textures/concretetext2.png')
         for(var i = 0; i < 3; i++) {
             var gScale = 0.15;
             var x = -18;
@@ -366,21 +384,22 @@ class Main
             this.graveScale = new THREE.Vector3(gScale, gScale, gScale);
             this.graveRotate = new THREE.Vector3(0,qUtils.DegToRad(90),0);
             if(0 == qUtils.GetRandomBetweenInt(0,1))
-                this.objectL.ImportObject('assets/models/gravestone.obj', 'assets/textures/concretetext.png', this.gravePos, this.graveScale, this.graveRotate );
+                this.objectL.ImportObject('assets/models/gravestone.obj', this.graveTexture[qUtils.GetRandomBetweenInt(0,1)], this.gravePos, this.graveScale, this.graveRotate );
             else
-                this.objectL.ImportObject('assets/models/stone_grave.obj', 'assets/textures/concretetext.png', this.gravePos, this.graveScale, this.graveRotate );
+                this.objectL.ImportObject('assets/models/stone_grave.obj', this.graveTexture[qUtils.GetRandomBetweenInt(0,1)], this.gravePos, this.graveScale, this.graveRotate );
 
             for(var k = 0; k < 4; k++){
                 this.gravePos = new THREE.Vector3(x+(6*i),y, z+(10*k));
                 //this.graveRotate = new THREE.Vector3(0,0, 0);
                 if(0 == qUtils.GetRandomBetweenInt(0,1))
-                    this.objectL.ImportObject('assets/models/gravestone.obj', 'assets/textures/concretetext.png', this.gravePos, this.graveScale, this.graveRotate );
+                    this.objectL.ImportObject('assets/models/gravestone.obj', this.graveTexture[qUtils.GetRandomBetweenInt(0,1)], this.gravePos, this.graveScale, this.graveRotate );
                 else
-                    this.objectL.ImportObject('assets/models/stone_grave.obj', 'assets/textures/concretetext.png', this.gravePos, this.graveScale, this.graveRotate );
+                    this.objectL.ImportObject('assets/models/stone_grave.obj', this.graveTexture[qUtils.GetRandomBetweenInt(0,1)], this.gravePos, this.graveScale, this.graveRotate );
 
             }
         }
 
+        //Pumpkin
         for(var i = 0; i < 8; i++) {
             var gScale = 0.05;
             var x = 22;
@@ -397,6 +416,35 @@ class Main
             }
         }
 
+        //Mountains
+        var gScale = 70;
+        var x = -150;
+        var y = -2.5;
+        var z = 150;
+        this.gravePos = new THREE.Vector3(x, y, z);
+        this.graveScale = new THREE.Vector3(gScale, gScale, gScale);
+        this.graveRotate = new THREE.Vector3(qUtils.DegToRad(0),0, 0);
+        this.objectL.ImportObject('assets/models/mountain.obj', 'assets/textures/concretetext.png', this.gravePos, this.graveScale, this.graveRotate );
+
+        //Mountains
+        var gScale = 70;
+        var x = 150;
+        var y = -2.5;
+        var z = 100;
+        this.gravePos = new THREE.Vector3(x, y, z);
+        this.graveScale = new THREE.Vector3(gScale, gScale, gScale);
+        this.graveRotate = new THREE.Vector3(qUtils.DegToRad(0),0, 0);
+        this.objectL.ImportObject('assets/models/mountain2.obj', 'assets/textures/concretetext.png', this.gravePos, this.graveScale, this.graveRotate );
+
+        //Mountains
+        var gScale = 70;
+        var x = -150;
+        var y = -2.5;
+        var z = -100;
+        this.gravePos = new THREE.Vector3(x, y, z);
+        this.graveScale = new THREE.Vector3(gScale, gScale, gScale);
+        this.graveRotate = new THREE.Vector3(qUtils.DegToRad(0),0, 0);
+        this.objectL.ImportObject('assets/models/mountain2.obj', 'assets/textures/concretetext.png', this.gravePos, this.graveScale, this.graveRotate );
     }
     CreateSkydome()
     {
