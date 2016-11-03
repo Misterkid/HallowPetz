@@ -125,11 +125,11 @@ class Main
     }
     SetPresentPosition()
     {
-        this.AddPresentPosition(2, 0, 5);
-        this.AddPresentPosition(3, 0, 7);
-        this.AddPresentPosition(5, 0, 7);
-        this.AddPresentPosition(9, 0, 2);
-        this.AddPresentPosition(10,0,9);
+        this.AddPresentPosition(2, -1.5, 5);
+        this.AddPresentPosition(3, -1.5, 7);
+        this.AddPresentPosition(5, -1.5, 7);
+        this.AddPresentPosition(9, -1.5, 2);
+        this.AddPresentPosition(10,-1.5,9);
     }
 
     SpawnPresent()
