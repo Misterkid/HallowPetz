@@ -5,8 +5,11 @@ class AudioSources
 {
     constructor()
     {
+        this.explosion = document.createElement('source');
+        this.explosion.src = 'assets/sounds/explosion.wav';
+
         this.eggHatch = document.createElement('source');
-        this.eggHatch.src = 'assets/sounds/explosion.wav';
+        this.eggHatch.src = 'assets/sounds/hello.wav';
 
         this.ballHit = document.createElement('source');
         this.ballHit.src = 'assets/sounds/ballHit.wav';
@@ -19,6 +22,12 @@ class AudioSources
 
         this.petClick = document.createElement('source');
         this.petClick.src = 'assets/sounds/woo.wav';
+
+        this.dayAmbient = document.createElement('source');
+        this.dayAmbient.src = 'assets/sounds/day.wav';
+
+        this.nightAmbient = document.createElement('source');
+        this.nightAmbient.src = 'assets/sounds/night.wav';
     }
 }
 let audioSources = new AudioSources();

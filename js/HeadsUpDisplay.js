@@ -30,8 +30,11 @@ class HeadsUpDisplay
         this.resetPetButton = document.getElementsByClassName("test_reset")[0];
         this.muteSFXButton = document.getElementsByClassName("effects_mute")[0];
         this.muteBGMButton =  document.getElementsByClassName("bgm_mute")[0];
+        this.muteAmbButton =  document.getElementsByClassName("ambient_mute")[0];
         this.fullScreenButton = document.getElementsByClassName("full_screen")[0];
         this.menuButton = document.getElementsByClassName("show_hide")[0];
+
+        this.menuIsShown = false;
     }
     OnUpdate(userPet)
     {
@@ -95,10 +98,12 @@ class HeadsUpDisplay
                 this.menuItems[i].style.visibility = "visible";
                // this.throwBall.Hide();
                 throwBall.Hide();
+                this.menuIsShown = true;
             }
             else
             {
                 this.menuItems[i].style.visibility = "hidden";
+                this.menuIsShown = false;
             }
         }
         if(userPet.isDead)

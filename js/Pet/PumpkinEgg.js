@@ -35,6 +35,16 @@ class PumpkinEgg extends Pet
             }
         }
     }
+    LoadPet()
+    {
+        super.LoadPet();
+        this.scaling += (this.scaleSteps * this.timesClicked);
+        var newY = (this.scaling - 1) + (this.height/2)-2;
+        this.position.set(0,newY,0);
+        this.scale.set(this.scaling,this.scaling,1);
+
+        this.headPoint.set(0,this.headPoint.y + this.scaleSteps,0);
+    }
     OnClick()
     {
         super.OnClick();
