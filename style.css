@@ -45,11 +45,13 @@ canvas
 }
 
 /*-- Pet Options --*/
-button.show_hide{
+.show_hide{
 
     position: absolute;
     top: 3%;
     right: 5%;
+    width: 100px;
+    height: 30px;
 
 }
 
@@ -74,13 +76,13 @@ p.health_bars
 }
 .plezier
 {
-    width: 100px;
+    width: 120px;
     height: 30px;
     padding-right: 20px;
 }
 .energie
 {
-    width: 100px;
+    width: 120px;
     height: 30px;
     padding-right: 20px;
 }
