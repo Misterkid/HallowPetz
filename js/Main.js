@@ -271,7 +271,7 @@ class Main
             this.objectL.ImportObject('assets/models/fench.obj', 'assets/textures/ColorsheetFenceBrown.png', this.boomPos, this.boomScale, this.boomRotate);
         }
         //Creating Tree's
-        for(var i = 0; i < 100; i++) {
+        for(var i = 0; i < 75; i++) {
             var k = qUtils.GetRandomBetweenInt(15, 25)/1000;
             var x = qUtils.GetRandomBetweenInt(-50, 50);
             var y = -2;
@@ -285,7 +285,7 @@ class Main
                 this.objectL.ImportObject('assets/models/boom.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale, this.boomRotate );
         }
 
-        for(var i = 0; i < 100; i++) {
+        for(var i = 0; i < 75; i++) {
             var k = qUtils.GetRandomBetweenInt(10, 25)/1000;
             var x = qUtils.GetRandomBetweenInt(-50, 50);
             var y = -2;
@@ -299,7 +299,7 @@ class Main
                 this.objectL.ImportObject('assets/models/boom.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale, this.boomRotate );
         }
 
-        for(var i = 0; i < 75; i++) {
+        for(var i = 0; i < 50; i++) {
             var k = qUtils.GetRandomBetweenInt(10, 25)/1000;
             var x = qUtils.GetRandomBetweenInt(-22, -40);
             var y = -2;
@@ -313,7 +313,7 @@ class Main
                 this.objectL.ImportObject('assets/models/boom.obj', 'assets/textures/colorsheettreenormal.png', this.boomPos, this.boomScale, this.boomRotate );
         }
 
-        for(var i = 0; i < 75; i++) {
+        for(var i = 0; i < 50; i++) {
             var k = qUtils.GetRandomBetweenInt(10, 25)/1000;
             var x = qUtils.GetRandomBetweenInt(50, 60);
             var y = -2;
