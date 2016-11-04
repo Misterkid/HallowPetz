@@ -3,7 +3,7 @@ class Eten extends THREE.Mesh//Is eigenlijk een mesh met meer opties!
     constructor (map,width,height)
     {
         var geometry = new THREE.PlaneGeometry(width,height);
-        var material = new THREE.MeshLambertMaterial();
+        var material = new THREE.MeshBasicMaterial ();
         material.map = map; //this.loader.load("assets/textures/eten1.png");
         material.transparent = true;
         material.depthWrite = false;
